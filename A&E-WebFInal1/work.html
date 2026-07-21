@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — A&E Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0B0C; --bg-soft:#121214; --panel:#17171A;
+    --line:rgba(245,245,243,0.10); --line-strong:rgba(245,245,243,0.18);
+    --ink:#F5F5F3; --ink-dim:#9C9C98;
+    --accent:#5B8CFF; --accent-dim:rgba(91,140,255,0.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;overflow-x:hidden;animation:pageIn .5s ease;}
+  @keyframes pageIn{from{opacity:0;}to{opacity:1;}}
+  @media (pointer:fine){ body{cursor:none;} body a, body button{cursor:none;} }
+  h1,h2,h3{font-family:'Inter Tight',sans-serif;font-weight:800;letter-spacing:-0.03em;line-height:1.02;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 40px;}
+  .micro{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);}
+  .micro b{color:var(--accent);font-weight:500;}
+  #cur,#curRing{position:fixed;top:0;left:0;pointer-events:none;z-index:300;border-radius:50%;transform:translate(-50%,-50%);}
+  #cur{width:6px;height:6px;background:var(--accent);}
+  #curRing{width:22px;height:22px;border:1px solid rgba(245,245,243,0.22);transition:width .25s ease,height .25s ease,border-color .25s ease,background .25s ease;}
+  body.hovering #curRing{width:48px;height:48px;border-color:var(--accent);background:rgba(91,140,255,0.07);}
+  @media (pointer:coarse){#cur,#curRing{display:none;}}
+  #prog{position:fixed;top:0;left:0;height:2px;background:var(--accent);width:0;z-index:150;}
+  #ticker{position:fixed;top:0;left:0;right:0;z-index:110;background:var(--bg);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:8px 40px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);}
+  #ticker .seg{display:flex;gap:26px;}
+  #ticker b{color:var(--accent);font-weight:500;}
+  header{position:fixed;top:33px;left:0;right:0;z-index:100;transition:all .3s;border-bottom:1px solid transparent;}
+  header.scrolled{background:rgba(11,11,12,.8);backdrop-filter:blur(14px);border-bottom-color:var(--line);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1280px;margin:0 auto;padding:18px 40px;}
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-mark{width:34px;height:34px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-weight:800;font-size:13px;position:relative;}
+  .brand-mark::after{content:"";position:absolute;inset:-5px;border:1px solid var(--accent-dim);}
+  .brand-name{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:15px;}
+  .brand-name span{color:var(--ink-dim);font-weight:500;}
+  nav.links{display:flex;gap:36px;}
+  nav.links a{font-size:13px;font-weight:500;color:var(--ink-dim);font-family:'IBM Plex Mono',monospace;transition:color .2s;}
+  nav.links a::before{content:"/ ";color:var(--accent);opacity:0;transition:opacity .2s;}
+  nav.links a:hover{color:var(--ink);}
+  nav.links a:hover::before{opacity:1;}
+  nav.links a.cur{color:var(--ink);}
+  nav.links a.cur::before{opacity:1;}
+  .nav-cta{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;border:1px solid var(--line-strong);padding:10px 20px;transition:all .2s;}
+  .nav-cta:hover{border-color:var(--accent);color:var(--accent);}
+  .page-hero{padding:190px 0 60px;}
+  .page-hero h1{font-size:clamp(46px,7vw,96px);margin-top:22px;}
+  .page-hero h1 .acc{color:var(--accent);}
+  .page-hero .sub{color:var(--ink-dim);font-size:15.5px;max-width:520px;margin-top:24px;}
+  section{padding:100px 0;position:relative;}
+  .sec-label{display:flex;align-items:center;gap:18px;margin-bottom:54px;}
+  .sec-label .micro{white-space:nowrap;}
+  .sec-label .rule{height:1px;background:var(--line);flex-grow:1;}
+  .rv{opacity:0;transform:translateY(36px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.65,.25,1);}
+  .rv.in{opacity:1;transform:none;}
+  .rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.2s;}.rv.d3{transition-delay:.3s;}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;padding:14px 28px;border:1px solid var(--ink);transition:background .25s,color .25s,border-color .25s;}
+  .btn-fill{background:var(--ink);color:var(--bg);}
+  .btn-fill:hover{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
+  .cta-band{border-top:1px solid var(--line);padding:110px 0;}
+  .cta-band h2{font-size:clamp(38px,5.6vw,72px);margin-bottom:32px;}
+  .cta-band h2 .dim{color:var(--ink-dim);}
+  footer{border-top:1px solid var(--line);padding:70px 0 40px;position:relative;}
+  .wordmark{display:block;font-family:'Inter Tight',sans-serif;font-weight:900;font-size:clamp(70px,14.5vw,220px);line-height:.9;letter-spacing:-0.05em;color:transparent;-webkit-text-stroke:1px var(--line-strong);transition:color .5s,-webkit-text-stroke .5s;user-select:none;text-align:center;margin-bottom:56px;will-change:transform;}
+  .wordmark:hover{color:var(--accent);-webkit-text-stroke:1px var(--accent);}
+  .foot-links{display:flex;gap:30px;justify-content:center;margin-bottom:34px;flex-wrap:wrap;}
+  .foot-links a{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);transition:color .2s;}
+  .foot-links a:hover{color:var(--accent);}
+  .foot-bottom{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:26px;}
+  .foot-bottom span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-dim);letter-spacing:.06em;}
+  @media (max-width:920px){
+    .wrap{padding:0 24px;}
+    nav.links{display:none;}
+    #ticker{padding:8px 24px;}
+    section{padding:80px 0;}
+    .page-hero{padding:160px 0 40px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001s !important;transition-duration:.001s !important;}
+    .rv{opacity:1;transform:none;}
+    body{cursor:auto;}
+    #cur,#curRing{display:none;}
+  }
+
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
+  .stat{background:var(--bg);padding:40px 34px;transition:all .3s;}
+  .stat:hover{background:var(--ink);}
+  .stat:hover .num,.stat:hover .lbl{color:var(--bg);}
+  .stat:hover .suffix{color:var(--accent);}
+  .stat .num{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(36px,4.2vw,56px);line-height:1;display:flex;align-items:baseline;gap:4px;transition:color .3s;}
+  .stat .suffix{font-size:.5em;color:var(--accent);}
+  .stat .lbl{margin-top:12px;transition:color .3s;}
+  .row{border:1px solid var(--line);border-bottom:none;background:var(--bg);display:block;overflow:hidden;transition:background .3s;}
+  .row:last-of-type{border-bottom:1px solid var(--line);}
+  .row-head{display:grid;grid-template-columns:70px 1fr auto auto;gap:26px;align-items:center;padding:32px 40px;}
+  .row .rnum{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-dim);}
+  .row h3{font-size:clamp(20px,2.8vw,34px);transition:color .25s,transform .3s;}
+  .row:hover{background:var(--bg-soft);}
+  .row:hover h3{color:var(--accent);transform:translateX(8px);}
+  .row .status{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--line-strong);color:var(--ink-dim);white-space:nowrap;}
+  .row .status.live{border-color:var(--accent-dim);color:var(--accent);}
+  .row .go{font-size:18px;color:var(--ink-dim);transition:all .25s;}
+  .row:hover .go{color:var(--accent);transform:translate(4px,-4px);}
+  .row-body{max-height:0;transition:max-height .45s cubic-bezier(.2,.65,.25,1);}
+  .row:hover .row-body{max-height:150px;}
+  .row-body-inner{padding:0 40px 32px 136px;display:flex;justify-content:space-between;gap:30px;align-items:center;}
+  .row-body p{color:var(--ink-dim);font-size:13.5px;max-width:600px;}
+  .swatches{display:flex;gap:6px;flex-shrink:0;}
+  .sw{width:22px;height:22px;border:1px solid var(--line-strong);}
+  .work-note{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-dim);letter-spacing:.06em;margin-top:22px;}
+  .work-note b{color:var(--accent);font-weight:500;}
+  @media (max-width:920px){
+    .stat-grid{grid-template-columns:1fr 1fr;}
+    .row-head{grid-template-columns:44px 1fr auto;padding:24px;}
+    .row .go{display:none;}
+    .row-body-inner{padding:0 24px 26px 94px;flex-direction:column;align-items:flex-start;}
+  }
+
+</style>
+</head>
+<body>
+
+<div id="cur"></div><div id="curRing"></div>
+<div id="prog"></div>
+
+<div id="ticker">
+  <div class="seg"><span>A&amp;E DESIGN</span><b>●</b><span>AURORA / NEWMARKET ON</span></div>
+  <div class="seg"><span id="clock">--:--:--</span><b>ACCEPTING PROJECTS</b></div>
+</div>
+
+<header id="hdr">
+  <div class="nav-row">
+    <a class="brand hoverable" href="index.html">
+      <div class="brand-mark">A·E</div>
+      <div class="brand-name">A&amp;E <span>Design</span></div>
+    </a>
+    <nav class="links">
+      <a class="hoverable" href="index.html">home</a>
+      <a class="hoverable" href="services.html">services</a>
+      <a class="hoverable cur" href="work.html">work</a>
+      <a class="hoverable" href="about.html">about</a>
+      <a class="hoverable" href="contact.html">contact</a>
+    </nav>
+    <a class="nav-cta hoverable magnetic" href="contact.html">START A PROJECT</a>
+  </div>
+</header>
+
+<div class="wrap page-hero">
+  <div class="micro">Selected Work <b>·</b> 2025 — 2026</div>
+  <h1>Real sites for<br><span class="acc">real businesses.</span></h1>
+  <p class="sub">One live client build and five concept sites built on spec — each designed from scratch for a specific local business, because that's how we work.</p>
+</div>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+    <div class="stat-grid rv">
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="7">0</span></div><div class="lbl micro">Sites designed &amp; built</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="30">0</span><span class="suffix">+</span></div><div class="lbl micro">Pages shipped</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="6">0</span></div><div class="lbl micro">Industries covered</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="100">0</span><span class="suffix">%</span></div><div class="lbl micro">Custom code — zero templates</div></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-label"><span class="micro">The portfolio</span><div class="rule"></div><span class="micro">Hover to expand</span></div>
+    <a class="row rv hoverable" href="#">
+      <div class="row-head"><span class="rnum">01</span><h3>Aurora-King Baseball Association</h3><span class="status live">Live · Client</span><span class="go">↗</span></div>
+      <div class="row-body"><div class="row-body-inner"><p>An 18-page league site with live Google Sheets data — teams, rosters, schedules, standings, tournaments, and registration for a community of hundreds of families. Updated by the league, not by us: their spreadsheets feed the site directly.</p>
+        <div class="swatches"><span class="sw" style="background:#1B3A6B;"></span><span class="sw" style="background:#C8102E;"></span><span class="sw" style="background:#F5F0E6;"></span></div>
+      </div></div>
+    </a>
+    <a class="row rv hoverable" href="#">
+      <div class="row-head"><span class="rnum">02</span><h3>Kloud9 Boarding &amp; Training</h3><span class="status">Concept</span><span class="go">↗</span></div>
+      <div class="row-body"><div class="row-body-inner"><p>Seven pages built around a 24-hour boarding facility's always-open advantage — services, rates, a day-in-the-life timeline, and a booking pipeline designed to turn Google searches into phone calls.</p>
+        <div class="swatches"><span class="sw" style="background:#2F4538;"></span><span class="sw" style="background:#C98A3D;"></span><span class="sw" style="background:#F1E9D8;"></span></div>
+      </div></div>
+    </a>
+    <a class="row rv hoverable" href="#">
+      <div class="row-head"><span class="rnum">03</span><h3>Beast to Beauty Pet Styling</h3><span class="status">Concept</span><span class="go">↗</span></div>
+      <div class="row-body"><div class="row-body-inner"><p>A salon-glam identity built on the name itself — split before/after visuals, a beauty-parlour service menu with dotted price leaders, and a cage-free promise woven through every page.</p>
+        <div class="swatches"><span class="sw" style="background:#B84A63;"></span><span class="sw" style="background:#C9A227;"></span><span class="sw" style="background:#FAF1EE;"></span></div>
+      </div></div>
+    </a>
+    <a class="row rv hoverable" href="#">
+      <div class="row-head"><span class="rnum">04</span><h3>Aurora Cat Hotel</h3><span class="status">Concept</span><span class="go">↗</span></div>
+      <div class="row-body"><div class="row-body-inner"><p>A boutique dark-mode "hotel" experience for a cats-only boarder — suite tiers styled like room listings, hotel amenities, and a guest book, all built around the brand their name implies.</p>
+        <div class="swatches"><span class="sw" style="background:#1D1F27;"></span><span class="sw" style="background:#E07A35;"></span><span class="sw" style="background:#F4EFE6;"></span></div>
+      </div></div>
+    </a>
+    <a class="row rv hoverable" href="#">
+      <div class="row-head"><span class="rnum">05</span><h3>Hero's Respite Haven</h3><span class="status">Concept</span><span class="go">↗</span></div>
+      <div class="row-body"><div class="row-body-inner"><p>Calm, care-first design for special-needs pet boarding — anchored by a live "care sheet" concept showing medication schedules and daily routines, because trust is this business's entire product.</p>
+        <div class="swatches"><span class="sw" style="background:#443752;"></span><span class="sw" style="background:#C2707E;"></span><span class="sw" style="background:#F4F2F6;"></span></div>
+      </div></div>
+    </a>
+    <a class="row rv hoverable" href="#">
+      <div class="row-head"><span class="rnum">06</span><h3>PAWS Personal Pet Care</h3><span class="status">Concept</span><span class="go">↗</span></div>
+      <div class="row-body"><div class="row-body-inner"><p>A warm, family-album redesign for a home-based sitter — tilted photo cards, a founder's story front and centre, and fifteen years of word-of-mouth trust finally given the site it deserves.</p>
+        <div class="swatches"><span class="sw" style="background:#23404A;"></span><span class="sw" style="background:#D9A441;"></span><span class="sw" style="background:#F6F3EC;"></span></div>
+      </div></div>
+    </a>
+    <div class="work-note">Concept sites are built on spec to show what's possible. <b>Yours could be next.</b></div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <div class="sec-label"><span class="micro">Next step</span><div class="rule"></div></div>
+    <h2 class="rv">Ready when you are.<br><span class="dim">Start with a conversation.</span></h2>
+    <div class="btn-row rv d1">
+      <a class="btn btn-fill hoverable magnetic" href="contact.html">Start a Project →</a>
+      <a class="btn btn-ghost hoverable magnetic" href="work.html">See the Work →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span class="wordmark hoverable magnetic-soft" id="wordmark">A&amp;E DESIGN</span>
+    <div class="foot-links">
+      <a class="hoverable" href="index.html">Home</a>
+      <a class="hoverable" href="services.html">Services</a>
+      <a class="hoverable" href="work.html">Work</a>
+      <a class="hoverable" href="about.html">About</a>
+      <a class="hoverable" href="contact.html">Contact</a>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 A&amp;E DESIGN. ALL RIGHTS RESERVED.</span>
+      <span>DESIGNED &amp; BUILT BY US — LIKE EVERYTHING WE SHIP.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer=matchMedia('(pointer: fine)').matches;
+  const clock=document.getElementById('clock');
+  function tickClock(){const d=new Date();
+    clock.textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':')+' EST';}
+  tickClock();setInterval(tickClock,1000);
+  const hdr=document.getElementById('hdr'),prog=document.getElementById('prog');
+  addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>40);
+    const h=document.documentElement.scrollHeight-innerHeight;
+    prog.style.width=(h>0?(scrollY/h*100):0)+'%';},{passive:true});
+  if(finePointer && !reduced){
+    const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
+    let mx=0,my=0,rx=0,ry=0;
+    addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
+      cur.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';});
+    (function follow(){rx+=(mx-rx)*.16;ry+=(my-ry)*.16;
+      ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';
+      requestAnimationFrame(follow);})();
+    document.querySelectorAll('.hoverable').forEach(el=>{
+      el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+    });
+    document.querySelectorAll('.magnetic').forEach(el=>{
+      el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();
+        el.style.transform='translate('+((e.clientX-r.left-r.width/2)*.25)+'px,'+((e.clientY-r.top-r.height/2)*.3)+'px)';});
+      el.addEventListener('mouseleave',()=>{el.style.transform='';});
+    });
+    document.querySelectorAll('.magnetic-soft').forEach(el=>{
+      el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();
+        el.style.transform='translate('+((e.clientX-r.left-r.width/2)*.05)+'px,'+((e.clientY-r.top-r.height/2)*.1)+'px)';});
+      el.addEventListener('mouseleave',()=>{el.style.transform='';});
+    });
+  }
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.15});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+  const cio=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;
+    const el=e.target,t=+el.dataset.target;cio.unobserve(el);
+    if(reduced){el.textContent=t;return;}
+    const t0=performance.now();(function s(n){const k=Math.min(1,(n-t0)/1400);
+      el.textContent=Math.round(t*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(s);})(t0);
+  });},{threshold:.4});
+  document.querySelectorAll('.count').forEach(x=>cio.observe(x));
+  document.querySelectorAll('.acc-head').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const item=btn.closest('.acc-item');
+      const wasOpen=item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen)item.classList.add('open');
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
