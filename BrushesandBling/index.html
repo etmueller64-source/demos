@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Brushes n Bling — Face Painting & Glitter Tattoos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7F0;
+    --paper-deep:#F1E9DC;
+    --ink:#2E2A33;
+    --ink-soft:#6E6878;
+    --pink:#E85D8A;
+    --purple:#8B5FBF;
+    --teal:#3BA8A0;
+    --gold:#E8A33D;
+    --blue:#4C8BE8;
+    --white:#FFFFFF;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'Nunito',sans-serif;line-height:1.65;overflow-x:hidden;}
+  h1,h2,h3{font-family:'Baloo 2',cursive;font-weight:700;color:var(--ink);line-height:1.12;}
+  .script{font-family:'Pacifico',cursive;color:var(--teal);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  .concept-banner{background:var(--ink);color:var(--paper);text-align:center;font-size:12.5px;letter-spacing:.05em;padding:8px 16px;font-weight:600;}
+  .concept-banner b{color:var(--gold);}
+
+  header{background:rgba(251,247,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--paper-deep);position:sticky;top:0;z-index:50;}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:1120px;margin:0 auto;gap:20px;}
+  .logo{display:flex;align-items:center;gap:11px;flex-shrink:0;}
+  .logo-mark{width:42px;height:42px;border-radius:50%;background:conic-gradient(var(--teal),var(--gold),var(--blue),var(--purple),var(--pink),var(--teal));display:flex;align-items:center;justify-content:center;font-size:19px;}
+  .logo-mark span{width:34px;height:34px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;}
+  .logo-name{font-family:'Baloo 2',cursive;font-weight:800;font-size:19px;line-height:1.05;}
+  .logo-name em{font-family:'Pacifico',cursive;font-style:normal;font-weight:400;font-size:15px;color:var(--teal);padding:0 2px;}
+  .logo-name small{display:block;font-family:'Nunito',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase;}
+  nav.links{display:flex;gap:24px;font-size:13.5px;font-weight:700;flex-wrap:wrap;}
+  nav.links a{color:var(--ink-soft);padding:6px 0;position:relative;transition:color .2s;}
+  nav.links a:hover{color:var(--ink);}
+  nav.links a.current{color:var(--ink);}
+  nav.links a.current::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--gold),var(--blue));}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:999px;font-weight:800;font-size:14px;font-family:'Baloo 2',cursive;cursor:pointer;border:2px solid transparent;transition:all .2s ease;}
+  .btn-pink{background:var(--teal);color:var(--white);}
+  .btn-pink:hover{background:#2A837C;transform:translateY(-2px);}
+  .btn-line{border-color:var(--ink);color:var(--ink);}
+  .btn-line:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px);}
+
+  /* hero */
+  .hero{padding:76px 0 70px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+  .hero .kicker{display:inline-flex;align-items:center;gap:9px;background:var(--white);border:1px solid var(--paper-deep);border-radius:999px;padding:8px 16px;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:22px;}
+  .hero .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+  .hero h1{font-size:clamp(40px,5.6vw,62px);font-weight:800;margin-bottom:8px;}
+  .hero h1 .paint{position:relative;white-space:nowrap;}
+  .hero h1 .paint::after{content:"";position:absolute;left:-2%;right:-2%;bottom:6px;height:14px;z-index:-1;border-radius:8px;background:linear-gradient(90deg,var(--teal),var(--gold),var(--blue),var(--purple));opacity:.35;transform:rotate(-1deg);}
+  .hero .script-line{font-size:clamp(22px,2.8vw,30px);display:block;margin-bottom:20px;}
+  .hero p{color:var(--ink-soft);font-size:16.5px;max-width:470px;margin-bottom:28px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:30px;}
+  .palette{display:flex;align-items:center;gap:10px;}
+  .palette .swatch{width:26px;height:26px;border-radius:50%;border:3px solid var(--white);box-shadow:0 2px 8px rgba(46,42,51,.18);transition:transform .2s ease;}
+  .palette .swatch:hover{transform:translateY(-5px) scale(1.12);}
+  .palette .lbl{font-size:12px;font-weight:700;color:var(--ink-soft);margin-left:6px;}
+
+  /* hero art: layered "painted" cards */
+  .hero-art{position:relative;height:420px;}
+  .art-card{position:absolute;border-radius:20px;display:flex;align-items:flex-end;padding:16px;font-weight:800;font-family:'Baloo 2',cursive;font-size:14px;color:rgba(255,255,255,.95);box-shadow:0 20px 44px rgba(46,42,51,.16);}
+  .a1{top:0;left:6%;width:58%;height:62%;background:linear-gradient(150deg,#5FC2BA,#3BA8A0 60%,#256F69);transform:rotate(-3deg);z-index:2;}
+  .a2{bottom:0;right:0;width:52%;height:56%;background:linear-gradient(150deg,#F0B95C,#E8A33D 60%,#C77F1E);transform:rotate(2.5deg);z-index:3;}
+  .a3{top:12%;right:4%;width:34%;height:38%;background:linear-gradient(150deg,#F291B4,#E85D8A 65%,#C2416F);transform:rotate(5deg);z-index:1;}
+  .art-tag{position:absolute;bottom:14%;left:0;background:var(--white);border-radius:14px;padding:12px 18px;box-shadow:0 12px 28px rgba(46,42,51,.16);z-index:4;font-size:13px;font-weight:700;}
+  .art-tag .script{display:block;font-size:17px;line-height:1.3;}
+  /* floating sparkles */
+  .sparkle{position:absolute;color:var(--gold);pointer-events:none;animation:floaty 5.5s ease-in-out infinite;opacity:.85;}
+  .sparkle.s2{color:var(--pink);animation-duration:7s;animation-delay:1.2s;}
+  .sparkle.s3{color:var(--teal);animation-duration:6.2s;animation-delay:2.4s;}
+  .sparkle.s4{color:var(--blue);animation-duration:8s;animation-delay:.6s;}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-16px) rotate(12deg);}}
+
+  /* sections */
+  section{padding:84px 0;}
+  .sec-head{max-width:620px;margin-bottom:44px;}
+  .sec-head .script{font-size:24px;display:block;margin-bottom:4px;}
+  .sec-head h2{font-size:clamp(28px,3.6vw,40px);font-weight:800;margin-bottom:12px;}
+  .sec-head p{color:var(--ink-soft);font-size:15.5px;}
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+  .rv.in{opacity:1;transform:none;}
+  .rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.2s;}.rv.d3{transition-delay:.3s;}
+
+  /* occasions chips */
+  .occasions{background:var(--white);border-top:1px solid var(--paper-deep);border-bottom:1px solid var(--paper-deep);padding:56px 0;}
+  .chip-cloud{display:flex;flex-wrap:wrap;gap:11px;}
+  .chip{background:var(--paper);border:1px solid var(--paper-deep);border-radius:999px;padding:9px 18px;font-size:13.5px;font-weight:700;color:var(--ink-soft);transition:all .2s ease;}
+  .chip:hover{transform:translateY(-3px);color:var(--white);border-color:transparent;}
+  .chip:nth-child(5n+1):hover{background:var(--teal);}
+  .chip:nth-child(5n+2):hover{background:var(--gold);}
+  .chip:nth-child(5n+3):hover{background:var(--blue);}
+  .chip:nth-child(5n+4):hover{background:var(--purple);}
+  .chip:nth-child(5n+5):hover{background:var(--pink);}
+  .chip-more{font-family:'Pacifico',cursive;color:var(--pink);border:none;background:none;font-size:15px;padding:9px 6px;}
+
+  /* services */
+  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .svc{background:var(--white);border:1px solid var(--paper-deep);border-radius:var(--radius);padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease;position:relative;overflow:hidden;}
+  .svc::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;}
+  .svc:nth-child(1)::before{background:var(--teal);}
+  .svc:nth-child(2)::before{background:var(--gold);}
+  .svc:nth-child(3)::before{background:var(--blue);}
+  .svc:nth-child(4)::before{background:var(--purple);}
+  .svc:hover{transform:translateY(-6px);box-shadow:0 18px 38px rgba(46,42,51,.12);}
+  .svc .ico{font-size:30px;margin-bottom:16px;display:block;}
+  .svc h3{font-size:19px;margin-bottom:8px;}
+  .svc p{font-size:13.5px;color:var(--ink-soft);}
+
+  /* gallery */
+  .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:170px;gap:14px;}
+  .g{border-radius:14px;display:flex;align-items:flex-end;padding:12px;font-size:12px;font-weight:800;font-family:'Baloo 2',cursive;color:rgba(255,255,255,.95);transition:transform .2s ease;}
+  .g:hover{transform:scale(1.03);}
+  .g.tall{grid-row:span 2;}
+  .gal-note{font-size:12.5px;color:var(--ink-soft);margin-top:16px;}
+
+  /* good-to-know band */
+  .know{background:var(--ink);color:var(--paper);}
+  .know .sec-head h2{color:var(--paper);}
+  .know .sec-head p{color:#B8B2C2;}
+  .know .script{color:var(--gold);}
+  .know-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .know-card{background:rgba(251,247,240,.06);border:1px solid rgba(251,247,240,.14);border-radius:var(--radius);padding:28px 26px;}
+  .know-card .ico{font-size:26px;display:block;margin-bottom:14px;}
+  .know-card h3{color:var(--paper);font-size:18px;margin-bottom:8px;}
+  .know-card p{font-size:13.5px;color:#B8B2C2;}
+  .know-card a{color:var(--gold);font-weight:700;}
+
+  /* contact cta */
+  .cta{background:linear-gradient(135deg,var(--teal),var(--blue));border-radius:24px;max-width:1120px;margin:0 auto;padding:56px 58px;color:var(--white);display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;position:relative;overflow:hidden;}
+  .cta .script{color:#FFE3B8;font-size:26px;display:block;margin-bottom:4px;font-family:'Pacifico',cursive;}
+  .cta h2{color:var(--white);font-size:clamp(26px,3.4vw,36px);margin-bottom:12px;}
+  .cta p{font-size:15px;color:#DCEFEE;max-width:420px;}
+  .cta-side{display:flex;flex-direction:column;gap:12px;align-items:flex-start;}
+  .cta-line{font-family:'Baloo 2',cursive;font-weight:800;font-size:19px;}
+  .cta-note{font-size:12.5px;color:#DCEFEE;}
+  .cta .btn-pink{background:var(--white);color:var(--teal);}
+  .cta .btn-pink:hover{background:var(--ink);color:var(--white);}
+
+  footer{padding:64px 0 36px;}
+  .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px;}
+  .f-col h5{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;}
+  .f-col a{display:block;font-size:14px;margin-bottom:9px;font-weight:600;color:var(--ink-soft);}
+  .f-col a:hover{color:var(--teal);}
+  .f-col p{font-size:14px;color:var(--ink-soft);max-width:260px;}
+  .foot-bottom{border-top:1px solid var(--paper-deep);padding-top:22px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);}
+
+  @media (max-width:900px){
+    nav.links{display:none;}
+    .hero-grid,.cta{grid-template-columns:1fr;}
+    .hero-art{height:340px;margin-top:10px;}
+    .svc-grid{grid-template-columns:1fr 1fr;}
+    .know-grid{grid-template-columns:1fr;}
+    .gal-grid{grid-template-columns:1fr 1fr;grid-auto-rows:150px;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+    .cta{padding:40px 28px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001s !important;transition-duration:.001s !important;}
+    .rv{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="concept-banner">CONCEPT MOCKUP — prepared for Brushes n Bling · <b>homepage only</b> · placeholder imagery, real contact &amp; page structure preserved</div>
+
+<header>
+  <div class="nav-row">
+    <a class="logo" href="#">
+      <div class="logo-mark"><span>🎨</span></div>
+      <div class="logo-name">Brushes <em>n</em> Bling<small>Face Painting · Glitter Tattoos</small></div>
+    </a>
+    <nav class="links">
+      <a href="#" class="current">Home</a>
+      <a href="#">Our Services</a>
+      <a href="#">Pricing</a>
+      <a href="#">Gallery</a>
+      <a href="#">Where We Work</a>
+      <a href="#">How to Remove</a>
+    </nav>
+    <a class="btn btn-pink" href="mailto:rebecca@brushesnbling.com">Book Now ✦</a>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="sparkle" style="top:14%;left:4%;font-size:18px;">✦</span>
+  <span class="sparkle s2" style="top:70%;left:2%;font-size:13px;">✦</span>
+  <span class="sparkle s3" style="top:22%;right:6%;font-size:16px;">✦</span>
+  <span class="sparkle s4" style="top:82%;right:10%;font-size:14px;">✦</span>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="kicker"><span class="dot"></span>Face painting &amp; glitter for every kind of event</span>
+        <h1>We bring the <span class="paint">bling &amp; sparkle</span></h1>
+        <span class="script script-line">…to birthdays, weddings, festivals &amp; more!</span>
+        <p>Professional face painting and glitter tattoos that turn any gathering into an occasion — for kids, teens, and yes, adults too.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-pink" href="mailto:rebecca@brushesnbling.com">Book Your Event ✦</a>
+          <a class="btn btn-line" href="#gallery">See Our Work</a>
+        </div>
+        <div class="palette">
+          <span class="swatch" style="background:var(--teal);"></span>
+          <span class="swatch" style="background:var(--gold);"></span>
+          <span class="swatch" style="background:var(--blue);"></span>
+          <span class="swatch" style="background:var(--purple);"></span>
+          <span class="swatch" style="background:var(--pink);"></span>
+          <span class="lbl">Every colour you can dream up</span>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="art-card a1">Dino scales</div>
+        <div class="art-card a2">Golden crown</div>
+        <div class="art-card a3">Glitter tattoo</div>
+        <div class="art-tag"><span class="script">Adults get painted too!</span>designs for every age</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="occasions">
+  <div class="wrap">
+    <div class="sec-head rv" style="margin-bottom:30px;">
+      <h2>Any event. Every occasion.</h2>
+    </div>
+    <div class="chip-cloud rv d1">
+      <span class="chip">Birthday parties</span>
+      <span class="chip">Weddings</span>
+      <span class="chip">Corporate events</span>
+      <span class="chip">Festivals</span>
+      <span class="chip">Bachelorettes</span>
+      <span class="chip">Bar &amp; bat mitzvahs</span>
+      <span class="chip">Renaissance fairs</span>
+      <span class="chip">Summer camps</span>
+      <span class="chip">Holiday parties</span>
+      <span class="chip">UV glow events</span>
+      <span class="chip">Proms &amp; graduations</span>
+      <span class="chip">Beach parties</span>
+      <span class="chip">Music festivals</span>
+      <span class="chip">Communions</span>
+      <span class="chip">Engagements</span>
+      <span class="chip-more">…and so much more!</span>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="script">What we do</span>
+      <h2>Four ways to sparkle</h2>
+      <p>More details on every service live on the Our Services page — here's the short version.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc rv"><span class="ico">🖌️</span><h3>Face Painting</h3><p>From quick cheek art to full-face masterpieces — favourite characters, animals, and custom requests.</p></div>
+      <div class="svc rv d1"><span class="ico">✨</span><h3>Glitter Tattoos</h3><p>Sparkly, skin-safe designs that last for days and survive pool parties like a champ.</p></div>
+      <div class="svc rv d2"><span class="ico">💄</span><h3>Adults &amp; Teens</h3><p>Elegant, festival-ready designs made for grown-ups — because sparkle has no age limit.</p></div>
+      <div class="svc rv d3"><span class="ico">🌙</span><h3>UV Glow</h3><p>Designs that light up under blacklight — perfect for raves, glow parties, and night events.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="script">Fresh off the brush</span>
+      <h2>A peek at the gallery</h2>
+    </div>
+    <div class="gal-grid rv d1">
+      <div class="g tall" style="background:linear-gradient(160deg,#5FC2BA,#2A837C);">Tiger stripes</div>
+      <div class="g" style="background:linear-gradient(160deg,#F0B95C,#C77F1E);">Golden crown</div>
+      <div class="g" style="background:linear-gradient(160deg,#6FA3EE,#2E63BE);">Superhero mask</div>
+      <div class="g tall" style="background:linear-gradient(160deg,#9F79CF,#6C4699);">Galaxy glow</div>
+      <div class="g" style="background:linear-gradient(160deg,#F291B4,#C2416F);">Butterfly princess</div>
+      <div class="g" style="background:linear-gradient(160deg,#E8A33D,#3BA8A0);">Dino face</div>
+    </div>
+    <p class="gal-note">Placeholder tiles — the live site would pull real photos from your gallery and Instagram.</p>
+  </div>
+</section>
+
+<div class="know">
+  <div class="wrap">
+    <section style="padding:76px 0;">
+      <div class="sec-head rv">
+        <span class="script">Good to know</span>
+        <h2>The practical bits, handled</h2>
+      </div>
+      <div class="know-grid">
+        <div class="know-card rv"><span class="ico">🧼</span><h3>Easy removal</h3><p>Face paint and glitter tattoos come off gently when the fun is done — our full <a href="#">How to Remove guide</a> walks you through it.</p></div>
+        <div class="know-card rv d1"><span class="ico">📍</span><h3>We come to you</h3><p>We travel to events across the region — check the <a href="#">Where We Work</a> page to see if your venue's in range.</p></div>
+        <div class="know-card rv d2"><span class="ico">💬</span><h3>Quick replies</h3><p>Email or call and you'll hear back within 24–36 hours — usually with a few questions about your event so we can quote it right.</p></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<section>
+  <div class="cta">
+    <span class="sparkle" style="top:16%;right:8%;font-size:18px;color:#FFE3B8;">✦</span>
+    <span class="sparkle s2" style="bottom:18%;right:24%;font-size:13px;color:#fff;">✦</span>
+    <div>
+      <span class="script">Let's make it sparkle</span>
+      <h2>Ready to book your event?</h2>
+      <p>Tell us the date, the occasion, and how many faces need painting — we'll take it from there.</p>
+    </div>
+    <div class="cta-side">
+      <span class="cta-line">✉️ Rebecca@BrushesnBling.com</span>
+      <span class="cta-line">📞 289-221-1030</span>
+      <span class="cta-note">Replies within 24–36 hours</span>
+      <a class="btn btn-pink" href="mailto:rebecca@brushesnbling.com">Book Now ✦</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="f-col">
+        <h5>Brushes n Bling</h5>
+        <p>Professional face painting and glitter tattoos for events of every kind — kids, teens, and adults alike.</p>
+      </div>
+      <div class="f-col">
+        <h5>Explore</h5>
+        <a href="#">Our Services</a>
+        <a href="#">Pricing</a>
+        <a href="#">Gallery</a>
+        <a href="#">Where We Work</a>
+      </div>
+      <div class="f-col">
+        <h5>Helpful</h5>
+        <a href="#">How to Remove</a>
+        <a href="#">Choosing a Face Painter</a>
+        <a href="https://www.instagram.com/brushes_n_bling_face_painting/">Instagram ↗</a>
+      </div>
+      <div class="f-col">
+        <h5>Book</h5>
+        <a href="mailto:rebecca@brushesnbling.com">Rebecca@BrushesnBling.com</a>
+        <a href="tel:2892211030">289-221-1030</a>
+        <a href="#">Replies in 24–36 hrs</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Brushes n Bling — concept mockup</span>
+      <span>Homepage only · other pages not yet built</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.15});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+})();
+</script>
+</body>
+</html>
