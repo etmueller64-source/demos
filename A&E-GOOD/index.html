@@ -175,6 +175,7 @@
   .scard .cat{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-dim);letter-spacing:.1em;}
   .scard .go{width:40px;height:40px;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;transition:all .25s;margin-top:auto;}
   .scard:hover .go{border-color:var(--accent);color:var(--accent);}
+  .work-note{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-dim);letter-spacing:.06em;}
 
   /* ---------- cta ---------- */
   .cta h2{font-size:clamp(44px,7vw,96px);margin-bottom:36px;}
@@ -345,32 +346,116 @@
     <h2 style="font-size:clamp(34px,4.6vw,58px);">Built for real <span style="color:var(--ink-dim);">local businesses.</span></h2>
   </div>
   <div class="wrap">
-    <a class="scard hoverable" href="#">
-      <div><div class="num">PROJECT 01 / 06</div><h3>Aurora-King Baseball Association</h3><p>An 18-page league site with live Google Sheets data — teams, schedules, standings, and registration for a community of hundreds of families.</p></div>
-      <div class="side"><span class="status live">Live · Client</span><span class="cat">SPORTS ORG</span><span class="go">↗</span></div>
-    </a>
-    <a class="scard hoverable" href="#" style="top:126px;">
-      <div><div class="num">PROJECT 02 / 06</div><h3>Kloud9 Boarding &amp; Training</h3><p>Seven pages built around a 24-hour boarding facility's always-open advantage — services, rates, and a booking pipeline.</p></div>
-      <div class="side"><span class="status">Concept</span><span class="cat">PET BOARDING</span><span class="go">↗</span></div>
-    </a>
-    <a class="scard hoverable" href="#" style="top:142px;">
-      <div><div class="num">PROJECT 03 / 06</div><h3>Beast to Beauty Pet Styling</h3><p>A salon-glam identity built on the name itself — split before/after visuals and a beauty-parlour menu for Aurora's cage-free groomer.</p></div>
-      <div class="side"><span class="status">Concept</span><span class="cat">GROOMING</span><span class="go">↗</span></div>
-    </a>
-    <a class="scard hoverable" href="#" style="top:158px;">
-      <div><div class="num">PROJECT 04 / 06</div><h3>Aurora Cat Hotel</h3><p>A boutique dark-mode "hotel" experience for a cats-only boarder — suites, amenities, and a guest book styled like fine hospitality.</p></div>
-      <div class="side"><span class="status">Concept</span><span class="cat">CAT BOARDING</span><span class="go">↗</span></div>
-    </a>
-    <a class="scard hoverable" href="#" style="top:174px;">
-      <div><div class="num">PROJECT 05 / 06</div><h3>Hero's Respite Haven</h3><p>Calm, care-first design for special-needs pet boarding — anchored by a live "care sheet" concept families can trust.</p></div>
-      <div class="side"><span class="status">Concept</span><span class="cat">SPECIAL NEEDS</span><span class="go">↗</span></div>
-    </a>
-    <a class="scard hoverable" href="#" style="top:190px;margin-bottom:120px;">
-      <div><div class="num">PROJECT 06 / 06</div><h3>PAWS Personal Pet Care</h3><p>A warm, family-album redesign for a home-based sitter — putting fifteen years of story and word-of-mouth trust front and centre.</p></div>
-      <div class="side"><span class="status">Concept</span><span class="cat">PET SITTING</span><span class="go">↗</span></div>
-    </a>
+    <div id="portfolio-stack">
+      <div class="work-note" id="portfolio-stack-status" style="padding:20px 0;">Loading portfolio…</div>
+    </div>
   </div>
 </div>
+
+<script>
+(function(){
+  // Same published Google Sheet as the Work page — one CSV, both pages.
+  const PORTFOLIO_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
+
+  function parseCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+
+  function extractRows(rows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rows.findIndex(r=>r.some(c=>['name','business','project'].includes(norm(c))));
+    if(headerIndex===-1) return {cols:null,data:[]};
+    const header=rows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={
+      order:      find('order','#','no','number'),
+      name:       find('name','business','project','business name'),
+      status:     find('status'),
+      category:   find('category','industry','type'),
+      desc:       find('description','summary','blurb'),
+      link:       find('link','url','website')
+    };
+    return {cols, data:rows.slice(headerIndex+1)};
+  }
+
+  function renderStack(result){
+    const container=document.getElementById('portfolio-stack');
+    const {cols,data}=result;
+    if(!cols){
+      container.innerHTML='<div class="work-note">Connect the Google Sheet link in the code to show live projects.</div>';
+      return;
+    }
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    const rows=data.filter(r=>get(r,cols.name));
+    if(!rows.length){
+      container.innerHTML='<div class="work-note">No projects listed yet — check back soon.</div>';
+      return;
+    }
+    const total=rows.length;
+    container.innerHTML=rows.map((r,i)=>{
+      const num=get(r,cols.order)||String(i+1).padStart(2,'0');
+      const name=get(r,cols.name);
+      const status=get(r,cols.status)||'Concept';
+      const isLive=/live/i.test(status);
+      const category=(get(r,cols.category)||'').toUpperCase();
+      const desc=get(r,cols.desc);
+      const link=get(r,cols.link);
+      const hasLink=/^https?:\/\//i.test(link);
+      const tag=hasLink
+        ? 'href="'+link+'" target="_blank" rel="noopener"'
+        : 'href="#" onclick="alert(\'Demo coming soon — check back shortly!\');return false;"';
+      const top=110+i*16;
+      const isLast=i===rows.length-1;
+      const style='top:'+top+'px;'+(isLast?'margin-bottom:120px;':'');
+      return '<a class="scard hoverable" '+tag+' style="'+style+'">'
+        +'<div><div class="num">PROJECT '+String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0')+'</div>'
+        +'<h3>'+name+'</h3><p>'+desc+'</p></div>'
+        +'<div class="side"><span class="status'+(isLive?' live':'')+'">'+status+'</span>'
+        +(category?'<span class="cat">'+category+'</span>':'')
+        +'<span class="go">↗</span></div></a>';
+    }).join('');
+
+    if(window.matchMedia('(pointer: fine)').matches){
+      container.querySelectorAll('.hoverable').forEach(el=>{
+        el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+      });
+    }
+  }
+
+  function loadStack(){
+    if(!PORTFOLIO_CSV_URL || PORTFOLIO_CSV_URL.includes('PASTE_YOUR')){
+      document.getElementById('portfolio-stack-status').textContent='Connect the Google Sheet link in the code to show live projects.';
+      return;
+    }
+    fetch(PORTFOLIO_CSV_URL)
+      .then(r=>{if(!r.ok) throw new Error('HTTP '+r.status); return r.text();})
+      .then(text=>renderStack(extractRows(parseCSV(text))))
+      .catch(err=>{
+        console.error('Portfolio CSV failed to load:', err);
+        document.getElementById('portfolio-stack').innerHTML='<div class="work-note">Could not load the portfolio right now.</div>';
+      });
+  }
+  loadStack();
+})();
+</script>
 
 <section class="cta" id="s4">
   <div class="wrap">
