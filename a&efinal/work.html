@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Services — A&E Design</title>
+<title>Work — A&E Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -50,7 +50,7 @@
   nav.links a.cur::before{opacity:1;}
   .nav-cta{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;border:1px solid var(--line-strong);padding:10px 20px;transition:all .2s;}
   .nav-cta:hover{border-color:var(--accent);color:var(--accent);}
-  .page-hero{padding:190px 0 60px;}
+  .page-hero{padding-top:190px;padding-bottom:60px;}
   .page-hero h1{font-size:clamp(46px,7vw,96px);margin-top:22px;}
   .page-hero h1 .acc{color:var(--accent);}
   .page-hero .sub{color:var(--ink-dim);font-size:15.5px;max-width:520px;margin-top:24px;}
@@ -82,7 +82,7 @@
     nav.links{display:none;}
     #ticker{padding:8px 24px;}
     section{padding:80px 0;}
-    .page-hero{padding:160px 0 40px;}
+    .page-hero{padding-top:160px;padding-bottom:40px;}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.001s !important;transition-duration:.001s !important;}
@@ -91,31 +91,38 @@
     #cur,#curRing{display:none;}
   }
 
-  .svc-layer{border:1px solid var(--line);border-bottom:none;display:grid;grid-template-columns:280px 1fr 1fr;}
-  .svc-layer:last-of-type{border-bottom:1px solid var(--line);}
-  .svc-cell{padding:48px 40px;border-left:1px solid var(--line);}
-  .svc-cell:first-child{border-left:none;}
-  .svc-layer .lnum{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:16px;display:block;}
-  .svc-layer h3{font-size:clamp(30px,3.4vw,44px);}
-  .svc-cell h4{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:20px;}
-  .svc-list{list-style:none;}
-  .svc-list li{padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--ink);display:flex;gap:12px;align-items:baseline;transition:padding-left .25s,color .25s;}
-  .svc-list li::before{content:"→";color:var(--accent);font-size:12px;}
-  .svc-list li:hover{padding-left:8px;}
-  .svc-list li:last-child{border-bottom:none;}
-  .svc-cell p{color:var(--ink-dim);font-size:14px;}
-  .proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
-  .proc{background:var(--bg);padding:40px 34px;transition:background .3s;}
-  .proc:hover{background:var(--bg-soft);}
-  .proc .pnum{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:44px;color:transparent;-webkit-text-stroke:1px var(--line-strong);line-height:1;margin-bottom:22px;transition:all .3s;}
-  .proc:hover .pnum{-webkit-text-stroke:1px var(--accent);}
-  .proc h3{font-size:17px;margin-bottom:10px;letter-spacing:-0.01em;}
-  .proc p{color:var(--ink-dim);font-size:13.5px;}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
+  .stat{background:var(--bg);padding:40px 34px;transition:all .3s;}
+  .stat:hover{background:var(--ink);}
+  .stat:hover .num,.stat:hover .lbl{color:var(--bg);}
+  .stat:hover .suffix{color:var(--accent);}
+  .stat .num{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(36px,4.2vw,56px);line-height:1;display:flex;align-items:baseline;gap:4px;transition:color .3s;}
+  .stat .suffix{font-size:.5em;color:var(--accent);}
+  .stat .lbl{margin-top:12px;transition:color .3s;}
+  .row{border:1px solid var(--line);border-bottom:none;background:var(--bg);display:block;overflow:hidden;transition:background .3s;}
+  .row:last-of-type{border-bottom:1px solid var(--line);}
+  .row-head{display:grid;grid-template-columns:70px 1fr auto auto;gap:26px;align-items:center;padding:32px 40px;}
+  .row .rnum{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-dim);}
+  .row h3{font-size:clamp(20px,2.8vw,34px);transition:color .25s,transform .3s;}
+  .row:hover{background:var(--bg-soft);}
+  .row:hover h3{color:var(--accent);transform:translateX(8px);}
+  .row .status{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--line-strong);color:var(--ink-dim);white-space:nowrap;}
+  .row .status.live{border-color:var(--accent-dim);color:var(--accent);}
+  .row .go{font-size:18px;color:var(--ink-dim);transition:all .25s;}
+  .row:hover .go{color:var(--accent);transform:translate(4px,-4px);}
+  .row-body{max-height:0;transition:max-height .45s cubic-bezier(.2,.65,.25,1);}
+  .row:hover .row-body{max-height:150px;}
+  .row-body-inner{padding:0 40px 32px 136px;display:flex;justify-content:space-between;gap:30px;align-items:center;}
+  .row-body p{color:var(--ink-dim);font-size:13.5px;max-width:600px;}
+  .swatches{display:flex;gap:6px;flex-shrink:0;}
+  .sw{width:22px;height:22px;border:1px solid var(--line-strong);}
+  .work-note{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-dim);letter-spacing:.06em;margin-top:22px;}
+  .work-note b{color:var(--accent);font-weight:500;}
   @media (max-width:920px){
-    .svc-layer{grid-template-columns:1fr;}
-    .svc-cell{border-left:none;border-top:1px solid var(--line);}
-    .svc-cell:first-child{border-top:none;}
-    .proc-grid{grid-template-columns:1fr 1fr;}
+    .stat-grid{grid-template-columns:1fr 1fr;}
+    .row-head{grid-template-columns:44px 1fr auto;padding:24px;}
+    .row .go{display:none;}
+    .row-body-inner{padding:0 24px 26px 94px;flex-direction:column;align-items:flex-start;}
   }
 
 </style>
@@ -138,8 +145,8 @@
     </a>
     <nav class="links">
       <a class="hoverable" href="index.html">home</a>
-      <a class="hoverable cur" href="services.html">services</a>
-      <a class="hoverable" href="work.html">work</a>
+      <a class="hoverable" href="services.html">services</a>
+      <a class="hoverable cur" href="work.html">work</a>
       <a class="hoverable" href="about.html">about</a>
       <a class="hoverable" href="contact.html">contact</a>
     </nav>
@@ -148,75 +155,158 @@
 </header>
 
 <div class="wrap page-hero">
-  <div class="micro">Services <b>·</b> Design — Build — Grow</div>
-  <h1>Three layers.<br><span class="acc">One partner.</span></h1>
-  <p class="sub">Every engagement moves through the same three layers — so you always know what's happening, what's next, and what you're getting.</p>
+  <div class="micro">Selected Work <b>·</b> 2025 — 2026</div>
+  <h1>Real sites for<br><span class="acc">real businesses.</span></h1>
+  <p class="sub">One live client build and five concept sites built on spec — each designed from scratch for a specific local business, because that's how we work.</p>
 </div>
 
 <section style="padding-top:20px;">
   <div class="wrap">
-    <div class="svc-layer rv">
-      <div class="svc-cell"><span class="lnum">Layer 1.0</span><h3>Design</h3></div>
-      <div class="svc-cell">
-        <h4>What's included</h4>
-        <ul class="svc-list">
-          <li>Discovery call — your business, your customers, your goals</li>
-          <li>Custom visual identity that fits your brand</li>
-          <li>Mobile-first layout, designed screen by screen</li>
-          <li>A clickable preview you approve before any build</li>
-        </ul>
-      </div>
-      <div class="svc-cell">
-        <h4>Why it matters</h4>
-        <p>Templates make every business look like every other business. We design for yours specifically — the way your customers find you, judge you, and decide to call you. Nothing goes to build until you've clicked through it and love it.</p>
-      </div>
-    </div>
-    <div class="svc-layer rv">
-      <div class="svc-cell"><span class="lnum">Layer 2.0</span><h3>Build</h3></div>
-      <div class="svc-cell">
-        <h4>What's included</h4>
-        <ul class="svc-list">
-          <li>Hand-coded, fast-loading pages — no page builders</li>
-          <li>Click-to-call, booking &amp; contact forms, maps</li>
-          <li>Live data feeds (schedules, rosters, menus) from Google Sheets</li>
-          <li>Hosting, domain &amp; SSL set up properly</li>
-        </ul>
-      </div>
-      <div class="svc-cell">
-        <h4>Why it matters</h4>
-        <p>Speed and reliability aren't features — they're the baseline. Hand-built sites load faster, rank better, and never break because a plugin updated. And live data means your site updates itself when your spreadsheet does.</p>
-      </div>
-    </div>
-    <div class="svc-layer rv">
-      <div class="svc-cell"><span class="lnum">Layer 3.0</span><h3>Grow</h3></div>
-      <div class="svc-cell">
-        <h4>What's included</h4>
-        <ul class="svc-list">
-          <li>Content updates as your business changes</li>
-          <li>Live Google rating &amp; reviews on your site</li>
-          <li>Search visibility basics done right</li>
-          <li>A real person to call when you need a change</li>
-        </ul>
-      </div>
-      <div class="svc-cell">
-        <h4>Why it matters</h4>
-        <p>A website isn't finished at launch — it's finished never. Seasons change, prices change, staff change. We keep your site current so it keeps working as hard on day 500 as it did on day one.</p>
-      </div>
+    <div class="stat-grid rv">
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="7">0</span></div><div class="lbl micro">Sites designed &amp; built</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="30">0</span><span class="suffix">+</span></div><div class="lbl micro">Pages shipped</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="6">0</span></div><div class="lbl micro">Industries covered</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="100">0</span><span class="suffix">%</span></div><div class="lbl micro">Custom code — zero templates</div></div>
     </div>
   </div>
 </section>
 
 <section style="padding-top:0;">
   <div class="wrap">
-    <div class="sec-label"><span class="micro">How an engagement runs</span><div class="rule"></div><span class="micro">First call → first customer</span></div>
-    <div class="proc-grid rv">
-      <div class="proc hoverable"><div class="pnum">01</div><h3>Talk</h3><p>A short conversation about your business, your customers, and what the site needs to do.</p></div>
-      <div class="proc hoverable"><div class="pnum">02</div><h3>Design</h3><p>We build a working preview you can click through — and refine it with your feedback.</p></div>
-      <div class="proc hoverable"><div class="pnum">03</div><h3>Launch</h3><p>Your site goes live on your own domain, fast and mobile-ready, with everything connected.</p></div>
-      <div class="proc hoverable"><div class="pnum">04</div><h3>Grow</h3><p>We keep it updated as your business changes — you run the shop, we run the site.</p></div>
+    <div class="sec-label"><span class="micro">The portfolio</span><div class="rule"></div><span class="micro" id="portfolio-hint">Hover to expand</span></div>
+    <div id="portfolio-rows">
+      <div class="work-note" id="portfolio-status">Loading portfolio…</div>
     </div>
+    <div class="work-note">Concept sites are built on spec to show what's possible. <b>Yours could be next.</b></div>
   </div>
 </section>
+
+<script>
+(function(){
+  // ---- Paste your published Google Sheet "Portfolio" tab CSV link below ----
+  const PORTFOLIO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTVWV21q4deo0_QkfYEOlMyvD2-3tKF7p8ch0G1XECEmqG30Z5SI0BhRELjpDFK72QiVCDFyWi4eYt5/pub?gid=0&single=true&output=csv";
+
+  function parseCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+
+  // Maps columns by header name, so column order in the sheet doesn't matter
+  // and you can rearrange or add columns freely.
+  function extractRows(rows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rows.findIndex(r=>r.some(c=>['name','business','project'].includes(norm(c))));
+    if(headerIndex===-1) return {cols:null,data:[]};
+    const header=rows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={
+      order:      find('order','#','no','number'),
+      name:       find('name','business','project','business name'),
+      status:     find('status'),
+      category:   find('category','industry','type'),
+      desc:       find('description','summary','blurb'),
+      colors:     find('colors','swatches','palette'),
+      color1:     find('color 1','color1'),
+      color2:     find('color 2','color2'),
+      color3:     find('color 3','color3'),
+      link:       find('link','url','website')
+    };
+    return {cols, data:rows.slice(headerIndex+1)};
+  }
+
+  function swatchesFor(row,cols){
+    const get=i=>(i>=0 && row[i]!=null)?row[i].trim():'';
+    let colors=[];
+    if(cols.colors>=0 && get(cols.colors)){
+      colors=get(cols.colors).split(/[,;]\s*/).filter(Boolean);
+    }else{
+      [cols.color1,cols.color2,cols.color3].forEach(i=>{const v=get(i);if(v)colors.push(v);});
+    }
+    if(!colors.length) colors=['#5B8CFF','#9C9C98','#F5F5F3']; // fallback trio
+    return colors.slice(0,3).map(hex=>'<span class="sw" style="background:'+hex+';"></span>').join('');
+  }
+
+  function renderPortfolio(result){
+    const container=document.getElementById('portfolio-rows');
+    const hint=document.getElementById('portfolio-hint');
+    const {cols,data}=result;
+    if(!cols){
+      container.innerHTML='<div class="work-note">Connect the Google Sheet link in the code to show live projects.</div>';
+      return;
+    }
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    const rows=data.filter(r=>get(r,cols.name));
+    if(!rows.length){
+      container.innerHTML='<div class="work-note">No projects listed yet — check back soon.</div>';
+      return;
+    }
+    hint.textContent='Hover to expand';
+    container.innerHTML=rows.map((r,i)=>{
+      const order=get(r,cols.order)||String(i+1).padStart(2,'0');
+      const name=get(r,cols.name);
+      const status=get(r,cols.status)||'Concept';
+      const isLive=/live/i.test(status);
+      const category=get(r,cols.category);
+      const desc=get(r,cols.desc);
+      const link=get(r,cols.link);
+      const hasLink=/^https?:\/\//i.test(link);
+      const tag=hasLink
+        ? 'href="'+link+'" target="_blank" rel="noopener"'
+        : 'href="#" onclick="alert(\'Demo coming soon — check back shortly!\');return false;"';
+      return '<a class="row rv hoverable" '+tag+'>'
+        +'<div class="row-head"><span class="rnum">'+order+'</span><h3>'+name+'</h3>'
+        +'<span class="status'+(isLive?' live':'')+'">'+status+'</span><span class="go">↗</span></div>'
+        +'<div class="row-body"><div class="row-body-inner"><p>'+desc
+        +(category?' <span style="color:var(--ink-dim);">— '+category+'</span>':'')+'</p>'
+        +'<div class="swatches">'+swatchesFor(r,cols)+'</div>'
+        +'</div></div></a>';
+    }).join('');
+
+    // give freshly-injected rows the same scroll-reveal behavior as the rest of the page
+    const rio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rio.unobserve(e.target);}});},{threshold:.1});
+    container.querySelectorAll('.rv').forEach(el=>rio.observe(el));
+
+    // re-arm the custom cursor's hover state on the new links
+    if(window.matchMedia('(pointer: fine)').matches){
+      container.querySelectorAll('.hoverable').forEach(el=>{
+        el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+      });
+    }
+  }
+
+  function loadPortfolio(){
+    if(!PORTFOLIO_CSV_URL || PORTFOLIO_CSV_URL.includes('PASTE_YOUR')){
+      document.getElementById('portfolio-status').textContent='Connect the Google Sheet link in the code to show live projects.';
+      return;
+    }
+    fetch(PORTFOLIO_CSV_URL)
+      .then(r=>{if(!r.ok) throw new Error('HTTP '+r.status); return r.text();})
+      .then(text=>renderPortfolio(extractRows(parseCSV(text))))
+      .catch(err=>{
+        console.error('Portfolio CSV failed to load:', err);
+        document.getElementById('portfolio-rows').innerHTML='<div class="work-note">Could not load the portfolio right now.</div>';
+      });
+  }
+  loadPortfolio();
+})();
+</script>
 
 <div class="cta-band">
   <div class="wrap">
