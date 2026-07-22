@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Work — A&E Design</title>
+<title>Work - A&E Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -155,9 +155,9 @@
 </header>
 
 <div class="wrap page-hero">
-  <div class="micro">Selected Work <b>·</b> 2025 — 2026</div>
+  <div class="micro">Selected Work <b>·</b> 2025 - 2026</div>
   <h1>Real sites for<br><span class="acc">real businesses.</span></h1>
-  <p class="sub">One live client build and five concept sites built on spec — each designed from scratch for a specific local business, because that's how we work.</p>
+  <p class="sub">One live client build and five concept sites built on spec - each designed from scratch for a specific local business, because that's how we work.</p>
 </div>
 
 <section style="padding-top:20px;">
@@ -166,7 +166,7 @@
       <div class="stat hoverable"><div class="num"><span class="count" data-target="7">0</span></div><div class="lbl micro">Sites designed &amp; built</div></div>
       <div class="stat hoverable"><div class="num"><span class="count" data-target="30">0</span><span class="suffix">+</span></div><div class="lbl micro">Pages shipped</div></div>
       <div class="stat hoverable"><div class="num"><span class="count" data-target="6">0</span></div><div class="lbl micro">Industries covered</div></div>
-      <div class="stat hoverable"><div class="num"><span class="count" data-target="100">0</span><span class="suffix">%</span></div><div class="lbl micro">Custom code — zero templates</div></div>
+      <div class="stat hoverable"><div class="num"><span class="count" data-target="100">0</span><span class="suffix">%</span></div><div class="lbl micro">Custom code - zero templates</div></div>
     </div>
   </div>
 </section>
@@ -253,7 +253,7 @@
     const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
     const rows=data.filter(r=>get(r,cols.name));
     if(!rows.length){
-      container.innerHTML='<div class="work-note">No projects listed yet — check back soon.</div>';
+      container.innerHTML='<div class="work-note">No projects listed yet - check back soon.</div>';
       return;
     }
     hint.textContent='Hover to expand';
@@ -268,12 +268,12 @@
       const hasLink=/^https?:\/\//i.test(link);
       const tag=hasLink
         ? 'href="'+link+'" target="_blank" rel="noopener"'
-        : 'href="#" onclick="alert(\'Demo coming soon — check back shortly!\');return false;"';
+        : 'href="#" onclick="alert(\'Demo coming soon - check back shortly!\');return false;"';
       return '<a class="row rv hoverable" '+tag+'>'
         +'<div class="row-head"><span class="rnum">'+order+'</span><h3>'+name+'</h3>'
         +'<span class="status'+(isLive?' live':'')+'">'+status+'</span><span class="go">↗</span></div>'
         +'<div class="row-body"><div class="row-body-inner"><p>'+desc
-        +(category?' <span style="color:var(--ink-dim);">— '+category+'</span>':'')+'</p>'
+        +(category?' <span style="color:var(--ink-dim);">- '+category+'</span>':'')+'</p>'
         +'<div class="swatches">'+swatchesFor(r,cols)+'</div>'
         +'</div></div></a>';
     }).join('');
@@ -331,7 +331,7 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 A&amp;E DESIGN. ALL RIGHTS RESERVED.</span>
-      <span>DESIGNED &amp; BUILT BY US — LIKE EVERYTHING WE SHIP.</span>
+      <span>DESIGNED &amp; BUILT BY US - LIKE EVERYTHING WE SHIP.</span>
     </div>
   </div>
 </footer>

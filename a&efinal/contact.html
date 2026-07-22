@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact — A&E Design</title>
+<title>Contact - A&E Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -152,7 +152,7 @@
 <div class="wrap page-hero">
   <div class="micro">Contact <b>·</b> Accepting projects</div>
   <h1>Let's build<br><span class="acc">yours.</span></h1>
-  <p class="sub">Tell us a little about your business and we'll get back to you within a day — usually faster.</p>
+  <p class="sub">Tell us a little about your business and we'll get back to you within a day - usually faster.</p>
 </div>
 
 <section style="padding-top:20px;">
@@ -174,7 +174,7 @@
             <option>A brand-new website</option>
             <option>A redesign of my current site</option>
             <option>Updates / maintenance help</option>
-            <option>Not sure yet — let's talk</option>
+            <option>Not sure yet - let's talk</option>
           </select>
         </div>
         <div class="form-row">
@@ -182,7 +182,7 @@
           <textarea id="f-msg" placeholder="What does your business do, and what should the site do for you?"></textarea>
         </div>
         <a class="btn btn-fill hoverable magnetic" href="#" id="f-send">Send it over →</a>
-        <div class="form-note">// opens your email app with everything pre-filled — nothing is stored on this site</div>
+        <div class="form-note">// opens your email app with everything pre-filled - nothing is stored on this site</div>
       </div>
       <div class="c-cell">
         <div class="sec-label" style="margin-bottom:34px;"><span class="micro">Reach us directly</span><div class="rule"></div></div>
@@ -190,7 +190,7 @@
           <li><a class="hoverable" href="mailto:hello@aedesign.ca"><span class="k">Email</span><span class="v">hello@aedesign.ca</span></a></li>
           <li><a class="hoverable" href="tel:0000000000"><span class="k">Phone / Text</span><span class="v">(XXX) XXX-XXXX</span></a></li>
           <li><span class="k">Based in</span><span class="v">Aurora / Newmarket, Ontario</span></li>
-          <li><span class="k">Serving</span><span class="v">York Region &amp; beyond — remote-friendly</span></li>
+          <li><span class="k">Serving</span><span class="v">York Region &amp; beyond - remote-friendly</span></li>
           <li><span class="k">Response time</span><span class="v">Within 24 hours, usually same-day</span></li>
         </ul>
       </div>
@@ -203,7 +203,7 @@
     <div class="sec-label"><span class="micro">Common questions</span><div class="rule"></div><span class="micro">Click to expand</span></div>
     <div class="acc-item open">
       <button class="acc-head hoverable" type="button"><h3>How much does a website cost?</h3><span class="pm">+</span></button>
-      <div class="acc-body"><div class="acc-body-inner">It depends on size and features, and we'll give you a clear, fixed quote before anything starts — no hourly surprises. A simple site costs less than most businesses expect; tell us what you need and we'll tell you exactly what it costs.</div></div>
+      <div class="acc-body"><div class="acc-body-inner">It depends on size and features, and we'll give you a clear, fixed quote before anything starts - no hourly surprises. A simple site costs less than most businesses expect; tell us what you need and we'll tell you exactly what it costs.</div></div>
     </div>
     <div class="acc-item">
       <button class="acc-head hoverable" type="button"><h3>How long does it take?</h3><span class="pm">+</span></button>
@@ -211,11 +211,11 @@
     </div>
     <div class="acc-item">
       <button class="acc-head hoverable" type="button"><h3>I already have a website. Can you improve it?</h3><span class="pm">+</span></button>
-      <div class="acc-body"><div class="acc-body-inner">Yes — redesigns are a big part of what we do. We'll review what you have, tell you honestly what's worth keeping, and show you a preview of what it could become before you commit to anything.</div></div>
+      <div class="acc-body"><div class="acc-body-inner">Yes - redesigns are a big part of what we do. We'll review what you have, tell you honestly what's worth keeping, and show you a preview of what it could become before you commit to anything.</div></div>
     </div>
     <div class="acc-item">
       <button class="acc-head hoverable" type="button"><h3>What happens after launch?</h3><span class="pm">+</span></button>
-      <div class="acc-body"><div class="acc-body-inner">Your call: some clients take the keys and go, most keep us on for updates and maintenance. Either way, you own your domain and your site — no lock-in, ever.</div></div>
+      <div class="acc-body"><div class="acc-body-inner">Your call: some clients take the keys and go, most keep us on for updates and maintenance. Either way, you own your domain and your site - no lock-in, ever.</div></div>
     </div>
   </div>
 </section>
@@ -232,7 +232,7 @@
     </div>
     <div class="foot-bottom">
       <span>© 2026 A&amp;E DESIGN. ALL RIGHTS RESERVED.</span>
-      <span>DESIGNED &amp; BUILT BY US — LIKE EVERYTHING WE SHIP.</span>
+      <span>DESIGNED &amp; BUILT BY US - LIKE EVERYTHING WE SHIP.</span>
     </div>
   </div>
 </footer>
@@ -290,14 +290,14 @@
     });
   });
 
-  /* build a mailto from the form — works with no backend */
+  /* build a mailto from the form - works with no backend */
   const send=document.getElementById('f-send');
   if(send){
     send.addEventListener('click',e=>{
       e.preventDefault();
       const v=id=>document.getElementById(id).value.trim();
       const name=v('f-name'),biz=v('f-biz'),need=document.getElementById('f-need').value,msg=v('f-msg');
-      const subject=encodeURIComponent('Project inquiry — '+(biz||name||'new project'));
+      const subject=encodeURIComponent('Project inquiry - '+(biz||name||'new project'));
       const body=encodeURIComponent('Name: '+name+'\nBusiness: '+biz+'\nLooking for: '+need+'\n\n'+msg);
       location.href='mailto:hello@aedesign.ca?subject='+subject+'&body='+body;
     });
