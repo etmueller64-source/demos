@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration — Aurora-King Baseball Association</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F7F4EA;
+    --navy:#101B34;
+    --navy-2:#16264A;
+    --red:#C0392E;
+    --red-deep:#A02F26;
+    --ink:#1A1D24;
+    --ink-soft:#5B6072;
+    --line:rgba(16,27,52,0.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  h1,h2,.display{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:0.01em;text-transform:uppercase;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px;}
+  :focus-visible{outline:2px solid var(--red);outline-offset:3px;}
+  section{scroll-margin-top:84px;}
+
+  /* NAV */
+  nav{background:var(--cream);border-bottom:1px solid var(--line);position:relative;z-index:100;}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:84px;}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-badge{width:38px;height:38px;border-radius:50%;border:2px solid var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .logo-badge svg{width:20px;height:20px;}
+  .logo-text .l1{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.03em;color:var(--navy);}
+  .logo-text .l2{font-size:10.5px;color:var(--ink-soft);letter-spacing:0.1em;}
+  .navlinks{display:flex;gap:26px;font-size:14px;font-weight:500;align-items:center;}
+  .navlinks > a{color:var(--ink);opacity:0.75;transition:opacity .2s;padding:8px 0;}
+  .navlinks > a:hover,.navlinks > a.active{opacity:1;}
+  .nav-cta{background:var(--red);color:#fff;padding:11px 22px;border-radius:3px;font-size:13px;font-weight:700;letter-spacing:0.04em;transition:background .2s;white-space:nowrap;margin-left:24px;flex-shrink:0;}
+  .nav-cta:hover{background:var(--red-deep);}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--navy);margin:5px 0;}
+
+  /* Dropdown */
+  .has-dropdown{position:relative;}
+  .drop-toggle{display:flex;align-items:center;gap:5px;cursor:pointer;background:none;border:none;font:inherit;color:var(--ink);opacity:0.75;padding:8px 0;font-weight:500;}
+  .drop-toggle:hover,.has-dropdown.open .drop-toggle{opacity:1;}
+  .drop-toggle svg{width:10px;height:10px;transition:transform .2s;}
+  .has-dropdown.open .drop-toggle svg{transform:rotate(180deg);}
+  .dropdown-menu{
+    position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--line);border-radius:6px;
+    box-shadow:0 16px 32px rgba(16,27,52,0.14);min-width:190px;padding:8px;
+    opacity:0;visibility:hidden;transform:translateY(6px);transition:all .18s ease;
+  }
+  .has-dropdown.open .dropdown-menu,.has-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+  .dropdown-menu a{display:block;padding:10px 12px;font-size:13.5px;font-weight:500;color:var(--ink);border-radius:4px;transition:background .15s;}
+  .dropdown-menu a:hover{background:var(--cream);}
+
+  /* Mobile nav */
+  .mobile-panel{display:none;}
+  @media (max-width:900px){
+    .navlinks{display:none;}
+    .menu-btn{display:block;}
+    .nav-cta{padding:9px 16px;font-size:12px;}
+    .mobile-panel{
+      display:block;position:absolute;top:100%;left:0;right:0;background:var(--cream);
+      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .25s ease;
+    }
+    .mobile-panel.open{max-height:520px;}
+    .mobile-panel .wrap{display:flex;flex-direction:column;padding:12px 40px 20px;height:auto;}
+    .mobile-panel a{padding:12px 0;font-size:14.5px;font-weight:600;border-bottom:1px solid var(--line);}
+    .mobile-panel .sub-link{padding-left:16px;font-weight:500;font-size:13.5px;color:var(--ink-soft);}
+  }
+
+  /* HERO */
+  .hero{
+    position:relative;color:#fff;min-height:560px;display:flex;align-items:center;
+    background:
+      linear-gradient(100deg, rgba(16,27,52,0.94) 20%, rgba(16,27,52,0.55) 60%, rgba(16,27,52,0.75) 100%),
+      radial-gradient(ellipse at 75% 40%, #2b3f6b 0%, #101B34 55%);
+    overflow:hidden;
+  }
+  .hero .bat{position:absolute;right:6%;top:50%;width:520px;height:6px;background:linear-gradient(90deg,#3a4b78,#8a95b5);transform:translateY(-50%) rotate(-32deg);border-radius:4px;opacity:0.35;}
+  .hero .silhouette{
+    position:absolute;right:4%;bottom:0;width:340px;height:520px;
+    background:linear-gradient(180deg, rgba(6,10,22,0.75), rgba(6,10,22,0.92));
+    clip-path:polygon(38% 0%, 55% 4%, 62% 14%, 58% 24%, 66% 30%, 70% 46%, 62% 52%, 68% 62%, 60% 78%, 66% 100%, 30% 100%, 38% 78%, 28% 62%, 36% 52%, 26% 44%, 30% 28%, 22% 18%, 32% 8%);
+    opacity:0.5;
+  }
+  .hero .wrap{position:relative;padding:80px 40px;}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(192,57,46,0.16);border:1px solid rgba(192,57,46,0.5);color:#F0A69E;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.08em;margin-bottom:24px;}
+  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--red);}
+  .hero h1{font-size:clamp(34px,5vw,58px);line-height:1.08;max-width:680px;margin-bottom:24px;}
+  .hero h1 .accent{color:var(--red);}
+  .hero p{font-size:16px;color:rgba(255,255,255,0.72);max-width:520px;margin-bottom:34px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{background:var(--red);color:#fff;padding:15px 26px;font-size:13.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-radius:3px;transition:background .2s;display:inline-block;}
+  .btn-primary:hover{background:var(--red-deep);}
+  .btn-outline{border:1.5px solid rgba(255,255,255,0.5);color:#fff;padding:15px 26px;font-size:13.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-radius:3px;transition:all .2s;display:inline-block;}
+  .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.08);}
+  .btn-outline-dark{border:1.5px solid var(--line);color:var(--navy);padding:15px 26px;font-size:13.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-radius:3px;transition:all .2s;display:inline-block;}
+  .btn-outline-dark:hover{border-color:var(--navy);background:var(--navy);color:#fff;}
+
+  /* STATS */
+  .stats{background:#fff;padding:44px 0;border-bottom:1px solid var(--line);}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .stat{display:flex;align-items:center;gap:14px;}
+  .stat-icon{width:42px;height:42px;border-radius:8px;background:var(--cream);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--navy);}
+  .stat-num{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--navy);line-height:1.1;}
+  .stat-label{font-size:12px;color:var(--ink-soft);letter-spacing:0.03em;text-transform:uppercase;margin-top:2px;}
+
+  /* SECTION HEAD */
+  .section{padding:88px 0;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;gap:24px;flex-wrap:wrap;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:0.12em;color:var(--red);margin-bottom:8px;}
+  .section-head h2{font-size:clamp(24px,3vw,32px);color:var(--navy);max-width:520px;}
+  .section-head p{color:var(--ink-soft);max-width:340px;font-size:14.5px;}
+  .see-all{font-size:13px;font-weight:600;color:var(--navy);border-bottom:1.5px solid var(--red);padding-bottom:2px;white-space:nowrap;}
+
+  /* PROGRAM BLOCKS (fade in) */
+  .block-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .block-card{
+    opacity:0;transform:translateY(28px);transition:opacity .6s ease, transform .6s ease;
+  }
+  .block-card.in-view{opacity:1;transform:translateY(0);}
+  .block-card:nth-child(2){transition-delay:.08s;}
+  .block-card:nth-child(3){transition-delay:.16s;}
+  .block-card:nth-child(4){transition-delay:.24s;}
+  .block-photo{aspect-ratio:4/3;border-radius:6px;margin-bottom:18px;background-size:cover;background-position:center;}
+  .bp-house{background:linear-gradient(150deg,#2b3f6b,#101B34);}
+  .bp-rep{background:linear-gradient(150deg,#8a3a30,#4a1a15);}
+  .bp-hp{background:linear-gradient(150deg,#3f5230,#1c2915);}
+  .bp-ump{background:linear-gradient(150deg,#6b6230,#2b2712);}
+  .block-card h3{font-size:19px;color:var(--red);text-transform:none;letter-spacing:0;margin-bottom:10px;font-family:'Oswald',sans-serif;font-weight:700;}
+  .block-card p{font-size:14px;color:var(--ink-soft);margin-bottom:18px;}
+  .block-btn{
+    display:inline-block;background:var(--navy);color:#fff;padding:11px 20px;font-size:12.5px;font-weight:700;
+    letter-spacing:0.03em;text-transform:uppercase;border-radius:3px;transition:background .2s;
+  }
+  .block-btn:hover{background:var(--red);}
+
+  /* NEWS (simple) */
+  .news-simple{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .news-list-simple{display:flex;flex-direction:column;}
+  .news-row{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 4px;border-bottom:1px solid var(--line);transition:background .15s;border-radius:4px;}
+  .news-row:last-child{border-bottom:none;}
+  a.news-row:hover{background:var(--cream);}
+  a.news-row:hover .news-row-title{color:var(--red);}
+  .news-row-left{display:flex;align-items:baseline;gap:16px;}
+  .news-row-date{font-size:12.5px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:0.03em;min-width:90px;}
+  .news-row-title{font-size:15px;font-weight:600;color:var(--navy);}
+  .news-row-tag{font-size:11px;color:var(--ink-soft);border:1px solid var(--line);padding:3px 9px;border-radius:20px;white-space:nowrap;}
+
+  /* CTA */
+  .cta-band{background:var(--navy);color:#fff;padding:56px 0;}
+  .cta-band .wrap{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;}
+  .cta-band h2{font-size:clamp(24px,3vw,32px);margin-bottom:10px;}
+  .cta-band p{color:rgba(255,255,255,0.65);font-size:14.5px;max-width:520px;}
+
+  /* SPONSORS */
+  .sponsors{padding:80px 0;text-align:center;}
+  .sponsors .eyebrow{text-align:center;}
+  .sponsors h2{font-size:26px;color:var(--navy);margin-bottom:44px;}
+  .sponsor-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;}
+  .sponsor-box{background:#fff;border:1px solid var(--line);border-radius:5px;height:74px;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--ink-soft);text-align:center;padding:10px;letter-spacing:0.02em;transition:border-color .2s;}
+  .sponsor-box:hover{border-color:var(--red);}
+
+  /* FOOTER */
+  footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:56px 0 28px;border-top:1px solid rgba(255,255,255,0.08);}
+  .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;}
+  .footer-brand p{font-size:13px;margin-top:14px;max-width:250px;}
+  .footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;color:#fff;}
+  .footer-col a{display:block;font-size:13.5px;margin-bottom:9px;color:rgba(255,255,255,0.55);transition:color .2s;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:22px;display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:10px;}
+
+  @media (max-width:980px){
+    .block-grid{grid-template-columns:repeat(2,1fr);}
+    .stats .wrap{grid-template-columns:repeat(2,1fr);}
+    .sponsor-grid{grid-template-columns:repeat(3,1fr);}
+    .footer-top{grid-template-columns:1fr 1fr;}
+    .hero .silhouette,.hero .bat{display:none;}
+  }
+  @media (max-width:720px){
+    .block-grid{grid-template-columns:1fr;}
+    .stats .wrap{grid-template-columns:1fr;}
+    .sponsor-grid{grid-template-columns:repeat(2,1fr);}
+    .cta-band .wrap{flex-direction:column;align-items:flex-start;}
+    .news-row{flex-direction:column;gap:6px;}
+    .wrap{padding:0 20px;}
+  }
+</style>
+
+<style>
+  .page-header{background:var(--navy);color:#fff;padding:56px 0 46px;position:relative;overflow:hidden;}
+  .page-header::after{content:'';position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;border:2px dashed rgba(192,57,46,0.25);}
+  .page-header .wrap{position:relative;}
+  .page-header .eyebrow{color:#F0A69E;}
+  .page-header h1{font-size:clamp(28px,4vw,42px);max-width:640px;}
+  .page-header p{color:rgba(255,255,255,0.7);max-width:520px;margin-top:14px;font-size:15px;}
+
+  .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+  .detail-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:28px;scroll-margin-top:100px;}
+  .detail-card .tag{font-size:11.5px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+  .detail-card h3{font-size:19px;color:var(--navy);text-transform:none;letter-spacing:0;margin-bottom:12px;font-family:'Oswald',sans-serif;font-weight:600;}
+  .detail-card p{font-size:14px;color:var(--ink-soft);margin-bottom:14px;}
+  .detail-list{list-style:none;font-size:13.5px;color:var(--ink-soft);}
+  .detail-list li{padding:6px 0;border-top:1px solid var(--line);}
+  .detail-list li:first-child{border-top:none;}
+  .detail-list b{color:var(--ink);}
+
+  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .team-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:20px;text-align:center;}
+  .team-avatar{aspect-ratio:1/1;border-radius:50%;margin:0 auto 14px;background:linear-gradient(150deg,var(--navy-2),var(--navy));max-width:76px;}
+  .team-card h4{font-size:15px;color:var(--navy);margin-bottom:4px;font-family:'Oswald',sans-serif;font-weight:600;text-transform:none;}
+  .team-card span{font-size:12.5px;color:var(--ink-soft);}
+
+  .loc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .loc-card{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .loc-map{height:120px;background:linear-gradient(150deg,var(--navy-2),var(--navy));}
+  .loc-body{padding:20px;}
+  .loc-body h3{font-size:15.5px;color:var(--navy);text-transform:none;letter-spacing:0;margin-bottom:8px;font-family:'Oswald',sans-serif;font-weight:600;}
+  .loc-body p{font-size:13px;color:var(--ink-soft);}
+
+  .role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .role-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:24px;}
+  .role-card .icon{width:38px;height:38px;border-radius:50%;background:var(--cream);color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Oswald',sans-serif;margin-bottom:14px;}
+  .role-card h3{font-size:15.5px;color:var(--navy);text-transform:none;letter-spacing:0;margin-bottom:10px;font-family:'Oswald',sans-serif;font-weight:600;}
+  .role-card p{font-size:13.5px;color:var(--ink-soft);}
+
+  .contact-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;}
+  .info-block{margin-bottom:26px;}
+  .info-block h3{font-size:13px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;}
+  .info-block p{color:var(--ink-soft);font-size:14.5px;}
+  .form-group{margin-bottom:18px;}
+  .form-group label{display:block;font-size:12.5px;font-weight:600;margin-bottom:8px;color:var(--ink);}
+  .form-group input,.form-group select,.form-group textarea{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:3px;
+    font-family:'Inter',sans-serif;font-size:14px;background:var(--cream);color:var(--ink);
+  }
+  .form-group textarea{resize:vertical;min-height:110px;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--red);}
+  .btn-submit{
+    background:var(--navy);color:#fff;border:none;cursor:pointer;
+    padding:14px 28px;font-size:13.5px;font-weight:700;border-radius:3px;text-transform:uppercase;letter-spacing:0.03em;
+    font-family:'Inter',sans-serif;transition:background .2s;
+  }
+  .btn-submit:hover{background:var(--navy-2);}
+
+  .sched-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .sched-table th{background:var(--cream);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-soft);padding:12px 16px;font-weight:700;}
+  .sched-table td{padding:14px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);}
+  .sched-table .div-tag{display:inline-block;background:var(--cream);color:var(--navy);font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;}
+
+  .filter-row{display:flex;gap:10px;margin-bottom:36px;flex-wrap:wrap;}
+  .filter-pill{padding:8px 16px;border:1px solid var(--line);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:#fff;font-family:'Inter',sans-serif;transition:all .2s;}
+  .filter-pill.active,.filter-pill:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .block-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+
+  @media (max-width:900px){
+    .detail-grid{grid-template-columns:1fr;}
+    .team-grid{grid-template-columns:repeat(2,1fr);}
+    .loc-grid{grid-template-columns:1fr;}
+    .role-grid{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;gap:32px;}
+    .block-grid-3{grid-template-columns:1fr;}
+    .sched-table{display:block;overflow-x:auto;}
+  }
+</style>
+
+<style>
+  /* Volunteer accordion */
+  .accordion-item{background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:12px;overflow:hidden;}
+  .accordion-header{
+    display:flex;justify-content:space-between;align-items:center;padding:18px 22px;cursor:pointer;
+    font-size:14.5px;font-weight:600;color:var(--red);background:none;border:none;width:100%;text-align:left;
+    font-family:'Inter',sans-serif;
+  }
+  .accordion-header .plus{font-size:20px;color:var(--red);transition:transform .2s;font-weight:400;}
+  .accordion-item.open .accordion-header .plus{transform:rotate(45deg);}
+  .accordion-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .accordion-item.open .accordion-body{max-height:220px;}
+  .accordion-body-inner{padding:0 22px 20px;font-size:14px;color:var(--ink-soft);}
+
+  .volunteer-hero{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:56px;}
+  .hands-graphic{aspect-ratio:16/10;border-radius:6px;background:linear-gradient(150deg,var(--navy-2),var(--navy));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .hands-graphic .badge{
+    background:var(--red);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:0.04em;padding:14px 26px;border-radius:4px;font-size:16px;position:relative;z-index:2;
+  }
+  .hands-graphic svg{position:absolute;inset:0;width:100%;height:100%;opacity:0.35;}
+
+  @media (max-width:900px){
+    .volunteer-hero{grid-template-columns:1fr;gap:28px;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#101B34" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M6 8c3 1 9 1 12 0M6 16c3-1 9-1 12 0"/></svg>
+      </div>
+      <div class="logo-text">
+        <div class="l1">AURORA-KING</div>
+        <div class="l2">BASEBALL ASSOCIATION</div>
+      </div>
+    </a>
+    <div class="navlinks">
+      <div class="has-dropdown" id="home-dropdown">
+        <a href="index.html" class="drop-toggle">Home <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="about.html">About</a>
+          <a href="locations.html">Fields</a>
+        </div>
+      </div>
+      <div class="has-dropdown" id="baseball-dropdown">
+        <button class="drop-toggle">Programs <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="baseball-house-league.html">House League</a>
+          <a href="baseball-rep.html">Rep</a>
+          <a href="baseball-hp.html">HP</a>
+        </div>
+      </div>
+      <a href="umpires.html" class="active">Umpires</a>
+      <a href="volunteer.html">Volunteering</a>
+      <a href="coaching.html">Coaching</a>
+      <a href="tournaments.html">Tournaments</a>
+      <a href="registration.html">Registration</a>
+      <a href="teams.html">Teams</a>
+      <a href="News.html">News</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="registration.html" class="nav-cta">Register</a>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-panel" id="mobile-panel">
+    <div class="wrap">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="locations.html">Fields</a>
+      <a href="baseball-house-league.html" class="sub-link">↳ House League</a>
+      <a href="baseball-rep.html" class="sub-link">↳ Rep</a>
+      <a href="baseball-hp.html" class="sub-link">↳ HP</a>
+      <a href="umpires.html">Umpires</a>
+      <a href="volunteer.html">Volunteering</a>
+      <a href="coaching.html">Coaching</a>
+      <a href="tournaments.html">Tournaments</a>
+      <a href="registration.html">Registration</a>
+      <a href="teams.html">Teams</a>
+      <a href="news.html">News</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+<section class="page-header">
+  <div class="wrap">
+    <div class="eyebrow">Registration</div>
+    <h1>Register for the 2026 season</h1>
+    <p>Pick your program below — registration and payment are handled securely through TeamSnap, our official registration partner.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    <div class="block-grid-3">
+      <div class="block-card in-view">
+        <div class="block-photo bp-house"></div>
+        <h3>House League</h3>
+        <p>Ages 4–19. Our recreational backbone — local divisions focused on development and fun.</p>
+        <a href="https://register.teamsnap.com/akba" target="_blank" rel="noopener" class="block-btn">Register now</a>
+      </div>
+      <div class="block-card in-view">
+        <div class="block-photo bp-rep"></div>
+        <h3>Rep</h3>
+        <p>Ages 9+. Competitive travel baseball through York Simcoe Baseball Association.</p>
+        <a href="https://register.teamsnap.com/akba" target="_blank" rel="noopener" class="block-btn">Register now</a>
+      </div>
+      <div class="block-card in-view">
+        <div class="block-photo bp-hp"></div>
+        <h3>HP</h3>
+        <p>Ages 13+. High-performance training and elite competitive play.</p>
+        <a href="https://register.teamsnap.com/akba" target="_blank" rel="noopener" class="block-btn">Register now</a>
+      </div>
+    </div>
+    <div style="margin-top:48px;" class="detail-card">
+      <div class="tag">Good to know</div>
+      <h3>Financial assistance available</h3>
+      <p>No player is ever turned away for cost. Contact us before registering if you'd like to discuss financial assistance options.</p>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-badge" style="border-color:#fff;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M6 8c3 1 9 1 12 0M6 16c3-1 9-1 12 0"/></svg>
+          </div>
+          <div class="logo-text"><div class="l1" style="color:#fff;">AURORA-KING</div><div class="l2">BASEBALL ASSOCIATION</div></div>
+        </div>
+        <p>Community baseball for Aurora &amp; King Township — Rally Cap through Elite Rep, built by volunteers since 1975.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Baseball</h4>
+        <a href="baseball-house-league.html">House League</a>
+        <a href="baseball-rep.html">Rep</a>
+        <a href="baseball-hp.html">HP</a>
+        <a href="umpires.html">Umpires</a>
+      </div>
+      <div class="footer-col">
+        <h4>Quick links</h4>
+        <a href="tournaments.html">Tournaments</a>
+        <a href="teams.html">Teams</a>
+        <a href="news.html">News</a>
+        <a href="locations.html">Fields</a>
+        <a href="volunteer.html">Volunteer</a>
+
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="contact.html">info@akba.ca</a>
+        <a href="contact.html">Aurora &amp; King Township, ON</a>
+        <a href="registration.html">Register for 2026</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Aurora-King Baseball Association. All rights reserved.</div>
+      <div>Registered not-for-profit, Ontario</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const mobilePanel = document.getElementById('mobile-panel');
+  menuBtn.addEventListener('click', () => mobilePanel.classList.toggle('open'));
+
+  // Dropdowns (Home + Baseball): close on load, close on mouseleave, toggle on click for touch
+  document.querySelectorAll('.has-dropdown').forEach(dd => {
+    dd.classList.remove('open');
+    const toggle = dd.querySelector('.drop-toggle');
+    if (toggle.tagName === 'BUTTON') {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.has-dropdown').forEach(other => {
+          if (other !== dd) other.classList.remove('open');
+        });
+        dd.classList.toggle('open');
+      });
+    }
+    dd.addEventListener('mouseleave', () => dd.classList.remove('open'));
+  });
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.has-dropdown.open').forEach(dd => {
+      if (!dd.contains(e.target)) dd.classList.remove('open');
+    });
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.block-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
