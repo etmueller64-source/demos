@@ -128,6 +128,7 @@
   .stat:hover .suffix{color:var(--accent);}
   .stat .num{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(40px,4.6vw,62px);line-height:1;display:flex;align-items:baseline;gap:4px;transition:color .3s;}
   .stat .suffix{font-size:.5em;color:var(--accent);}
+  .stat .suffix.plus{align-self:center;}
   .stat .lbl{margin-top:12px;transition:color .3s;}
 
   /* ---------- what we do: slabs (B) ---------- */
@@ -303,8 +304,8 @@
   <div class="wrap">
     <div class="sec-label"><span class="micro">01 — By the numbers</span><div class="rule"></div><span class="micro">Hover to invert</span></div>
     <div class="stat-grid">
-      <div class="stat rv hoverable"><div class="num"><span class="count" data-target="3">0</span><span class="suffix">+</span></div><div class="lbl micro">Sites designed &amp; built</div></div>
-      <div class="stat rv d1 hoverable"><div class="num"><span class="count" data-target="6">0</span><span class="suffix">+</span></div><div class="lbl micro">Local industries served</div></div>
+      <div class="stat rv hoverable"><div class="num"><span class="count" data-target="3">0</span><span class="suffix plus">+</span></div><div class="lbl micro">Sites designed &amp; built</div></div>
+      <div class="stat rv d1 hoverable"><div class="num"><span class="count" data-target="6">0</span><span class="suffix plus">+</span></div><div class="lbl micro">Local industries served</div></div>
       <div class="stat rv d2 hoverable"><div class="num"><span class="count" data-target="100">0</span><span class="suffix">%</span></div><div class="lbl micro">Custom code — zero templates</div></div>
       <div class="stat rv d3 hoverable"><div class="num"><span class="count" data-target="24">0</span><span class="suffix">h</span></div><div class="lbl micro">Typical response time</div></div>
     </div>
