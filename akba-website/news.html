@@ -64,12 +64,20 @@
     .nav-cta{padding:9px 16px;font-size:12px;}
     .mobile-panel{
       display:block;position:absolute;top:100%;left:0;right:0;background:var(--cream);
-      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .25s ease;
+      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .3s ease;
     }
-    .mobile-panel.open{max-height:520px;}
-    .mobile-panel .wrap{display:flex;flex-direction:column;padding:12px 40px 20px;height:auto;}
-    .mobile-panel a{padding:12px 0;font-size:14.5px;font-weight:600;border-bottom:1px solid var(--line);}
-    .mobile-panel .sub-link{padding-left:16px;font-weight:500;font-size:13.5px;color:var(--ink-soft);}
+    .mobile-panel.open{max-height:calc(100vh - 84px);overflow-y:auto;}
+    .mobile-panel .wrap{display:flex;flex-direction:column;align-items:center;padding:12px 40px 20px;height:auto;}
+    .mobile-panel a{display:block;width:100%;padding:12px 0;font-size:14.5px;font-weight:600;text-align:center;border-bottom:1px solid var(--line);}
+    .mobile-panel .sub-link{font-weight:500;font-size:13.5px;color:var(--ink-soft);}
+    .mobile-drop{width:100%;}
+    .mobile-drop-row{display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:1px solid var(--line);}
+    .mobile-drop-row > a,.mobile-drop-row > span{width:auto;padding:12px 0;font-size:14.5px;font-weight:600;border-bottom:none;}
+    .mobile-drop-toggle{background:none;border:none;padding:12px 4px;cursor:pointer;color:var(--ink);flex-shrink:0;}
+    .mobile-drop-toggle svg{width:11px;height:11px;transition:transform .2s;}
+    .mobile-drop.open .mobile-drop-toggle svg{transform:rotate(180deg);}
+    .mobile-submenu{max-height:0;overflow:hidden;transition:max-height .25s ease;display:flex;flex-direction:column;align-items:center;width:100%;}
+    .mobile-drop.open .mobile-submenu{max-height:200px;}
   }
 
   /* HERO */
@@ -367,7 +375,7 @@
       <a href="tournaments.html">Tournaments</a>
       <a href="registration.html">Registration</a>
       <a href="teams.html">Teams</a>
-      <a href="News.html">News</a>
+      <a href="news.html">News</a>
       <a href="contact.html">Contact</a>
     </div>
     <a href="registration.html" class="nav-cta">Register</a>
@@ -375,12 +383,27 @@
   </div>
   <div class="mobile-panel" id="mobile-panel">
     <div class="wrap">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="locations.html">Fields</a>
-      <a href="baseball-house-league.html" class="sub-link">↳ House League</a>
-      <a href="baseball-rep.html" class="sub-link">↳ Rep</a>
-      <a href="baseball-hp.html" class="sub-link">↳ HP</a>
+      <div class="mobile-drop" id="mobile-home-drop">
+        <div class="mobile-drop-row">
+          <a href="index.html">Home</a>
+          <button class="mobile-drop-toggle" aria-label="Toggle Home submenu"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></button>
+        </div>
+        <div class="mobile-submenu">
+          <a href="about.html" class="sub-link">About</a>
+          <a href="locations.html" class="sub-link">Fields</a>
+        </div>
+      </div>
+      <div class="mobile-drop" id="mobile-programs-drop">
+        <div class="mobile-drop-row">
+          <span>Programs</span>
+          <button class="mobile-drop-toggle" aria-label="Toggle Programs submenu"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></button>
+        </div>
+        <div class="mobile-submenu">
+          <a href="baseball-house-league.html" class="sub-link">House League</a>
+          <a href="baseball-rep.html" class="sub-link">Rep</a>
+          <a href="baseball-hp.html" class="sub-link">HP</a>
+        </div>
+      </div>
       <a href="umpires.html">Umpires</a>
       <a href="volunteer.html">Volunteering</a>
       <a href="coaching.html">Coaching</a>
@@ -439,8 +462,6 @@
         <h4>Quick links</h4>
         <a href="tournaments.html">Tournaments</a>
         <a href="teams.html">Teams</a>
-        <a href="schedules.html">Schedules</a>
-        <a href="standings.html">Standings</a>
         <a href="news.html">News</a>
         <a href="locations.html">Fields</a>
         <a href="volunteer.html">Volunteer</a>
@@ -466,6 +487,13 @@
   const menuBtn = document.getElementById('menu-btn');
   const mobilePanel = document.getElementById('mobile-panel');
   menuBtn.addEventListener('click', () => mobilePanel.classList.toggle('open'));
+
+  // Mobile dropdown accordions (Home / Programs)
+  document.querySelectorAll('.mobile-drop-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.mobile-drop').classList.toggle('open');
+    });
+  });
 
   // Baseball dropdown (click for touch devices; CSS hover handles desktop)
   document.querySelectorAll('.has-dropdown').forEach(dd => {
