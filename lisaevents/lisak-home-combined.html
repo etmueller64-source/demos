@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Lisa K Events — Wedding Planning &amp; Design, Toronto &amp; the GTA</title>
+<meta name="description" content="A boutique full-planning and design studio for weddings in Toronto and the GTA. Check your date with Lisa K Events.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#FAF6EF;
+  --ivory-deep:#EFE7DA;
+  --white:#FFFFFF;
+  --ink:#2B231F;
+  --ink-soft:#6F625A;
+  --emerald:#1F4B3F;
+  --emerald-deep:#163A30;
+  --gold:#B08D3E;
+  --gold-soft:#D9C48C;
+  --blush:#C08B84;
+  --display:'Italiana', Georgia, serif;
+  --body:'Cormorant Garamond', Georgia, serif;
+  --util:'Tenor Sans', -apple-system, sans-serif;
+  --pad:clamp(20px,5vw,44px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ivory);color:var(--ink);font-family:var(--body);font-weight:400;font-size:18.5px;line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;line-height:1.12;letter-spacing:.03em}
+h1{font-size:clamp(40px,6.6vw,86px)}
+h2{font-size:clamp(30px,4.2vw,52px)}
+em.s{font-family:var(--body);font-style:italic;font-weight:400;letter-spacing:0;color:var(--emerald)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+
+.label{font-family:var(--util);font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:14px}
+.label::before,.label::after{content:"";width:30px;height:1px;background:var(--gold);opacity:.6}
+.label.plain::before,.label.plain::after{display:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--util);font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:16px 34px;border-radius:2px;border:1px solid transparent;transition:background .3s,color .3s,border-color .3s;cursor:pointer}
+.btn-em{background:var(--emerald);color:var(--ivory);border-color:var(--emerald)}
+.btn-em:hover{background:var(--emerald-deep);border-color:var(--emerald-deep)}
+.btn-line{border-color:rgba(43,35,31,.35);color:var(--ink)}
+.btn-line:hover{border-color:var(--emerald);color:var(--emerald)}
+.btn-ivory{background:var(--ivory);color:var(--emerald);border-color:var(--ivory)}
+.btn-ivory:hover{background:var(--gold-soft);border-color:var(--gold-soft);color:var(--emerald-deep)}
+
+/* ================= WHITE CENTERED INTRO ================= */
+#intro{position:fixed;inset:0;z-index:600;background:var(--white);display:flex;align-items:center;justify-content:center;transition:opacity .9s ease,visibility .9s ease}
+#intro.done{opacity:0;visibility:hidden}
+.intro-mark{display:flex;flex-direction:column;align-items:center;gap:18px}
+.intro-ring{width:104px;height:104px;border-radius:50%;border:1px solid var(--ivory-deep);display:flex;align-items:center;justify-content:center;position:relative;opacity:0;animation:markIn 1s ease .1s forwards}
+.intro-ring::before{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--gold);clip-path:inset(0 0 100% 0);animation:ringDraw 1.15s cubic-bezier(.65,0,.35,1) .35s forwards}
+.intro-ring span{font-family:var(--display);font-size:32px;letter-spacing:.06em;color:var(--emerald)}
+.intro-name{font-family:var(--util);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--ink-soft);opacity:0;animation:markIn .9s ease .55s forwards}
+.intro-rule{width:0;height:1px;background:var(--gold);opacity:.5;animation:ruleOut .9s cubic-bezier(.65,0,.35,1) .8s forwards}
+@keyframes markIn{to{opacity:1}}
+@keyframes ringDraw{to{clip-path:inset(0 0 0 0)}}
+@keyframes ruleOut{to{width:170px}}
+/* page fade-up */
+#page{opacity:0;transform:translateY(8px);transition:opacity 1.1s ease,transform 1.1s ease}
+#page.in{opacity:1;transform:none}
+
+/* ================= HEADER ================= */
+header{position:fixed;top:0;left:0;right:0;z-index:90;border-bottom:1px solid transparent;transition:background .4s,border-color .4s,backdrop-filter .4s}
+header.scrolled{background:rgba(250,246,239,.93);backdrop-filter:blur(12px);border-bottom-color:var(--ivory-deep)}
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1180px;margin:0 auto;padding:22px var(--pad);transition:padding .3s}
+header.scrolled .nav-row{padding-top:14px;padding-bottom:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-ring{width:38px;height:38px;flex:0 0 38px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center}
+.brand-ring span{font-family:var(--display);font-size:15px;color:var(--emerald)}
+.brand-name{font-family:var(--display);font-size:21px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+nav.links{display:flex;gap:34px}
+nav.links a{font-family:var(--util);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;position:relative;padding-bottom:4px}
+nav.links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .32s ease}
+nav.links a:hover::after,nav.links a.current::after{transform:scaleX(1)}
+.nav-cta{font-family:var(--util);font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--emerald);color:var(--emerald);padding:12px 24px;border-radius:2px;transition:background .3s,color .3s}
+.nav-cta:hover{background:var(--emerald);color:var(--ivory)}
+.burger{display:none;width:42px;height:42px;border:1px solid var(--ivory-deep);border-radius:2px;background:transparent;cursor:pointer;position:relative}
+.burger i{position:absolute;left:11px;right:11px;height:1px;background:var(--ink);transition:transform .3s,opacity .3s}
+.burger i:nth-child(1){top:15px}.burger i:nth-child(2){top:20px}.burger i:nth-child(3){top:25px}
+body.menu-open .burger i:nth-child(1){transform:translateY(5px) rotate(45deg)}
+body.menu-open .burger i:nth-child(2){opacity:0}
+body.menu-open .burger i:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+.drawer{position:fixed;inset:0;z-index:85;background:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+body.menu-open .drawer{opacity:1;visibility:visible}
+.drawer a{font-family:var(--display);font-size:30px;letter-spacing:.1em}
+.drawer a.d-cta{font-family:var(--util);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-top:14px}
+
+/* ================= HERO ================= */
+.hero{padding:clamp(130px,17vw,190px) 0 0;text-align:center}
+.hero .label{margin-bottom:24px}
+.hero h1{margin:0 auto 4px;max-width:15ch}
+.hero h1 .line2{display:block;font-family:var(--body);font-style:italic;font-size:.56em;letter-spacing:0;color:var(--emerald);margin-top:6px}
+.hero .sub{max-width:50ch;margin:24px auto 36px;color:var(--ink-soft);font-size:20px}
+.hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:clamp(48px,7vw,74px)}
+
+/* ---- ARCH PHOTO TRIPTYCH (theme B shape, index layout) ---- */
+.strip{display:grid;grid-template-columns:1fr 1.24fr 1fr;gap:clamp(14px,2vw,26px);align-items:end;max-width:1180px;margin:0 auto;padding:0 var(--pad)}
+.arch{position:relative;overflow:hidden;background:var(--ivory-deep);box-shadow:0 26px 56px rgba(43,35,31,.16)}
+.arch img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.arch:hover img{transform:scale(1.045)}
+.arch figcaption{position:absolute;left:0;right:0;bottom:0;padding:44px 18px 16px;font-family:var(--util);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.92);background:linear-gradient(to top,rgba(22,18,15,.62),transparent);text-align:left}
+.a-side{height:clamp(280px,34vw,380px);border-radius:210px 210px 3px 3px;margin-bottom:clamp(20px,4vw,44px)}
+.a-mid{height:clamp(340px,44vw,500px);border-radius:280px 280px 3px 3px}
+
+/* ================= PRESS ================= */
+.press{margin-top:clamp(60px,9vw,96px);padding:clamp(46px,6vw,66px) 0;border-top:1px solid var(--ivory-deep);border-bottom:1px solid var(--ivory-deep);text-align:center}
+.press .label{margin-bottom:28px}
+.press-row{display:flex;justify-content:center;align-items:center;gap:clamp(24px,4.5vw,56px);flex-wrap:wrap}
+.press-row span{font-family:var(--display);font-size:clamp(15px,1.7vw,22px);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);opacity:.8;transition:opacity .25s,color .25s}
+.press-row span:hover{opacity:1;color:var(--emerald)}
+
+/* ================= SECTION SHELL ================= */
+section{padding:clamp(70px,9vw,112px) 0}
+.sec-head{text-align:center;max-width:660px;margin:0 auto clamp(40px,6vw,62px)}
+.sec-head .label{margin-bottom:18px}
+.sec-head h2{margin-bottom:16px}
+.sec-head p{color:var(--ink-soft)}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .85s cubic-bezier(.2,.65,.25,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+
+/* statement */
+.statement{text-align:center;padding-bottom:clamp(50px,7vw,80px)}
+.statement p{font-family:var(--body);font-style:italic;font-size:clamp(23px,3.1vw,34px);line-height:1.5;max-width:880px;margin:0 auto}
+.statement .sig{margin-top:26px;font-family:var(--util);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--emerald)}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ivory-deep);border:1px solid var(--ivory-deep)}
+.svc{background:var(--ivory);padding:clamp(30px,3.2vw,46px) clamp(22px,2.4vw,34px);text-align:center;transition:background .35s}
+.svc:hover{background:var(--white)}
+.svc .num{display:block;font-family:var(--body);font-style:italic;font-size:16px;color:var(--gold);margin-bottom:14px}
+.svc h3{font-size:clamp(21px,2.1vw,26px);margin-bottom:12px}
+.svc>p{font-size:16.5px;color:var(--ink-soft)}
+.svc ul{list-style:none;margin:20px 0 0;padding:18px 0 0;border-top:1px solid var(--ivory-deep);font-family:var(--util);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);line-height:1.5}
+.svc li{padding:7px 0}
+
+/* portfolio — arch grid */
+.port-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2vw,24px)}
+.port{display:block}
+.port .ph{position:relative;overflow:hidden;background:var(--ivory-deep);aspect-ratio:3/4.15;border-radius:170px 170px 3px 3px;box-shadow:0 18px 44px rgba(43,35,31,.14);transition:transform .4s ease,box-shadow .4s ease}
+.port:hover .ph{transform:translateY(-6px);box-shadow:0 28px 58px rgba(43,35,31,.2)}
+.port img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.port:hover img{transform:scale(1.05)}
+.port h4{font-size:23px;margin-top:18px;text-align:center}
+.port .kicker{display:block;text-align:center;font-family:var(--util);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:6px}
+.port-note{text-align:center;font-family:var(--util);font-size:11px;letter-spacing:.06em;color:var(--ink-soft);margin-top:32px}
+
+/* about */
+.about{background:var(--white);border-top:1px solid var(--ivory-deep);border-bottom:1px solid var(--ivory-deep)}
+.about-grid{display:grid;grid-template-columns:.78fr 1.22fr;gap:clamp(30px,6vw,80px);align-items:center}
+.about .ph{position:relative;overflow:hidden;aspect-ratio:3/4.2;border-radius:230px 230px 3px 3px;box-shadow:0 26px 56px rgba(43,35,31,.15)}
+.about .ph img{width:100%;height:100%;object-fit:cover}
+.about p{color:var(--ink-soft);margin-bottom:1em}
+.about .credit{font-family:var(--util);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);opacity:.7;margin-top:12px;text-align:center}
+.sig-name{font-family:var(--body);font-style:italic;font-size:30px;color:var(--emerald);margin-top:20px}
+
+/* process */
+.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,2.6vw,34px)}
+.steps li{position:relative;padding-top:32px;border-top:1px solid var(--ivory-deep)}
+.steps li::before{content:"";position:absolute;top:-4px;left:0;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.steps b{display:block;font-family:var(--body);font-style:italic;font-weight:400;font-size:17px;color:var(--gold);margin-bottom:6px}
+.steps h3{font-size:22px;margin-bottom:8px}
+.steps p{font-size:16px;color:var(--ink-soft)}
+
+/* testimonial */
+.testi{background:var(--emerald);color:var(--ivory);padding:clamp(50px,7vw,84px) clamp(26px,5vw,60px);text-align:center;position:relative;overflow:hidden;border-radius:3px}
+.testi::before{content:"\201C";position:absolute;top:-24px;left:28px;font-family:var(--display);font-size:190px;color:rgba(217,196,140,.16);line-height:1}
+.testi blockquote{position:relative;z-index:1;font-family:var(--body);font-style:italic;font-size:clamp(22px,3vw,32px);line-height:1.5;max-width:24ch;margin:0 auto 24px}
+.testi .who{font-family:var(--util);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft)}
+.testi-note{text-align:center;font-family:var(--util);font-size:11px;color:var(--ink-soft);margin-top:18px}
+
+/* inquiry */
+.inq{background:var(--white);border-top:1px solid var(--ivory-deep)}
+.inq-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5.5vw,76px)}
+.inq h2{margin-bottom:16px}
+.inq .lead{color:var(--ink-soft);margin-bottom:26px}
+.inq .contact{font-family:var(--body);font-style:italic;font-size:21px;color:var(--emerald)}
+.inq .contact a{border-bottom:1px solid var(--gold-soft);padding-bottom:2px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.f{display:flex;flex-direction:column;gap:7px}
+.f.full{grid-column:1/-1}
+label{font-family:var(--util);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+input,select,textarea{font-family:var(--body);font-size:17px;color:var(--ink);background:var(--ivory);border:1px solid var(--ivory-deep);border-radius:2px;padding:13px 14px;transition:border-color .3s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--emerald)}
+textarea{resize:vertical;min-height:86px}
+.fine{font-family:var(--util);font-size:10.5px;letter-spacing:.06em;color:var(--ink-soft);margin-top:16px}
+
+/* footer */
+footer{border-top:1px solid var(--ivory-deep);padding:clamp(44px,6vw,60px) 0 90px}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:22px}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap}
+.foot-links a{font-family:var(--util);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);transition:color .25s}
+.foot-links a:hover{color:var(--emerald)}
+.foot-bottom{margin-top:32px;padding-top:24px;border-top:1px solid var(--ivory-deep);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--util);font-size:10px;letter-spacing:.1em;color:var(--ink-soft)}
+
+/* sticky mobile CTA */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:70;display:none;padding:12px var(--pad) calc(12px + env(safe-area-inset-bottom));background:rgba(250,246,239,.96);backdrop-filter:blur(10px);border-top:1px solid var(--ivory-deep)}
+.sticky-cta .btn{width:100%}
+
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (max-width:1000px){
+  nav.links{display:none}
+  .burger{display:block}
+  .nav-cta{display:none}
+  .svc-grid{grid-template-columns:1fr}
+  .port-grid{grid-template-columns:1fr 1fr}
+  .about-grid,.inq-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .sticky-cta{display:block}
+}
+@media (max-width:680px){
+  .strip{grid-template-columns:1fr}
+  .a-side{margin-bottom:0;height:clamp(300px,74vw,420px);border-radius:190px 190px 3px 3px}
+  .a-mid{height:clamp(340px,88vw,480px)}
+  .a-side.hide-sm{display:none}
+  .fields{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .hero .sub{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+  .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- WHITE CENTERED INTRO -->
+<div id="intro" aria-hidden="true">
+  <div class="intro-mark">
+    <div class="intro-ring"><span>LK</span></div>
+    <div class="intro-name">Lisa K Events</div>
+    <div class="intro-rule"></div>
+  </div>
+</div>
+
+<div id="page">
+
+<header id="hdr">
+  <div class="nav-row">
+    <a class="brand" href="#top">
+      <span class="brand-ring"><span>LK</span></span>
+      <span class="brand-name">Lisa K Events</span>
+    </a>
+    <nav class="links">
+      <a href="#top" class="current">Home</a>
+      <a href="#work">Portfolio</a>
+      <a href="#lisa">About</a>
+      <a href="#services">Services</a>
+      <a href="#inquire">Contact</a>
+    </nav>
+    <a class="nav-cta" href="#inquire">Check your date</a>
+    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <a href="#work">Portfolio</a>
+  <a href="#lisa">About</a>
+  <a href="#services">Services</a>
+  <a href="#process">How it works</a>
+  <a class="d-cta btn btn-em" href="#inquire">Check your date</a>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="top">
+  <div class="wrap">
+    <span class="label">Boutique full-planning &amp; design studio</span>
+    <h1>Weddings, designed<span class="line2">with intention.</span></h1>
+    <p class="sub">Toronto and GTA full planning and design for couples who want the day to feel effortless — and look like it took a year of careful thought, because it did.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-em" href="#inquire">Check your date</a>
+      <a class="btn btn-line" href="#work">View portfolio</a>
+    </div>
+  </div>
+  <div class="strip">
+    <figure class="arch a-side hide-sm">
+      <img src="https://static.wixstatic.com/media/554c58_d1bc4dbeee574e8da03712415d242fb9~mv2.jpg/v1/fill/w_319,h_478,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Details_EmilyJeanPhotography-0020.jpg" alt="Styled table details from a wedding planned by Lisa K Events">
+      <figcaption>Tablescape · Mike &amp; Mel</figcaption>
+    </figure>
+    <figure class="arch a-mid">
+      <img src="https://static.wixstatic.com/media/554c58_97a50ff4d18544bd87e8481320512426~mv2.jpg/v1/fill/w_2500,h_3750,al_c/554c58_97a50ff4d18544bd87e8481320512426~mv2.jpg" alt="Reception designed by Lisa K Events">
+      <figcaption>Reception design · Vaughan, ON</figcaption>
+    </figure>
+    <figure class="arch a-side hide-sm">
+      <img src="https://static.wixstatic.com/media/554c58_bf7bc993d93345939b3856fa881b8425~mv2.jpg/v1/fill/w_319,h_479,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_12.jpg" alt="Wedding celebration planned by Lisa K Events">
+      <figcaption>Celebration · Priya &amp; Elijah</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- PRESS -->
+<div class="press">
+  <div class="wrap">
+    <span class="label">As seen in</span>
+    <div class="press-row">
+      <span>Elegant Wedding</span>
+      <span>WeddingBells</span>
+      <span>WedLuxe</span>
+      <span>Wedding Chicks</span>
+      <span>Today's Bride</span>
+    </div>
+  </div>
+</div>
+
+<!-- STATEMENT -->
+<section class="statement">
+  <div class="wrap rv">
+    <p>A wedding should feel like <em class="s">you</em> — not a template, and not a trend. My job is to hold every detail so closely that on the day itself, you don't have to think about a single one.</p>
+    <div class="sig">Lisa K — Founder &amp; Lead Planner</div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">What I offer</span>
+      <h2>Three ways to work together</h2>
+      <p>Some couples arrive with a venue and a vision. Some have only a date. Tell me where you are and I'll tell you which of these fits.</p>
+    </div>
+    <div class="svc-grid rv d1">
+      <div class="svc">
+        <span class="num">most requested</span>
+        <h3>Full planning &amp; design</h3>
+        <p>Share your vision and I'll execute the whole wedding, start to finish, with help on every detail of the day.</p>
+        <ul>
+          <li>Vendors, contracts &amp; payments</li>
+          <li>Design concept &amp; décor direction</li>
+          <li>Timeline, floor plan &amp; logistics</li>
+          <li>On-site all wedding day</li>
+        </ul>
+      </div>
+      <div class="svc">
+        <span class="num">for the design-led</span>
+        <h3>Design &amp; styling</h3>
+        <p>For couples with the logistics handled who want the room to look like the one in their head.</p>
+        <ul>
+          <li>Concept board &amp; colour direction</li>
+          <li>Florals, linens &amp; lighting</li>
+          <li>Tablescape &amp; installation design</li>
+          <li>Install-day styling &amp; reveal</li>
+        </ul>
+      </div>
+      <div class="svc">
+        <span class="num">beyond weddings</span>
+        <h3>Social &amp; corporate</h3>
+        <p>A versatile background means I can design, plan and run the event without the night resting on you.</p>
+        <ul>
+          <li>Engagements &amp; proposals</li>
+          <li>Bridal &amp; baby showers</li>
+          <li>Galas &amp; fundraising evenings</li>
+          <li>Launch &amp; holiday events</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="work" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Recent celebrations</span>
+      <h2>A few favourites</h2>
+      <p>Across Toronto, Vaughan and Mississauga — different cultures, different budgets, the same attention to how it all comes together.</p>
+    </div>
+    <div class="port-grid rv d1">
+      <a class="port" href="#">
+        <div class="ph"><img src="https://static.wixstatic.com/media/554c58_7d0f9d54b3c44b87820ae7ce9bc26ee6~mv2.jpg/v1/fill/w_319,h_478,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/R%2BP%20Reception%20Details%20%2B%20Reveal-87.jpg" alt="Rachel and Patrick reception reveal"></div>
+        <h4>Rachel &amp; Patrick</h4><span class="kicker">Reception design</span>
+      </a>
+      <a class="port" href="#">
+        <div class="ph"><img src="https://static.wixstatic.com/media/554c58_37abb70116464a72a4e2221cea109074~mv2.jpg/v1/fill/w_319,h_409,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Detail_McleanHouse_EmilyJeanPhotography_28.jpg" alt="Nathan and Irene at McLean House"></div>
+        <h4>Nathan &amp; Irene</h4><span class="kicker">McLean House, Toronto</span>
+      </a>
+      <a class="port" href="#">
+        <div class="ph"><img src="https://static.wixstatic.com/media/554c58_5d08b7c21066461b9f7c1104eeb34437~mv2.jpg/v1/fill/w_319,h_452,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/557-MMNP5060.jpg" alt="Gary and Nadine wedding"></div>
+        <h4>Gary &amp; Nadine</h4><span class="kicker">Full planning &amp; design</span>
+      </a>
+      <a class="port" href="#">
+        <div class="ph"><img src="https://static.wixstatic.com/media/554c58_d8c468ef015f42968911eb27fbee98c8~mv2_d_3701_5544_s_4_2.jpg/v1/fill/w_319,h_451,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Aisha-Tyler-Wedding-605.jpg" alt="Aisha and Tyler wedding"></div>
+        <h4>Aisha &amp; Tyler</h4><span class="kicker">Full planning &amp; design</span>
+      </a>
+    </div>
+    <p class="port-note">Images pulled from the current site at low resolution — replace with full-size originals at launch.</p>
+    <p style="text-align:center;margin-top:26px"><a class="btn btn-line" href="#">View the full portfolio</a></p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="lisa">
+  <div class="wrap about-grid rv">
+    <div>
+      <div class="ph"><img src="https://static.wixstatic.com/media/554c58_5ed52d5c5c18412b8563b82ad40851e2~mv2.jpg/v1/fill/w_354,h_530,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Lisa%20K%20Events-3.jpg" alt="Lisa, founder of Lisa K Events"></div>
+      <p class="credit">Photo · Allison Leigh Photography</p>
+    </div>
+    <div>
+      <span class="label plain">Meet Lisa</span>
+      <h2 style="margin:16px 0 20px">I watch the details so you can enjoy the <em class="s">day</em></h2>
+      <p>Hi, I'm Lisa. I may be small but I've got a whole lot of energy and passion, especially when it comes to people and helping them plan their perfect event. I've been planning for several years — weddings, corporate functions, fundraising galas and everything in between.</p>
+      <p>Class, sophistication and genuine care are what you get when you place your trust, and your event, in my hands. Whether you want something small and intimate or large and lavish, we'll build a day you'll never forget.</p>
+      <p class="sig-name">Lisa</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">How it works</span>
+      <h2>Four steps, in order</h2>
+      <p>Planning with me follows the same shape every time, so you always know what's next and what's needed from you.</p>
+    </div>
+    <ol class="steps rv d1">
+      <li><b>First</b><h3>Consultation</h3><p>A relaxed call about your date, venue, guest count and budget. Free, no pressure.</p></li>
+      <li><b>Then</b><h3>Design</h3><p>A concept, palette and layout built around your vision, with a vendor shortlist and full budget.</p></li>
+      <li><b>Next</b><h3>Coordination</h3><p>I handle bookings, contracts, payments and the timeline. You approve; I chase.</p></li>
+      <li><b>Finally</b><h3>Wedding day</h3><p>I'm on site from setup to last dance so the only thing on your list is being present.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="testi rv">
+      <blockquote>She thought of everything we didn't.</blockquote>
+      <div class="who">Client name — Venue, City</div>
+    </div>
+    <p class="testi-note">Placeholder quote — swap in a real review before launch.</p>
+  </div>
+</section>
+
+<!-- INQUIRE -->
+<section class="inq" id="inquire">
+  <div class="wrap inq-grid">
+    <div class="rv">
+      <span class="label plain">Let's begin</span>
+      <h2 style="margin-top:16px">Have a date in mind?</h2>
+      <p class="lead">I take a limited number of weddings each season so every couple gets my full attention. Send your date and I'll reply within two business days with availability and pricing.</p>
+      <p class="contact"><a href="mailto:hello@lisakevents.com">hello@lisakevents.com</a></p>
+      <p class="contact"><a href="https://www.instagram.com/lisakevents">@lisakevents</a></p>
+    </div>
+    <form class="rv d1" onsubmit="event.preventDefault();this.querySelector('button').textContent='Inquiry sent';">
+      <div class="fields">
+        <div class="f"><label for="q1">Your name</label><input id="q1" required></div>
+        <div class="f"><label for="q2">Partner's name</label><input id="q2"></div>
+        <div class="f"><label for="q3">Email</label><input id="q3" type="email" required></div>
+        <div class="f"><label for="q4">Phone</label><input id="q4" type="tel"></div>
+        <div class="f"><label for="q5">Wedding date (or month)</label><input id="q5" placeholder="e.g. 14 June 2027"></div>
+        <div class="f"><label for="q6">Guest count</label>
+          <select id="q6"><option>Under 75</option><option>75–150</option><option>150–250</option><option>250+</option><option>Not sure yet</option></select>
+        </div>
+        <div class="f full"><label for="q7">Venue, city, or where you're at</label><input id="q7" placeholder="Booked, still looking, or open to ideas"></div>
+        <div class="f full"><label for="q8">What kind of help do you need?</label><textarea id="q8"></textarea></div>
+      </div>
+      <p style="margin-top:26px"><button class="btn btn-em" type="submit">Send inquiry</button></p>
+      <p class="fine">Demo form — connect to an inbox or CRM before launch.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <a class="brand" href="#top">
+        <span class="brand-ring"><span>LK</span></span>
+        <span class="brand-name" style="font-size:19px">Lisa K Events</span>
+      </a>
+      <div class="foot-links">
+        <a href="#top">Home</a>
+        <a href="#work">Portfolio</a>
+        <a href="#lisa">About</a>
+        <a href="#services">Services</a>
+        <a href="#inquire">Contact</a>
+        <a href="https://www.instagram.com/lisakevents">@lisakevents ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Lisa K Events — concept mockup</span>
+      <span>Toronto, Ontario · Homepage design only</span>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky-cta"><a class="btn btn-em" href="#inquire">Check your date</a></div>
+
+</div>
+
+<script>
+(function(){
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const intro = document.getElementById('intro');
+  const page  = document.getElementById('page');
+
+  function reveal(){ intro.classList.add('done'); page.classList.add('in'); setTimeout(()=>intro.remove(), 1000); }
+  if(reduced){ intro.remove(); page.classList.add('in'); }
+  else { setTimeout(reveal, 1750); }
+
+  const hdr = document.getElementById('hdr');
+  addEventListener('scroll', ()=> hdr.classList.toggle('scrolled', scrollY > 30), {passive:true});
+
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger.addEventListener('click', ()=>{
+    const open = document.body.classList.toggle('menu-open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  drawer.addEventListener('click', e=>{
+    if(e.target.tagName === 'A'){ document.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded','false'); }
+  });
+
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>
