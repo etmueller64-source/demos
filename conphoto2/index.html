@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Conacher Photography — Family, Nature &amp; Event Photography</title>
+<title>Conacher Photography - Family, Nature &amp; Event Photography</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
@@ -120,7 +120,7 @@
   .photo-strip .carousel-item{flex:0 0 calc(33.333% - 11px);}
   .ph{
     /* aspect-ratio (not a fixed px height) so this box adapts cleanly whatever the source photo's
-       real proportions turn out to be — wide, narrow, tall, whatever gets dropped in later. */
+       real proportions turn out to be - wide, narrow, tall, whatever gets dropped in later. */
     aspect-ratio:4/5;
     background-size:cover;background-position:center;
     border-radius:var(--radius);position:relative;overflow:hidden;
@@ -128,7 +128,7 @@
     opacity:0.8;transform:scale(0.92);transform-origin:center;
     transition:transform .4s ease,opacity .4s ease,box-shadow .4s ease;
   }
-  /* the item centred in the visible window gets a small, subtle rescale forward — JS assigns this */
+  /* the item centred in the visible window gets a small, subtle rescale forward - JS assigns this */
   .ph.is-center{opacity:1;transform:scale(1.04);box-shadow:0 26px 50px rgba(44,40,34,0.2);z-index:2;}
   .ph-cap{position:absolute;left:14px;bottom:12px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.9);z-index:2;}
   @media (max-width:900px){
@@ -171,7 +171,7 @@
 </head>
 <body>
 
-<div class="concept-banner">CONCEPT REDESIGN — prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
+<div class="concept-banner">CONCEPT REDESIGN - prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
 
 <header>
   <div class="nav-row">
@@ -209,7 +209,7 @@
   <div class="hero-inner">
     <span class="label">Newmarket &amp; the GTA</span>
     <h1>Capturing nature, people,<br><em>and life around us.</em></h1>
-    <p class="sub">Candid, unhurried portraiture and nature photography — family sessions, milestones, events, and fine-art prints of the outdoors.</p>
+    <p class="sub">Candid, unhurried portraiture and nature photography - family sessions, milestones, events, and fine-art prints of the outdoors.</p>
     <div class="hero-ctas">
       <a class="btn btn-rose" href="contact.html">Book a Session</a>
       <a class="btn btn-line" href="portfolio.html">View Portfolio</a>
@@ -238,7 +238,7 @@
 <section class="statement" id="d-statement" style="margin-top:70px;">
   <div class="wrap rv">
     <p>&ldquo;Capturing nature, people, life and spaces around us, is my way of storing its beauty in the form of art. Each type of photography I venture in has a personal element and passion for me which is shown in my work and to my clients.&rdquo;</p>
-    <div class="sig">— Debbie Conacher, Photographer</div>
+    <div class="sig">- Debbie Conacher, Photographer</div>
   </div>
 </section>
 
@@ -247,7 +247,7 @@
     <div class="sec-head rv">
       <span class="label">Explore by Genre</span>
       <h2>A little bit of everything</h2>
-      <p>From family portraits to fine-art nature prints — see the full range in the portfolio.</p>
+      <p>From family portraits to fine-art nature prints - see the full range in the portfolio.</p>
     </div>
     <div class="genre-grid rv d1">
       <a class="genre" href="portfolio.html#family" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="genre-cap">Family &amp; Portraits</span></a>
@@ -282,7 +282,7 @@
       </div>
       <div class="testi">
         <span class="q">&ldquo;</span>
-        <p>The shoot was fun and easy going, with candid shots and some posed ones. Debbie was very patient — even with our crazy dog! Her love for her craft comes through in every picture.</p>
+        <p>The shoot was fun and easy going, with candid shots and some posed ones. Debbie was very patient - even with our crazy dog! Her love for her craft comes through in every picture.</p>
         <div class="who">Julie &amp; Tom Mueller</div>
       </div>
     </div>
@@ -293,7 +293,7 @@
   <div class="wrap">
     <div class="cta-band rv">
       <h2>Let's capture something beautiful.</h2>
-      <p>Family portraits, milestones, events, or a fine-art print for your wall — reach out and let's talk.</p>
+      <p>Family portraits, milestones, events, or a fine-art print for your wall - reach out and let's talk.</p>
       <a class="btn btn-line" href="contact.html">Book a Free Phone Consult</a>
     </div>
   </div>
@@ -315,7 +315,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Conacher Photography — concept redesign</span>
+      <span>© 2026 Conacher Photography - concept redesign</span>
       <span>Servicing Newmarket, Bradford, Keswick, Aurora, Richmond Hill, King City &amp; the GTA</span>
     </div>
   </div>
@@ -326,7 +326,7 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Generic manual carousel (no auto-rotate, loops both directions) — class "carousel"
+  // Generic manual carousel (no auto-rotate, loops both directions) - class "carousel"
   document.querySelectorAll('.carousel').forEach(root=>{
     const track = root.querySelector('.carousel-track');
     const items = [...root.querySelectorAll('.carousel-item')];

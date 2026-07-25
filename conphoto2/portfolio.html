@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Portfolio — Conacher Photography</title>
+<title>Portfolio - Conacher Photography</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
@@ -144,7 +144,7 @@
 </head>
 <body>
 
-<div class="concept-banner">CONCEPT REDESIGN — prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
+<div class="concept-banner">CONCEPT REDESIGN - prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
 
 <header>
   <div class="nav-row">
@@ -182,7 +182,7 @@
   <div class="wrap">
     <span class="label">The Portfolio</span>
     <h1>Every genre, one page.</h1>
-    <p>Filter by the kind of session you're picturing — or browse everything below. Looking to buy a print instead? That's its own tab too.</p>
+    <p>Filter by the kind of session you're picturing - or browse everything below. Looking to buy a print instead? That's its own tab too.</p>
   </div>
 </div>
 
@@ -234,7 +234,7 @@
     <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#6E5A4E,#3F312A);"><span class="shot-cap"><span class="g">Sports</span><h4>Team Photo</h4></span></div>
     
     </div>
-    <p class="grid-note">Placeholder imagery shown by genre — the live site would feature Debbie's real session photography throughout.</p>
+    <p class="grid-note">Placeholder imagery shown by genre - the live site would feature Debbie's real session photography throughout.</p>
   </div>
 </div>
 
@@ -264,7 +264,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Conacher Photography — concept redesign</span>
+      <span>© 2026 Conacher Photography - concept redesign</span>
       <span>Servicing Newmarket, Bradford, Keswick, Aurora, Richmond Hill, King City &amp; the GTA</span>
     </div>
   </div>
@@ -275,7 +275,7 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Generic manual carousel (no auto-rotate) — used for any element with class "carousel"
+  // Generic manual carousel (no auto-rotate) - used for any element with class "carousel"
   document.querySelectorAll('.carousel').forEach(root=>{
     const track = root.querySelector('.carousel-track');
     const items = [...root.querySelectorAll('.carousel-item')];
@@ -320,7 +320,7 @@
   tabs.forEach(tab=>{
     tab.addEventListener('click',()=> applyFilter(tab.dataset.genre));
   });
-  // Nav dropdown links arrive as portfolio.html#nature, #portraits, etc. —
+  // Nav dropdown links arrive as portfolio.html#nature, #portraits, etc. -
   // pre-filter the grid to match, so the header genre menu and the on-page
   // filter tabs are the same system instead of two separate things.
   const hashGenre = location.hash.replace('#','');
