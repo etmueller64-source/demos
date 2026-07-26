@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Contact — Conacher Photography</title>
+<title>Contact - Conacher Photography</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
@@ -170,7 +170,7 @@
 </head>
 <body>
 
-<div class="concept-banner">CONCEPT REDESIGN — prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
+<div class="concept-banner">CONCEPT REDESIGN - prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
 
 <header>
   <div class="nav-row">
@@ -209,9 +209,9 @@
       <div class="page-hero-copy">
         <span class="label">Contact</span>
         <h1>Let's talk about your session.</h1>
-        <p>Whether you know exactly what you want or you're not sure where to start — reach out and we'll figure it out together.</p>
+        <p>Whether you know exactly what you want or you're not sure where to start - reach out and we'll figure it out together.</p>
       </div>
-      <div class="hero-photo" style="background:linear-gradient(155deg,#C7A98A,#9A7752);"><span class="hero-photo-cap">Photo slot — Debbie during a consult</span></div>
+      <div class="hero-photo" style="background:linear-gradient(155deg,#C7A98A,#9A7752);"><span class="hero-photo-cap">Photo slot - Debbie during a consult</span></div>
     </div>
   </div>
 </div>
@@ -222,7 +222,7 @@
       <div>
         <span class="label">No Obligation</span>
         <h2>Book a free 15-minute phone consult</h2>
-        <p>Not sure which session is right for you, or just want to chat before committing? Grab a short call — no pressure, no commitment, just a conversation about what you're picturing.</p>
+        <p>Not sure which session is right for you, or just want to chat before committing? Grab a short call - no pressure, no commitment, just a conversation about what you're picturing.</p>
       </div>
       <div class="consult-side">
         <a class="btn btn-line" href="mailto:debtes@icloud.com?subject=Free%20Phone%20Consult%20Request">Book My Free Consult</a>
@@ -252,12 +252,12 @@
             <option>Maternity</option>
             <option>Engagement</option>
             <option>Print Purchase</option>
-            <option>Not sure yet — let's talk</option>
+            <option>Not sure yet - let's talk</option>
           </select>
         </div>
         <div class="form-row"><label>Tell us a bit more</label><textarea id="f-msg" placeholder="Dates, location ideas, group size, or anything else that helps us plan…"></textarea></div>
         <a class="btn btn-rose" href="#" id="f-send">Send Inquiry</a>
-        <div class="form-note">// opens your email app with everything pre-filled — nothing is stored on this site</div>
+        <div class="form-note">// opens your email app with everything pre-filled - nothing is stored on this site</div>
       </div>
       <div class="direct-card">
         <h3>Reach Us Directly</h3>
@@ -288,7 +288,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Conacher Photography — concept redesign</span>
+      <span>© 2026 Conacher Photography - concept redesign</span>
       <span>Servicing Newmarket, Bradford, Keswick, Aurora, Richmond Hill, King City &amp; the GTA</span>
     </div>
   </div>
@@ -299,7 +299,7 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Generic manual carousel (no auto-rotate, loops both directions) — class "carousel"
+  // Generic manual carousel (no auto-rotate, loops both directions) - class "carousel"
   document.querySelectorAll('.carousel').forEach(root=>{
     const track = root.querySelector('.carousel-track');
     const items = [...root.querySelectorAll('.carousel-item')];
@@ -343,7 +343,7 @@
       e.preventDefault();
       const v=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
       const name=v('f-name'),email=v('f-email'),phone=v('f-phone'),type=document.getElementById('f-type').value,msg=v('f-msg');
-      const subject=encodeURIComponent('Session Inquiry — '+(type||'General'));
+      const subject=encodeURIComponent('Session Inquiry - '+(type||'General'));
       const body=encodeURIComponent('Name: '+name+'\nEmail: '+email+'\nPhone: '+phone+'\nSession type: '+type+'\n\n'+msg);
       location.href='mailto:debtes@icloud.com?subject='+subject+'&body='+body;
     });
