@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Portfolio — Conacher Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF6EF; --cream-deep:#EFE6D3;
+    --ink:#2C2822; --ink-soft:#75695C;
+    --rose:#C9748C; --rose-deep:#A65670;
+    --amber:#C08A34; --amber-deep:#9C6D26;
+    --white:#FFFFFF;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'Jost',sans-serif;font-size:17px;line-height:1.7;overflow-x:hidden;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-0.005em;}
+  em{font-style:italic;color:var(--rose);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+  .label{font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose);}
+
+  .concept-banner{background:var(--ink);color:var(--cream);text-align:center;font-size:12px;letter-spacing:0.06em;padding:9px 16px;}
+  .concept-banner b{color:var(--amber);}
+
+  /* header, Jen-Short-inspired: clean, logo left, dropdown services */
+  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:20px 40px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-logo{height:52px;width:auto;display:block;}
+  .brand-logo.foot-logo{height:64px;}
+  nav.links{display:flex;align-items:center;gap:34px;}
+  nav.links > a{font-size:13px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink);padding:8px 0;position:relative;}
+  nav.links > a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);transform:scaleX(0);transition:transform .25s ease;transform-origin:left;}
+  nav.links > a:hover::after,nav.links > a.current::after{transform:scaleX(1);}
+  .has-drop{position:relative;}
+  .dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);background:var(--white);border:1px solid var(--cream-deep);box-shadow:0 18px 40px rgba(44,40,34,0.12);min-width:205px;padding:10px 0;opacity:0;visibility:hidden;transition:opacity .2s ease,transform .2s ease,visibility .2s ease;}
+  .has-drop:hover .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+  .dropdown a{display:block;padding:10px 22px;font-size:13.5px;color:var(--ink-soft);white-space:nowrap;}
+  .dropdown a:hover{color:var(--rose);background:var(--cream);}
+  .nav-cta{font-size:12.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--rose);color:var(--rose);padding:11px 22px;border-radius:2px;transition:all .2s ease;}
+  .nav-cta:hover{background:var(--rose);color:var(--cream);}
+
+  /* side dot nav (only used on Home & Portfolio) */
+  #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:16px;}
+  #dots a{width:9px;height:9px;border-radius:50%;border:1px solid rgba(44,40,34,0.28);transition:all .3s ease;position:relative;display:block;}
+  #dots a.on{background:var(--amber);border-color:var(--amber);transform:scale(1.3);}
+  #dots a .tip{position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);opacity:0;transition:opacity .2s;pointer-events:none;background:var(--cream);padding:3px 8px;border-radius:2px;}
+  #dots a:hover .tip{opacity:1;}
+  @media (max-width:1100px){ #dots{display:none;} }
+
+  section{padding:96px 0;}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 52px;}
+  .sec-head .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .sec-head .label::before,.sec-head .label::after{content:"";width:26px;height:1px;background:var(--amber);}
+  .sec-head h2{font-size:clamp(30px,4vw,44px);margin-bottom:14px;}
+  .sec-head p{color:var(--ink-soft);font-size:17px;}
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+  .rv.in{opacity:1;transform:none;}
+  .rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.2s;}.rv.d3{transition-delay:.3s;}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:15px 30px;border-radius:2px;transition:all .22s ease;cursor:pointer;}
+  .btn-rose{background:var(--rose);color:var(--cream);border:1px solid var(--rose);}
+  .btn-rose:hover{background:var(--rose-deep);}
+  .btn-line{border:1px solid var(--ink);color:var(--ink);}
+  .btn-line:hover{border-color:var(--rose);color:var(--rose);}
+
+  footer{border-top:1px solid var(--cream-deep);padding:56px 0 40px;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .foot-links{display:flex;gap:26px;flex-wrap:wrap;}
+  .foot-links a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);transition:color .2s;}
+  .foot-links a:hover{color:var(--rose);}
+  .foot-bottom{margin-top:30px;padding-top:22px;border-top:1px solid var(--cream-deep);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;letter-spacing:0.05em;color:var(--ink-soft);}
+
+  @media (max-width:900px){
+    nav.links{display:none;}
+    section{padding:70px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.001s !important;animation-duration:.001s !important;}
+    .rv{opacity:1;transform:none;}
+  }
+
+  /* ---------- reusable arrow-navigated carousel (manual only, no auto-rotate) ---------- */
+  .carousel{position:relative;}
+  .carousel-viewport{overflow:hidden;}
+  .carousel-track{display:flex;gap:16px;transition:transform .45s cubic-bezier(.2,.65,.25,1);will-change:transform;}
+  .car-btn{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:46px;height:46px;border-radius:50%;background:var(--white);border:1px solid var(--cream-deep);
+    display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--ink);
+    cursor:pointer;box-shadow:0 10px 24px rgba(44,40,34,0.14);transition:all .2s ease;
+  }
+  .car-btn:hover{border-color:var(--rose);color:var(--rose);}
+  .car-btn:disabled{opacity:0.35;cursor:default;box-shadow:none;}
+  .car-btn:disabled:hover{border-color:var(--cream-deep);color:var(--ink);}
+  .car-prev{left:-23px;}
+  .car-next{right:-23px;}
+  @media (max-width:900px){
+    .car-prev{left:6px;} .car-next{right:6px;}
+  }
+
+  /* ---------- shared page-hero pattern: text beside a photo slot, used on every subpage ---------- */
+  .page-hero{padding:64px 0 60px;}
+  .page-hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;}
+  .page-hero-copy{text-align:left;}
+  .page-hero-copy .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:20px;}
+  .page-hero-copy .label::before,.page-hero-copy .label::after{content:"";width:28px;height:1px;background:var(--amber);}
+  .page-hero-copy h1{font-size:clamp(32px,4.6vw,52px);margin-bottom:16px;}
+  .page-hero-copy p{color:var(--ink-soft);font-size:16.5px;max-width:460px;}
+  .hero-photo{
+    aspect-ratio:4/5;border-radius:var(--radius);position:relative;overflow:hidden;
+    box-shadow:0 26px 54px rgba(44,40,34,0.16);background-size:cover;background-position:center;
+  }
+  .hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.35) 100%);}
+  .hero-photo-cap{position:absolute;left:16px;bottom:14px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.92);z-index:2;}
+  @media (max-width:900px){
+    .page-hero-grid{grid-template-columns:1fr;}
+    .page-hero-copy{text-align:center;}
+    .page-hero-copy .label{justify-content:center;}
+    .page-hero-copy p{margin-left:auto;margin-right:auto;}
+    .hero-photo{aspect-ratio:16/10;}
+  }
+
+  .page-hero .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:20px;}
+  .page-hero .label::before,.page-hero .label::after{content:"";width:28px;height:1px;background:var(--amber);}
+  .page-hero h1{font-size:clamp(36px,5.6vw,58px);margin-bottom:14px;}
+  .page-hero p{color:var(--ink-soft);max-width:520px;margin:0 auto;}
+
+  .filter-bar{position:sticky;top:81px;z-index:60;background:rgba(250,246,239,0.97);backdrop-filter:blur(6px);border-top:1px solid var(--cream-deep);border-bottom:1px solid var(--cream-deep);padding:20px 0;}
+  .filter-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .f-tab{font-size:12.5px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--cream-deep);color:var(--ink-soft);transition:all .2s ease;background:var(--white);cursor:pointer;}
+  .f-tab:hover{border-color:var(--rose);color:var(--rose);}
+  .f-tab.active{background:var(--rose);border-color:var(--rose);color:var(--cream);}
+  .f-tab.print-tab{border-color:var(--amber);color:var(--amber-deep);font-weight:600;}
+  .f-tab.print-tab:hover{background:var(--amber);color:var(--white);}
+
+  .grid-wrap{padding:56px 0;}
+  .photo-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;}
+  .shot{flex:0 1 calc(33.333% - 12px);border-radius:var(--radius);height:320px;position:relative;overflow:hidden;box-shadow:0 20px 44px rgba(44,40,34,0.12);opacity:1;transform:scale(1);transition:opacity .35s ease,transform .35s ease;}
+  .shot.hidden-shot{display:none;}
+  .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.55) 100%);}
+  .shot-cap{position:absolute;left:16px;bottom:14px;z-index:2;color:var(--white);}
+  .shot-cap .g{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber-deep);background:rgba(255,255,255,0.9);padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:6px;}
+  .shot-cap h4{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--white);}
+  .grid-note{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:24px;}
+
+  .print-cta{background:var(--cream-deep);border-radius:var(--radius);max-width:1180px;margin:0 auto;padding:64px 50px;text-align:center;}
+  .print-cta h2{font-size:clamp(26px,3.6vw,36px);margin-bottom:14px;}
+  .print-cta p{color:var(--ink-soft);max-width:460px;margin:0 auto 28px;}
+
+  @media (max-width:900px){
+    .shot{flex:0 1 calc(50% - 9px);}
+    .filter-row{padding:0 20px;}
+  }
+  @media (max-width:600px){ .shot{flex:0 1 100%;} }
+
+</style>
+</head>
+<body>
+
+<div class="concept-banner">CONCEPT REDESIGN — prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="index.html">
+      <img src="logo.png" alt="Deb Conacher Photography" class="brand-logo">
+    </a>
+    <nav class="links">
+      <a class="" href="index.html">Home</a>
+      <div class="has-drop">
+        <a class="current" href="portfolio.html">Portfolio</a>
+        <div class="dropdown">
+          <a href="portfolio.html#nature">Nature</a>
+          <a href="portfolio.html#landscapes">Landscapes</a>
+          <a href="portfolio.html#portraits">Portraits</a>
+          <a href="portfolio.html#family">Family</a>
+          <a href="portfolio.html#engagement">Engagement</a>
+          <a href="portfolio.html#groups">Groups</a>
+          <a href="portfolio.html#events">Events</a>
+          <a href="portfolio.html#maternity">Maternity</a>
+          <a href="portfolio.html#pets">Pets</a>
+          <a href="portfolio.html#sports">Sports</a>
+          <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
+        </div>
+      </div>
+      <a class="" href="services.html">Services</a>
+      <a class="" href="about.html">About</a>
+      <a class="" href="contact.html">Contact</a>
+    </nav>
+    <a class="nav-cta" href="contact.html">Book a Session</a>
+  </div>
+</header>
+<div id="dots"><a href="#d-intro" data-sec="d-intro"><span class="tip">Intro</span></a><a href="#d-filter" data-sec="d-filter"><span class="tip">Filter</span></a><a href="#d-grid" data-sec="d-grid"><span class="tip">Gallery</span></a><a href="#d-printcta" data-sec="d-printcta"><span class="tip">Prints</span></a></div>
+
+<div class="page-hero" id="d-intro">
+  <div class="wrap">
+    <div class="page-hero-grid">
+      <div class="page-hero-copy">
+        <span class="label">The Portfolio</span>
+        <h1>Every genre, one page.</h1>
+        <p>Filter by the kind of session you're picturing — or browse everything below. Looking to buy a print instead? That's its own tab too.</p>
+      </div>
+      <div class="hero-photo" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="hero-photo-cap">Photo slot — signature portfolio image</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-bar" id="d-filter">
+  <div class="wrap">
+    <div class="filter-row">
+      <button class="f-tab active" data-genre="all">All</button>
+      <button class="f-tab" data-genre="nature">Nature</button>
+      <button class="f-tab" data-genre="landscapes">Landscapes</button>
+      <button class="f-tab" data-genre="portraits">Portraits</button>
+      <button class="f-tab" data-genre="family">Family</button>
+      <button class="f-tab" data-genre="engagement">Engagement</button>
+      <button class="f-tab" data-genre="groups">Groups</button>
+      <button class="f-tab" data-genre="events">Events</button>
+      <button class="f-tab" data-genre="maternity">Maternity</button>
+      <button class="f-tab" data-genre="pets">Pets</button>
+      <button class="f-tab" data-genre="sports">Sports</button>
+      <a class="f-tab print-tab" href="print.html">Prints for Purchase ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="grid-wrap" id="d-grid">
+  <div class="wrap">
+    <div class="photo-grid" id="photoGrid">
+    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#7C8F6E,#4B5D45);"><span class="shot-cap"><span class="g">Nature</span><h4>Morning Mist, King City</h4></span></div>
+    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#8FA48A,#526B4C);"><span class="shot-cap"><span class="g">Nature</span><h4>Autumn Trail</h4></span></div>
+    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#6D8560,#3C4E36);"><span class="shot-cap"><span class="g">Nature</span><h4>Forest Light</h4></span></div>
+    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="shot-cap"><span class="g">Landscapes</span><h4>Sunset Over the GTA</h4></span></div>
+    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#B7C2CC,#7D8B99);"><span class="shot-cap"><span class="g">Landscapes</span><h4>Winter Field, Bradford</h4></span></div>
+    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#D8B26A,#A97E33);"><span class="shot-cap"><span class="g">Landscapes</span><h4>Golden Hour, Keswick</h4></span></div>
+    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);"><span class="shot-cap"><span class="g">Portraits</span><h4>Studio Portrait</h4></span></div>
+    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#C7A788,#8F6B4E);"><span class="shot-cap"><span class="g">Portraits</span><h4>Outdoor Portrait</h4></span></div>
+    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#A98F76,#6E543C);"><span class="shot-cap"><span class="g">Portraits</span><h4>Headshot Session</h4></span></div>
+    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="shot-cap"><span class="g">Family</span><h4>Family, Sheppard's Bush</h4></span></div>
+    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#D8C3A0,#A9895A);"><span class="shot-cap"><span class="g">Family</span><h4>Newborn &amp; Family</h4></span></div>
+    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#BFA37E,#8C6F45);"><span class="shot-cap"><span class="g">Family</span><h4>Extended Family, Aurora</h4></span></div>
+    <div class="shot" data-genre="engagement" style="background:linear-gradient(155deg,#8C7B6B,#5C4F42);"><span class="shot-cap"><span class="g">Engagement</span><h4>Engagement, Richmond Hill</h4></span></div>
+    <div class="shot" data-genre="engagement" style="background:linear-gradient(155deg,#A6917D,#6E5A46);"><span class="shot-cap"><span class="g">Engagement</span><h4>Ring Detail</h4></span></div>
+    <div class="shot" data-genre="groups" style="background:linear-gradient(155deg,#7D8B7A,#4E5C4B);"><span class="shot-cap"><span class="g">Groups</span><h4>Friends Session</h4></span></div>
+    <div class="shot" data-genre="groups" style="background:linear-gradient(155deg,#94826F,#5E4C3A);"><span class="shot-cap"><span class="g">Groups</span><h4>Bridal Party</h4></span></div>
+    <div class="shot" data-genre="events" style="background:linear-gradient(155deg,#8B6B57,#5A4433);"><span class="shot-cap"><span class="g">Events</span><h4>Wedding Reception, Aurora</h4></span></div>
+    <div class="shot" data-genre="events" style="background:linear-gradient(155deg,#6E7B85,#3F4E56);"><span class="shot-cap"><span class="g">Events</span><h4>Corporate Event</h4></span></div>
+    <div class="shot" data-genre="maternity" style="background:linear-gradient(155deg,#C7A98A,#9A7752);"><span class="shot-cap"><span class="g">Maternity</span><h4>Maternity, Golden Hour</h4></span></div>
+    <div class="shot" data-genre="maternity" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);"><span class="shot-cap"><span class="g">Maternity</span><h4>Studio Maternity</h4></span></div>
+    <div class="shot" data-genre="pets" style="background:linear-gradient(155deg,#B08856,#7C5E37);"><span class="shot-cap"><span class="g">Pets</span><h4>Golden Retriever Portrait</h4></span></div>
+    <div class="shot" data-genre="pets" style="background:linear-gradient(155deg,#8F7A63,#5E4B37);"><span class="shot-cap"><span class="g">Pets</span><h4>Cat &amp; Family</h4></span></div>
+    <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#5C6B7A,#33404C);"><span class="shot-cap"><span class="g">Sports</span><h4>Hockey Action, Newmarket</h4></span></div>
+    <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#6E5A4E,#3F312A);"><span class="shot-cap"><span class="g">Sports</span><h4>Team Photo</h4></span></div>
+    
+    </div>
+    <p class="grid-note">Placeholder imagery shown by genre — the live site would feature Debbie's real session photography throughout.</p>
+  </div>
+</div>
+
+<section id="d-printcta" style="padding-top:0;">
+  <div class="wrap">
+    <div class="print-cta rv">
+      <h2>Love a landscape? Take it home.</h2>
+      <p>Select nature and landscape images are available as fine-art prints and canvases, in a range of sizes.</p>
+      <a class="btn btn-rose" href="print.html">Browse Prints for Purchase</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="brand">
+        <img src="logo.png" alt="Deb Conacher Photography" class="brand-logo foot-logo">
+      </div>
+      <div class="foot-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="https://www.instagram.com/conacherphotography/">@conacherphotography ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Conacher Photography — concept redesign</span>
+      <span>Servicing Newmarket, Bradford, Keswick, Aurora, Richmond Hill, King City &amp; the GTA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+
+  // Generic manual carousel (no auto-rotate, loops both directions) — class "carousel"
+  document.querySelectorAll('.carousel').forEach(root=>{
+    const track = root.querySelector('.carousel-track');
+    const items = [...root.querySelectorAll('.carousel-item')];
+    const prevBtn = root.querySelector('.car-prev');
+    const nextBtn = root.querySelector('.car-next');
+    if(!track || !items.length || !prevBtn || !nextBtn) return;
+    const coverflow = root.classList.contains('photo-strip'); // center item gets a small, subtle rescale
+    let index = 0;
+    let resizing = false;
+    function step(){ return items[0].getBoundingClientRect().width + 16; }
+    function perView(){ return Math.max(1, Math.round(root.querySelector('.carousel-viewport').clientWidth / step())); }
+    function maxIndex(){ return Math.max(0, items.length - perView()); }
+    function render(){
+      const mi = maxIndex();
+      index = ((index % (mi + 1)) + (mi + 1)) % (mi + 1); // wrap both directions
+      track.style.transform = 'translateX(' + (-index * step()) + 'px)';
+      if(coverflow){
+        const pv = perView();
+        items.forEach((it,i)=>{
+          const active = (pv === 3) ? (i === index + 1) : (i >= index && i < index + pv);
+          it.classList.toggle('is-center', active);
+        });
+      }
+    }
+    prevBtn.addEventListener('click', ()=>{ index -= 1; render(); });
+    nextBtn.addEventListener('click', ()=>{ index += 1; render(); });
+    // On resize, recompute layout without animating the transition (avoids the "bounce")
+    addEventListener('resize', ()=>{
+      if(!resizing){ track.style.transition = 'none'; resizing = true; }
+      clearTimeout(track._rTimer);
+      render();
+      track._rTimer = setTimeout(()=>{ track.style.transition = ''; resizing = false; }, 120);
+    }, {passive:true});
+    render();
+  });
+
+
+  const tabs = document.querySelectorAll('.f-tab[data-genre]');
+  const shots = document.querySelectorAll('.shot');
+  function applyFilter(g){
+    tabs.forEach(t=>t.classList.toggle('active', t.dataset.genre===g));
+    shots.forEach(s=>{
+      const match = (g==='all') || (s.dataset.genre===g);
+      s.classList.toggle('hidden-shot', !match);
+    });
+  }
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=> applyFilter(tab.dataset.genre));
+  });
+  // Nav dropdown links arrive as portfolio.html#nature, #portraits, etc. —
+  // pre-filter the grid to match, so the header genre menu and the on-page
+  // filter tabs are the same system instead of two separate things.
+  const hashGenre = location.hash.replace('#','');
+  if(hashGenre && [...tabs].some(t=>t.dataset.genre===hashGenre)){
+    applyFilter(hashGenre);
+    setTimeout(()=>{
+      const grid=document.getElementById('d-grid');
+      if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 50);
+  }
+
+  const secs=[...document.querySelectorAll('[id^="d-"]')];
+  const dots=document.querySelectorAll('#dots a');
+  if(secs.length && dots.length){
+    const dio=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ dots.forEach(d=>d.classList.toggle('on', d.dataset.sec===e.target.id)); } });
+    },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+    secs.forEach(s=>dio.observe(s));
+  }
+
+})();
+</script>
+</body>
+</html>

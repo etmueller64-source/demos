@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Services &amp; Pricing — Conacher Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF6EF; --cream-deep:#EFE6D3;
+    --ink:#2C2822; --ink-soft:#75695C;
+    --rose:#C9748C; --rose-deep:#A65670;
+    --amber:#C08A34; --amber-deep:#9C6D26;
+    --white:#FFFFFF;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'Jost',sans-serif;font-size:17px;line-height:1.7;overflow-x:hidden;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-0.005em;}
+  em{font-style:italic;color:var(--rose);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+  .label{font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose);}
+
+  .concept-banner{background:var(--ink);color:var(--cream);text-align:center;font-size:12px;letter-spacing:0.06em;padding:9px 16px;}
+  .concept-banner b{color:var(--amber);}
+
+  /* header, Jen-Short-inspired: clean, logo left, dropdown services */
+  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:20px 40px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-logo{height:52px;width:auto;display:block;}
+  .brand-logo.foot-logo{height:64px;}
+  nav.links{display:flex;align-items:center;gap:34px;}
+  nav.links > a{font-size:13px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink);padding:8px 0;position:relative;}
+  nav.links > a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);transform:scaleX(0);transition:transform .25s ease;transform-origin:left;}
+  nav.links > a:hover::after,nav.links > a.current::after{transform:scaleX(1);}
+  .has-drop{position:relative;}
+  .dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);background:var(--white);border:1px solid var(--cream-deep);box-shadow:0 18px 40px rgba(44,40,34,0.12);min-width:205px;padding:10px 0;opacity:0;visibility:hidden;transition:opacity .2s ease,transform .2s ease,visibility .2s ease;}
+  .has-drop:hover .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+  .dropdown a{display:block;padding:10px 22px;font-size:13.5px;color:var(--ink-soft);white-space:nowrap;}
+  .dropdown a:hover{color:var(--rose);background:var(--cream);}
+  .nav-cta{font-size:12.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--rose);color:var(--rose);padding:11px 22px;border-radius:2px;transition:all .2s ease;}
+  .nav-cta:hover{background:var(--rose);color:var(--cream);}
+
+  /* side dot nav (only used on Home & Portfolio) */
+  #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:16px;}
+  #dots a{width:9px;height:9px;border-radius:50%;border:1px solid rgba(44,40,34,0.28);transition:all .3s ease;position:relative;display:block;}
+  #dots a.on{background:var(--amber);border-color:var(--amber);transform:scale(1.3);}
+  #dots a .tip{position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);opacity:0;transition:opacity .2s;pointer-events:none;background:var(--cream);padding:3px 8px;border-radius:2px;}
+  #dots a:hover .tip{opacity:1;}
+  @media (max-width:1100px){ #dots{display:none;} }
+
+  section{padding:96px 0;}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 52px;}
+  .sec-head .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .sec-head .label::before,.sec-head .label::after{content:"";width:26px;height:1px;background:var(--amber);}
+  .sec-head h2{font-size:clamp(30px,4vw,44px);margin-bottom:14px;}
+  .sec-head p{color:var(--ink-soft);font-size:17px;}
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+  .rv.in{opacity:1;transform:none;}
+  .rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.2s;}.rv.d3{transition-delay:.3s;}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:15px 30px;border-radius:2px;transition:all .22s ease;cursor:pointer;}
+  .btn-rose{background:var(--rose);color:var(--cream);border:1px solid var(--rose);}
+  .btn-rose:hover{background:var(--rose-deep);}
+  .btn-line{border:1px solid var(--ink);color:var(--ink);}
+  .btn-line:hover{border-color:var(--rose);color:var(--rose);}
+
+  footer{border-top:1px solid var(--cream-deep);padding:56px 0 40px;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .foot-links{display:flex;gap:26px;flex-wrap:wrap;}
+  .foot-links a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);transition:color .2s;}
+  .foot-links a:hover{color:var(--rose);}
+  .foot-bottom{margin-top:30px;padding-top:22px;border-top:1px solid var(--cream-deep);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;letter-spacing:0.05em;color:var(--ink-soft);}
+
+  @media (max-width:900px){
+    nav.links{display:none;}
+    section{padding:70px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.001s !important;animation-duration:.001s !important;}
+    .rv{opacity:1;transform:none;}
+  }
+
+  /* ---------- reusable arrow-navigated carousel (manual only, no auto-rotate) ---------- */
+  .carousel{position:relative;}
+  .carousel-viewport{overflow:hidden;}
+  .carousel-track{display:flex;gap:16px;transition:transform .45s cubic-bezier(.2,.65,.25,1);will-change:transform;}
+  .car-btn{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:46px;height:46px;border-radius:50%;background:var(--white);border:1px solid var(--cream-deep);
+    display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--ink);
+    cursor:pointer;box-shadow:0 10px 24px rgba(44,40,34,0.14);transition:all .2s ease;
+  }
+  .car-btn:hover{border-color:var(--rose);color:var(--rose);}
+  .car-btn:disabled{opacity:0.35;cursor:default;box-shadow:none;}
+  .car-btn:disabled:hover{border-color:var(--cream-deep);color:var(--ink);}
+  .car-prev{left:-23px;}
+  .car-next{right:-23px;}
+  @media (max-width:900px){
+    .car-prev{left:6px;} .car-next{right:6px;}
+  }
+
+  /* ---------- shared page-hero pattern: text beside a photo slot, used on every subpage ---------- */
+  .page-hero{padding:64px 0 60px;}
+  .page-hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;}
+  .page-hero-copy{text-align:left;}
+  .page-hero-copy .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:20px;}
+  .page-hero-copy .label::before,.page-hero-copy .label::after{content:"";width:28px;height:1px;background:var(--amber);}
+  .page-hero-copy h1{font-size:clamp(32px,4.6vw,52px);margin-bottom:16px;}
+  .page-hero-copy p{color:var(--ink-soft);font-size:16.5px;max-width:460px;}
+  .hero-photo{
+    aspect-ratio:4/5;border-radius:var(--radius);position:relative;overflow:hidden;
+    box-shadow:0 26px 54px rgba(44,40,34,0.16);background-size:cover;background-position:center;
+  }
+  .hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.35) 100%);}
+  .hero-photo-cap{position:absolute;left:16px;bottom:14px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.92);z-index:2;}
+  @media (max-width:900px){
+    .page-hero-grid{grid-template-columns:1fr;}
+    .page-hero-copy{text-align:center;}
+    .page-hero-copy .label{justify-content:center;}
+    .page-hero-copy p{margin-left:auto;margin-right:auto;}
+    .hero-photo{aspect-ratio:16/10;}
+  }
+
+  /* editorial alternating rows: a photo slot beside every service, like the rest of the site */
+  .svc-row{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:76px;}
+  .svc-row:last-child{margin-bottom:0;}
+  .svc-row.reverse .svc-photo{order:2;}
+  .svc-row.reverse .svc-copy{order:1;}
+  .svc-photo{aspect-ratio:4/5;border-radius:var(--radius);position:relative;overflow:hidden;box-shadow:0 24px 50px rgba(44,40,34,0.14);background-size:cover;background-position:center;}
+  .svc-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(44,40,34,0.35) 100%);}
+  .svc-photo-cap{position:absolute;left:16px;bottom:14px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.92);z-index:2;}
+  .svc-copy .tag{display:inline-block;background:var(--cream-deep);color:var(--rose);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:16px;}
+  .svc-copy.featured .tag{background:var(--rose);color:var(--cream);}
+  .svc-copy h3{font-size:clamp(24px,3vw,32px);margin-bottom:10px;}
+  .svc-copy .price{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--rose);margin-bottom:16px;}
+  .svc-copy .price span{font-size:14px;color:var(--ink-soft);font-family:'Jost',sans-serif;font-weight:400;}
+  .svc-copy ul{list-style:none;margin:0 0 22px;}
+  .svc-copy li{font-size:14.5px;color:var(--ink-soft);padding:8px 0;border-bottom:1px solid var(--cream-deep);}
+  .svc-copy li:last-child{border-bottom:none;}
+
+  .extra-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .extra{background:var(--white);border:1px solid var(--cream-deep);border-radius:var(--radius);padding:0;overflow:hidden;display:grid;grid-template-columns:130px 1fr;align-items:stretch;}
+  .extra-photo{background-size:cover;background-position:center;min-height:100%;}
+  .extra-copy{padding:24px 26px;}
+  .extra-copy h4{font-size:18px;margin-bottom:8px;}
+  .extra-copy p{color:var(--ink-soft);font-size:14.5px;margin-bottom:10px;}
+  .extra-copy .amt{font-family:'Fraunces',serif;font-weight:600;color:var(--amber-deep);font-size:19px;}
+
+  .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .step{text-align:center;}
+  .step .n{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--amber);margin-bottom:12px;display:block;}
+  .step h4{font-size:17px;margin-bottom:8px;}
+  .step p{font-size:14px;color:var(--ink-soft);}
+
+  @media (max-width:900px){
+    .svc-row,.svc-row.reverse{grid-template-columns:1fr;margin-bottom:52px;}
+    .svc-row.reverse .svc-photo{order:0;}
+    .svc-row.reverse .svc-copy{order:0;}
+    .extra-row{grid-template-columns:1fr;}
+    .extra{grid-template-columns:1fr;}
+    .extra-photo{min-height:120px;}
+    .process-grid{grid-template-columns:1fr 1fr;}
+  }
+
+</style>
+</head>
+<body>
+
+<div class="concept-banner">CONCEPT REDESIGN — prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="index.html">
+      <img src="logo.png" alt="Deb Conacher Photography" class="brand-logo">
+    </a>
+    <nav class="links">
+      <a class="" href="index.html">Home</a>
+      <div class="has-drop">
+        <a class="" href="portfolio.html">Portfolio</a>
+        <div class="dropdown">
+          <a href="portfolio.html#nature">Nature</a>
+          <a href="portfolio.html#landscapes">Landscapes</a>
+          <a href="portfolio.html#portraits">Portraits</a>
+          <a href="portfolio.html#family">Family</a>
+          <a href="portfolio.html#engagement">Engagement</a>
+          <a href="portfolio.html#groups">Groups</a>
+          <a href="portfolio.html#events">Events</a>
+          <a href="portfolio.html#maternity">Maternity</a>
+          <a href="portfolio.html#pets">Pets</a>
+          <a href="portfolio.html#sports">Sports</a>
+          <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
+        </div>
+      </div>
+      <a class="current" href="services.html">Services</a>
+      <a class="" href="about.html">About</a>
+      <a class="" href="contact.html">Contact</a>
+    </nav>
+    <a class="nav-cta" href="contact.html">Book a Session</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="page-hero-grid">
+      <div class="page-hero-copy">
+        <span class="label">Services &amp; Pricing</span>
+        <h1>Simple, honest pricing.</h1>
+        <p>No hidden fees, no confusing packages — just what's included, and what it costs.</p>
+      </div>
+      <div class="hero-photo" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);"><span class="hero-photo-cap">Photo slot — a session in progress</span></div>
+    </div>
+  </div>
+</div>
+
+<section style="padding-top:20px;">
+  <div class="wrap">
+
+    <div class="svc-row rv">
+      <div class="svc-photo" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="svc-photo-cap">Photo slot — family session, Sheppard's Bush</span></div>
+      <div class="svc-copy">
+        <span class="tag">Most Requested</span>
+        <h3>Family Portraits</h3>
+        <div class="price">$350<span>+</span></div>
+        <ul>
+          <li>1–2 hours on location</li>
+          <li>Up to 6 people</li>
+          <li>Edited digital gallery</li>
+          <li>Outdoor or indoor studio lighting</li>
+        </ul>
+        <a class="btn btn-line" href="contact.html">Inquire</a>
+      </div>
+    </div>
+
+    <div class="svc-row reverse rv d1">
+      <div class="svc-photo" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);"><span class="svc-photo-cap">Photo slot — professional headshot session</span></div>
+      <div class="svc-copy featured">
+        <span class="tag">Most Booked</span>
+        <h3>Professional Portraits</h3>
+        <div class="price">$300<span>+</span></div>
+        <ul>
+          <li>10–12 fully edited images</li>
+          <li>Headshots, branding &amp; solo sessions</li>
+          <li>Indoor or outdoor setting</li>
+          <li>Quick turnaround</li>
+        </ul>
+        <a class="btn btn-rose" href="contact.html">Inquire</a>
+      </div>
+    </div>
+
+    <div class="svc-row rv d2">
+      <div class="svc-photo" style="background:linear-gradient(155deg,#5C6B7A,#33404C);"><span class="svc-photo-cap">Photo slot — team &amp; event coverage</span></div>
+      <div class="svc-copy">
+        <span class="tag">Groups &amp; Teams</span>
+        <h3>Events &amp; Teams</h3>
+        <div class="price">$200<span>/hr</span></div>
+        <ul>
+          <li>2-hour minimum booking</li>
+          <li>50% deposit to book</li>
+          <li>Remainder due at event</li>
+          <li>Team, corporate &amp; group coverage</li>
+        </ul>
+        <a class="btn btn-line" href="contact.html">Inquire</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Good to Know</span>
+      <h2>A few extras</h2>
+    </div>
+    <div class="extra-row rv d1">
+      <div class="extra">
+        <div class="extra-photo" style="background:linear-gradient(155deg,#D8B26A,#A97E33);"></div>
+        <div class="extra-copy"><h4>Additional Edits</h4><p>Need more images from your session, beyond what's included?</p><div class="amt">From $45 / image</div></div>
+      </div>
+      <div class="extra">
+        <div class="extra-photo" style="background:linear-gradient(155deg,#7C8F6E,#4B5D45);"></div>
+        <div class="extra-copy"><h4>Prints &amp; Canvases</h4><p>Landscape and nature images are available for purchase — sizes and pricing vary.</p><div class="amt"><a href="print.html" style="color:var(--amber-deep);font-weight:600;">See Print Pricing →</a></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">How It Works</span>
+      <h2>From first message to final gallery</h2>
+    </div>
+    <div class="process-grid rv d1">
+      <div class="step"><span class="n">01</span><h4>Reach Out</h4><p>Send a message or book a free phone consult to talk through your session.</p></div>
+      <div class="step"><span class="n">02</span><h4>Book</h4><p>Pick a date, confirm the details, and secure your session.</p></div>
+      <div class="step"><span class="n">03</span><h4>Shoot</h4><p>A relaxed, candid session — on location or in-studio, your call.</p></div>
+      <div class="step"><span class="n">04</span><h4>Gallery</h4><p>Receive your fully edited digital gallery, ready to share and print.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="brand">
+        <img src="logo.png" alt="Deb Conacher Photography" class="brand-logo foot-logo">
+      </div>
+      <div class="foot-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="https://www.instagram.com/conacherphotography/">@conacherphotography ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Conacher Photography — concept redesign</span>
+      <span>Servicing Newmarket, Bradford, Keswick, Aurora, Richmond Hill, King City &amp; the GTA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+
+  // Generic manual carousel (no auto-rotate, loops both directions) — class "carousel"
+  document.querySelectorAll('.carousel').forEach(root=>{
+    const track = root.querySelector('.carousel-track');
+    const items = [...root.querySelectorAll('.carousel-item')];
+    const prevBtn = root.querySelector('.car-prev');
+    const nextBtn = root.querySelector('.car-next');
+    if(!track || !items.length || !prevBtn || !nextBtn) return;
+    const coverflow = root.classList.contains('photo-strip'); // center item gets a small, subtle rescale
+    let index = 0;
+    let resizing = false;
+    function step(){ return items[0].getBoundingClientRect().width + 16; }
+    function perView(){ return Math.max(1, Math.round(root.querySelector('.carousel-viewport').clientWidth / step())); }
+    function maxIndex(){ return Math.max(0, items.length - perView()); }
+    function render(){
+      const mi = maxIndex();
+      index = ((index % (mi + 1)) + (mi + 1)) % (mi + 1); // wrap both directions
+      track.style.transform = 'translateX(' + (-index * step()) + 'px)';
+      if(coverflow){
+        const pv = perView();
+        items.forEach((it,i)=>{
+          const active = (pv === 3) ? (i === index + 1) : (i >= index && i < index + pv);
+          it.classList.toggle('is-center', active);
+        });
+      }
+    }
+    prevBtn.addEventListener('click', ()=>{ index -= 1; render(); });
+    nextBtn.addEventListener('click', ()=>{ index += 1; render(); });
+    // On resize, recompute layout without animating the transition (avoids the "bounce")
+    addEventListener('resize', ()=>{
+      if(!resizing){ track.style.transition = 'none'; resizing = true; }
+      clearTimeout(track._rTimer);
+      render();
+      track._rTimer = setTimeout(()=>{ track.style.transition = ''; resizing = false; }, 120);
+    }, {passive:true});
+    render();
+  });
+
+
+})();
+</script>
+</body>
+</html>
