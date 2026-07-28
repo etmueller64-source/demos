@@ -408,7 +408,20 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
+  // IMPORTANT: publish the "Website Data" tab only (File > Share > Publish to web
+  // > pick that tab > CSV). Publishing "Entire document" gives you the raw form
+  // responses instead, which this parser cannot read.
+  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+
+  // Any Drive link shape -> a URL that actually renders as an <img>.
+  // Belt and braces: the Apps Script already writes lh3 links, but this catches
+  // anything pasted into the sheet by hand.
+  function toImageUrl(url){
+    const s = (url||'').trim();
+    if(!s) return '';
+    const m = s.match(/(?:[?&]id=|\/d\/|\/file\/d\/)([A-Za-z0-9_-]{20,})/);
+    return m ? 'https://lh3.googleusercontent.com/d/' + m[1] + '=w2000' : s;
+  }
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
@@ -454,8 +467,8 @@
         section:   get(r,cols.section).toLowerCase(),
         name:      get(r,cols.name),
         label:     get(r,cols.label),
-        cover:     get(r,cols.cover),
-        album:     get(r,cols.album).split(',').map(s=>s.trim()).filter(Boolean)
+        cover:     toImageUrl(get(r,cols.cover)),
+        album:     get(r,cols.album).split(',').map(s=>toImageUrl(s)).filter(Boolean)
       }));
   }
 
