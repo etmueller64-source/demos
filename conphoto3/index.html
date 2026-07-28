@@ -150,25 +150,24 @@
   .hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:56px;}
 
   .photo-strip-wrap{max-width:1180px;margin:0 auto;padding:0 56px;}
-  .photo-strip .carousel-viewport{padding:16px 0;} /* breathing room so the rescaled centre photo isn't clipped */
+  .photo-strip .carousel-viewport{padding:16px 0;overflow:hidden;} /* breathing room so the rescaled centre photo isn't clipped */
   .photo-strip .carousel-track{align-items:center;}
-  .photo-strip .carousel-item{flex:0 0 calc(33.333% - 11px);}
+  /* each slide takes exactly the width its own photo renders at — no forced crop, no uniform box */
+  .photo-strip .carousel-item{flex:0 0 auto;}
   .ph{
-    /* aspect-ratio (not a fixed px height) so this box adapts cleanly whatever the source photo's
-       real proportions turn out to be — wide, narrow, tall, whatever gets dropped in later. */
-    aspect-ratio:4/5;
-    background-size:cover;background-position:center;
-    border-radius:var(--radius);position:relative;overflow:hidden;
+    height:340px; /* the one constant every photo shares — width follows the photo's own proportions */
+    position:relative;overflow:hidden;border-radius:var(--radius);
     box-shadow:0 18px 38px rgba(44,40,34,0.14);
-    opacity:0.8;transform:scale(0.92);transform-origin:center;
+    opacity:0.8;transform:scale(0.94);transform-origin:center;
     transition:transform .4s ease,opacity .4s ease,box-shadow .4s ease;
   }
+  .ph img{height:100%;width:auto;display:block;}
+  .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.45) 100%);}
   /* the item centred in the visible window gets a small, subtle rescale forward — JS assigns this */
   .ph.is-center{opacity:1;transform:scale(1.04);box-shadow:0 26px 50px rgba(44,40,34,0.2);z-index:2;}
   .ph-cap{position:absolute;left:14px;bottom:12px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.9);z-index:2;}
   @media (max-width:900px){
-    .photo-strip .carousel-item{flex:0 0 100%;}
-    .ph{opacity:1;transform:scale(1);}
+    .ph{height:240px;opacity:1;transform:scale(1);}
   }
   @media (min-width:901px) and (max-width:1180px){ .photo-strip .carousel-item{flex:0 0 calc(50% - 8px);} }
 
@@ -255,8 +254,8 @@
       <button class="car-btn car-prev" aria-label="Previous photos">&#8592;</button>
       <div class="carousel-viewport">
         <div class="carousel-track" id="carouselTrack">
-          <div class="carousel-item ph" style="background:linear-gradient(155deg,#C9A768,#9C6D26);display:flex;align-items:center;justify-content:center;">
-            <span class="ph-cap" style="position:static;color:var(--ink-soft);font-size:12px;">Connect the Google Sheet to show live photos here.</span>
+          <div class="carousel-item ph" style="width:420px;background:linear-gradient(155deg,#C9A768,#9C6D26);display:flex;align-items:center;justify-content:center;">
+            <span class="ph-cap" style="position:static;color:var(--ink-soft);font-size:12px;padding:0 24px;text-align:center;">Connect the Google Sheet to show live photos here.</span>
           </div>
         </div>
       </div>
@@ -361,67 +360,103 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Generic manual carousel (no auto-rotate, loops both directions) — class "carousel"
-  function initSingleCarousel(root){
+  // Variable-width filmstrip carousel with a seamless infinite loop.
+  // Each real slide keeps its own natural width (fixed height, no cropping).
+  // Looping works by cloning the first/last real slides onto the opposite
+  // ends of the track — scrolling "past the end" glides into a clone that
+  // looks identical to the real slide, then we silently snap back to the
+  // real one with transitions off, so the reset is invisible to the eye.
+  function initFilmstripCarousel(root){
     if(!root) return;
+    const viewport = root.querySelector('.carousel-viewport');
     const track = root.querySelector('.carousel-track');
-    const items = [...root.querySelectorAll('.carousel-item')];
-    const prevBtn = root.querySelector('.car-prev');
-    const nextBtn = root.querySelector('.car-next');
-    if(!track || !items.length || !prevBtn || !nextBtn) return;
-    const coverflow = root.classList.contains('photo-strip'); // center item gets a small, subtle rescale
-    let index = 0;
-    let resizing = false;
-    function step(){ return items[0].getBoundingClientRect().width + 16; }
-    function perView(){ return Math.max(1, Math.round(root.querySelector('.carousel-viewport').clientWidth / step())); }
-    function maxIndex(){ return Math.max(0, items.length - perView()); }
-    function render(){
-      const mi = maxIndex();
-      index = ((index % (mi + 1)) + (mi + 1)) % (mi + 1); // wrap both directions
-      track.style.transform = 'translateX(' + (-index * step()) + 'px)';
-      if(coverflow){
-        const pv = perView();
-        items.forEach((it,i)=>{
-          const active = (pv === 3) ? (i === index + 1) : (i >= index && i < index + pv);
-          it.classList.toggle('is-center', active);
-        });
+    const realItems = [...track.querySelectorAll('.carousel-item:not(.carousel-clone)')];
+    let prevBtn = root.querySelector('.car-prev');
+    let nextBtn = root.querySelector('.car-next');
+    if(!viewport || !track || !realItems.length || !prevBtn || !nextBtn) return;
+
+    // This can legitimately run more than once (e.g. once on placeholder content,
+    // then again once real photos load) — replace the buttons with fresh clones
+    // so any previously-bound click listeners are stripped, not stacked.
+    const freshPrev = prevBtn.cloneNode(true); prevBtn.replaceWith(freshPrev); prevBtn = freshPrev;
+    const freshNext = nextBtn.cloneNode(true); nextBtn.replaceWith(freshNext); nextBtn = freshNext;
+
+    // Clear any clones left over from a previous init
+    track.querySelectorAll('.carousel-clone').forEach(el=>el.remove());
+
+    const firstClone = realItems[0].cloneNode(true);
+    const lastClone = realItems[realItems.length-1].cloneNode(true);
+    firstClone.classList.add('carousel-clone');
+    lastClone.classList.add('carousel-clone');
+    track.insertBefore(lastClone, realItems[0]);
+    track.appendChild(firstClone);
+
+    let index = 1; // position 1 = the first REAL slide (position 0 is the prepended clone)
+    const items = () => [...track.children];
+    const gapPx = () => parseFloat(getComputedStyle(track).gap) || 16;
+
+    function offsetForIndex(i){
+      const all = items();
+      let x = 0;
+      for(let k=0;k<i;k++) x += all[k].getBoundingClientRect().width + gapPx();
+      const targetWidth = all[i].getBoundingClientRect().width;
+      return -(x - (viewport.clientWidth - targetWidth) / 2);
+    }
+
+    function goTo(i, animate){
+      track.style.transition = animate ? '' : 'none';
+      track.style.transform = 'translateX(' + offsetForIndex(i) + 'px)';
+    }
+
+    function markCenter(){
+      const vwCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+      let best = null, bestDist = Infinity;
+      items().forEach(it=>{
+        const r = it.getBoundingClientRect();
+        const d = Math.abs((r.left + r.width/2) - vwCenter);
+        if(d < bestDist){ bestDist = d; best = it; }
+      });
+      items().forEach(it=> it.classList.toggle('is-center', it === best));
+    }
+
+    function afterTransition(cb){
+      let done = false;
+      const handler = ()=>{ if(done) return; done = true; track.removeEventListener('transitionend', handler); cb(); };
+      track.addEventListener('transitionend', handler);
+      setTimeout(handler, 500); // safety net in case transitionend never fires
+    }
+
+    nextBtn.addEventListener('click', ()=>{
+      index += 1;
+      goTo(index, true);
+      markCenter();
+      if(index === items().length - 1){ // landed on the appended firstClone
+        afterTransition(()=>{ index = 1; goTo(index, false); markCenter(); });
       }
-    }
-    prevBtn.addEventListener('click', ()=>{ index -= 1; render(); });
-    nextBtn.addEventListener('click', ()=>{ index += 1; render(); });
-    // On resize, recompute layout without animating the transition (avoids the "bounce")
-    if(!root._resizeBound){
-      addEventListener('resize', ()=>{
-        if(!resizing){ track.style.transition = 'none'; resizing = true; }
-        clearTimeout(track._rTimer);
-        render();
-        track._rTimer = setTimeout(()=>{ track.style.transition = ''; resizing = false; }, 120);
-      }, {passive:true});
-      root._resizeBound = true;
-    }
-    render();
+    });
+    prevBtn.addEventListener('click', ()=>{
+      index -= 1;
+      goTo(index, true);
+      markCenter();
+      if(index === 0){ // landed on the prepended lastClone
+        afterTransition(()=>{ index = items().length - 2; goTo(index, false); markCenter(); });
+      }
+    });
+    if(track._resizeHandler) removeEventListener('resize', track._resizeHandler);
+    track._resizeHandler = ()=>{ goTo(index, false); markCenter(); };
+    addEventListener('resize', track._resizeHandler, {passive:true});
+
+    goTo(index, false);
+    markCenter();
   }
-  document.querySelectorAll('.carousel').forEach(initSingleCarousel);
+  document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
 
 
   // ============================================================
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  // IMPORTANT: publish the "Website Data" tab only (File > Share > Publish to web
-  // > pick that tab > CSV). Publishing "Entire document" gives you the raw form
-  // responses instead, which this parser cannot read.
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
-
-  // Any Drive link shape -> a URL that actually renders as an <img>.
-  // Belt and braces: the Apps Script already writes lh3 links, but this catches
-  // anything pasted into the sheet by hand.
-  function toImageUrl(url){
-    const s = (url||'').trim();
-    if(!s) return '';
-    const m = s.match(/(?:[?&]id=|\/d\/|\/file\/d\/)([A-Za-z0-9_-]{20,})/);
-    return m ? 'https://lh3.googleusercontent.com/d/' + m[1] + '=w2000' : s;
-  }
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
@@ -467,8 +502,8 @@
         section:   get(r,cols.section).toLowerCase(),
         name:      get(r,cols.name),
         label:     get(r,cols.label),
-        cover:     toImageUrl(get(r,cols.cover)),
-        album:     get(r,cols.album).split(',').map(s=>toImageUrl(s)).filter(Boolean)
+        cover:     get(r,cols.cover),
+        album:     get(r,cols.album).split(',').map(s=>s.trim()).filter(Boolean)
       }));
   }
 
@@ -502,9 +537,12 @@
 
     const track = document.getElementById('carouselTrack');
     if(albumList.length && track){
-      // one carousel tile per album — its cover is the first photo in that album
+      // one carousel tile per album — its cover is the first photo in that album.
+      // Real <img> tags (not background-image) so each slide keeps its own true
+      // width at a fixed height — no cropping, full photo always visible.
       track.innerHTML = albumList.map((a,i)=>
-        '<div class="carousel-item ph" data-album="'+i+'" style="background-image:url(\''+a.photos[0]+'\');background-size:cover;background-position:center;">'
+        '<div class="carousel-item ph" data-album="'+i+'">'
+        +'<img src="'+a.photos[0]+'" alt="">'
         +'<span class="ph-cap">'+(a.label||a.name)+'</span></div>'
       ).join('');
       track.querySelectorAll('[data-album]').forEach(el=>{
@@ -512,7 +550,7 @@
       });
       // re-init this carousel now that real items exist (the shared carousel script
       // already ran once against the placeholder — refresh it against the new DOM)
-      initSingleCarousel(document.getElementById('homeCarousel'));
+      initFilmstripCarousel(document.getElementById('homeCarousel'));
     }
 
     // ---------- FEATURED: group by Tile Name, newest submission per name wins ----------
