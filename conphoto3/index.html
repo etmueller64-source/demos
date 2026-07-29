@@ -158,16 +158,19 @@
     height:340px; /* the one constant every photo shares — width follows the photo's own proportions */
     position:relative;overflow:hidden;border-radius:var(--radius);
     box-shadow:0 18px 38px rgba(44,40,34,0.14);
-    opacity:0.8;transform:scale(0.94);transform-origin:center;
-    transition:transform .4s ease,opacity .4s ease,box-shadow .4s ease;
+    transform:scale(0.94);transform-origin:center;
+    transition:transform .4s ease,box-shadow .4s ease;
   }
   .ph img{height:100%;width:auto;display:block;}
   .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.45) 100%);}
-  /* the item centred in the visible window gets a small, subtle rescale forward — JS assigns this */
-  .ph.is-center{opacity:1;transform:scale(1.04);box-shadow:0 26px 50px rgba(44,40,34,0.2);z-index:2;}
+  /* the item centred in the visible window gets a small, subtle rescale forward — JS assigns this.
+     No opacity change here on purpose — fading between two opacity values against the page's light
+     background made the photo look like it was clearing up from a blurry, half-loaded state, which
+     read as a loading flash even though the photo was always fully loaded. */
+  .ph.is-center{transform:scale(1.04);box-shadow:0 26px 50px rgba(44,40,34,0.2);z-index:2;}
   .ph-cap{position:absolute;left:14px;bottom:12px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.9);z-index:2;}
   @media (max-width:900px){
-    .ph{height:240px;opacity:1;transform:scale(1);}
+    .ph{height:240px;transform:scale(1);}
   }
   @media (min-width:901px) and (max-width:1180px){ .photo-strip .carousel-item{flex:0 0 calc(50% - 8px);} }
 
@@ -445,11 +448,21 @@
       track.style.transform = 'translateX(' + offsetForPos(p) + 'px)';
       all().forEach((it,k)=> it.classList.toggle('is-center', k === p));
     }
+    let pendingAfter = null; // tracks the current in-flight afterTransition, so a fast click can cancel it
     function afterTransition(cb){
+      if(pendingAfter) pendingAfter.cancel(); // an earlier, interrupted transition's wait-up no longer applies
       let done = false;
-      const handler = ()=>{ if(done) return; done = true; track.removeEventListener('transitionend', handler); cb(); };
+      const handler = ()=>{
+        if(done) return; done = true;
+        track.removeEventListener('transitionend', handler);
+        clearTimeout(timer);
+        if(pendingAfter === entry) pendingAfter = null;
+        cb();
+      };
+      const timer = setTimeout(handler, 500); // safety net in case transitionend never fires
+      const entry = { cancel: ()=>{ done = true; track.removeEventListener('transitionend', handler); clearTimeout(timer); } };
+      pendingAfter = entry;
       track.addEventListener('transitionend', handler);
-      setTimeout(handler, 500); // safety net in case transitionend never fires
     }
 
     function step(dir){
@@ -459,6 +472,8 @@
         // Drifted too close to an edge of the tripled buffer? Snap invisibly
         // back to the equivalent spot in the middle copy — same photo, so
         // there's nothing to see — restoring a full buffer on both sides.
+        // Uses the CURRENT pos at the time this actually fires, never a
+        // stale value from a click that's since been superseded.
         if(pos < N * 0.5 || pos > N * 2.5){
           pos = N + realIndexAt(pos);
           goTo(pos, false);
@@ -507,7 +522,7 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
