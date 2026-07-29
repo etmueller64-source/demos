@@ -360,24 +360,34 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Variable-width filmstrip carousel with a seamless infinite loop.
-  // Variable-width filmstrip carousel with a clean, seamless wraparound.
-  // Each real slide keeps its own natural width (fixed height, no cropping).
-  // No cloned slides are used — every visible tile is always a genuine,
-  // original DOM node, so its click listener is never missing. Looping
-  // works by indexing directly into the real photo list with wraparound
-  // math: normal next/prev between neighbouring photos slides smoothly;
-  // the one wrap moment (last photo → first, or first photo → last) cuts
-  // cleanly with no slide-across, the same way the lightbox's counter
-  // resets instantly from the last photo back to "1" with no animation.
+  // Variable-width filmstrip carousel that always shows real photos peeking
+  // on both edges — never an empty side, no matter which album is centered.
+  //
+  // How: the real album list gets tripled (copy, copy, copy) so there's
+  // always a full spare set of real photos to slide into on either side.
+  // Every tile — original or a repeated copy — opens the correct lightbox
+  // album, because clicks are resolved through a shared lookup function
+  // (onCarouselTileClick) keyed by album index, rather than a listener
+  // attached to one specific element. That's what makes repeated copies
+  // fully functional instead of the dead-clicks bug from before.
+  //
+  // Navigation always slides to a physically adjacent slide (smooth, never
+  // a jump). Only once you've drifted several slides toward either edge of
+  // the tripled buffer does it invisibly snap back to the equivalent
+  // position in the middle copy — imperceptible, since that position shows
+  // the exact same photo.
+  let onCarouselTileClick = null; // renderHome() points this at the real lightbox opener
+
   function initFilmstripCarousel(root){
     if(!root) return;
     const viewport = root.querySelector('.carousel-viewport');
     const track = root.querySelector('.carousel-track');
-    const items = [...track.querySelectorAll('.carousel-item')];
+    const realItems = [...track.querySelectorAll('.carousel-item')];
     let prevBtn = root.querySelector('.car-prev');
     let nextBtn = root.querySelector('.car-next');
-    if(!viewport || !track || !items.length || !prevBtn || !nextBtn) return;
+    if(!viewport || !track || !realItems.length || !prevBtn || !nextBtn) return;
+
+    const N = realItems.length;
 
     // This can legitimately run more than once (e.g. once on placeholder content,
     // then again once real photos load) — replace the buttons with fresh clones
@@ -385,45 +395,74 @@
     const freshPrev = prevBtn.cloneNode(true); prevBtn.replaceWith(freshPrev); prevBtn = freshPrev;
     const freshNext = nextBtn.cloneNode(true); nextBtn.replaceWith(freshNext); nextBtn = freshNext;
 
-    const N = items.length;
-    let index = 0; // we always know exactly which real item is centered — no guessing needed
+    if(N <= 1){
+      // Nothing to loop or pad — just show the single item, no nav needed.
+      track.style.transform = 'translateX(0px)';
+      realItems.forEach(it=>it.classList.add('is-center'));
+      return;
+    }
+
+    // Triple the real list. With the 4-5+ albums we recommend, this is always
+    // wider than any realistic screen, so both edges stay filled at all times.
+    track.innerHTML = '';
+    for(let copy=0; copy<3; copy++){
+      realItems.forEach(it=> track.appendChild(it.cloneNode(true)));
+    }
+    const all = () => [...track.children];
+
+    let pos = N; // physical index into the tripled track — always moves to a true neighbour
+    const realIndexAt = p => ((p % N) + N) % N;
 
     function gapPx(){ return parseFloat(getComputedStyle(track).gap) || 16; }
-    function offsetForIndex(i){
+    function offsetForPos(p){
+      const items = all();
       let x = 0;
-      for(let k=0;k<i;k++) x += items[k].getBoundingClientRect().width + gapPx();
-      const targetWidth = items[i].getBoundingClientRect().width;
-      return -(x - (viewport.clientWidth - targetWidth) / 2);
+      for(let k=0;k<p;k++) x += items[k].getBoundingClientRect().width + gapPx();
+      const w = items[p].getBoundingClientRect().width;
+      return -(x - (viewport.clientWidth - w) / 2);
     }
-    function goTo(i, animate){
+    function goTo(p, animate){
       track.style.transition = animate ? '' : 'none';
-      track.style.transform = 'translateX(' + offsetForIndex(i) + 'px)';
-      items.forEach((it,k)=> it.classList.toggle('is-center', k === i));
+      track.style.transform = 'translateX(' + offsetForPos(p) + 'px)';
+      all().forEach((it,k)=> it.classList.toggle('is-center', k === p));
+    }
+    function afterTransition(cb){
+      let done = false;
+      const handler = ()=>{ if(done) return; done = true; track.removeEventListener('transitionend', handler); cb(); };
+      track.addEventListener('transitionend', handler);
+      setTimeout(handler, 500); // safety net in case transitionend never fires
     }
 
     function step(dir){
-      const raw = index + dir;
-      const wrapped = raw < 0 || raw >= N;
-      index = ((raw % N) + N) % N;
-      if(wrapped){
-        // The wrap moment: reposition instantly with no slide, matching how
-        // the lightbox counter resets from the last photo straight back to
-        // the first with no travelling animation.
-        goTo(index, false);
-        requestAnimationFrame(()=>{ track.style.transition = ''; }); // restore transitions for the next normal click
-      } else {
-        goTo(index, true);
-      }
+      pos += dir; // always a physically adjacent slide — smooth, never a jump
+      goTo(pos, true);
+      afterTransition(()=>{
+        // Drifted too close to an edge of the tripled buffer? Snap invisibly
+        // back to the equivalent spot in the middle copy — same photo, so
+        // there's nothing to see — restoring a full buffer on both sides.
+        if(pos < N * 0.5 || pos > N * 2.5){
+          pos = N + realIndexAt(pos);
+          goTo(pos, false);
+        }
+      });
     }
 
     prevBtn.addEventListener('click', ()=> step(-1));
     nextBtn.addEventListener('click', ()=> step(1));
 
+    // Click-to-open works through a shared lookup, not a per-element listener —
+    // so every physical copy of every album (original or peek-padding) opens
+    // the correct lightbox, with no risk of a "dead" repeated tile.
+    track.addEventListener('click', e=>{
+      const item = e.target.closest('[data-album]');
+      if(item && onCarouselTileClick) onCarouselTileClick(+item.dataset.album);
+    });
+
     if(track._resizeHandler) removeEventListener('resize', track._resizeHandler);
-    track._resizeHandler = ()=> goTo(index, false);
+    track._resizeHandler = ()=> goTo(pos, false);
     addEventListener('resize', track._resizeHandler, {passive:true});
 
-    goTo(index, false);
+    goTo(pos, false);
   }
   document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
 
@@ -432,7 +471,7 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
@@ -521,9 +560,9 @@
         +'<img src="'+a.photos[0]+'" alt="">'
         +'<span class="ph-cap">'+(a.label||a.name)+'</span></div>'
       ).join('');
-      track.querySelectorAll('[data-album]').forEach(el=>{
-        el.addEventListener('click', ()=> openLightbox(albumList[+el.dataset.album].photos, 0));
-      });
+      // shared lookup used by every physical copy of every tile (including the
+      // repeated peek-padding copies the carousel adds for the always-filled look)
+      onCarouselTileClick = (i)=> openLightbox(albumList[i].photos, 0);
       // re-init this carousel now that real items exist (the shared carousel script
       // already ran once against the placeholder — refresh it against the new DOM)
       initFilmstripCarousel(document.getElementById('homeCarousel'));
