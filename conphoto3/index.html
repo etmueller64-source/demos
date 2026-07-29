@@ -90,7 +90,7 @@
   /* ---------- reusable arrow-navigated carousel (manual only, no auto-rotate) ---------- */
   .carousel{position:relative;}
   .carousel-viewport{overflow:hidden;}
-  .carousel-track{display:flex;gap:16px;transition:transform .45s cubic-bezier(.2,.65,.25,1);will-change:transform;}
+  .carousel-track{display:flex;gap:16px;transition:transform .45s cubic-bezier(.2,.65,.25,1),opacity .3s ease;will-change:transform;}
   .car-btn{
     position:absolute;top:50%;transform:translateY(-50%);z-index:5;
     width:46px;height:46px;border-radius:50%;background:var(--white);border:1px solid var(--cream-deep);
@@ -410,6 +410,19 @@
     }
     const all = () => [...track.children];
 
+    // Every copy shares the same cached photo URL as the original, but each
+    // is still its own separate <img> element — the browser still needs a
+    // moment to decode it into something paintable the first time THAT
+    // specific element is shown, even though the bytes are already cached.
+    // That decode gap is what caused the flash right at a wrap/recenter, the
+    // first time a repeated copy came into view. Decoding every copy up
+    // front (usually only a few ms since it's all cached) removes that gap
+    // for every copy, not just the ones visible on the very first frame.
+    const allImgs = [...track.querySelectorAll('img')];
+    const decodeAll = Promise.all(allImgs.map(img =>
+      (img.decode ? img.decode().catch(()=>{}) : Promise.resolve())
+    ));
+
     let pos = N; // physical index into the tripled track — always moves to a true neighbour
     const realIndexAt = p => ((p % N) + N) % N;
 
@@ -468,14 +481,20 @@
     track._resizeHandler = ()=> goTo(pos, false);
     addEventListener('resize', track._resizeHandler, {passive:true});
 
-    goTo(pos, false);
+    track.style.transition = 'none'; // hiding must be instant — nothing wrong should ever be visible, even briefly
+    track.style.opacity = '0';
 
-    // A photo's true rendered width isn't known until it actually finishes
-    // loading over the network — real hosted photos take real time, unlike
-    // quick local test images. Recompute centering (no animation, so this
-    // never looks like an extra slide) every time one finishes, so the
-    // layout converges to the correct position as real sizes come in,
-    // instead of staying wrong forever based on a too-early guess.
+    decodeAll.then(()=>{
+      goTo(pos, false); // position correctly while still invisible — nothing to see yet
+      requestAnimationFrame(()=>{
+        track.style.transition = ''; // restore the normal CSS transition (covers opacity too)
+        track.style.opacity = '1';   // reveal, already fully positioned — nothing left to settle
+      });
+    });
+
+    // Fallback safety net: recompute (still invisible-safe, since it only
+    // runs before or shortly after the reveal above) in case a browser
+    // doesn't support decode(), or a photo's size shifts for any other reason.
     track.querySelectorAll('img').forEach(img=>{
       if(img.complete) requestAnimationFrame(()=> goTo(pos, false));
       else img.addEventListener('load', ()=> goTo(pos, false));
@@ -488,7 +507,7 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
@@ -569,20 +588,39 @@
 
     const track = document.getElementById('carouselTrack');
     if(albumList.length && track){
-      // one carousel tile per album — its cover is the first photo in that album.
-      // Real <img> tags (not background-image) so each slide keeps its own true
-      // width at a fixed height — no cropping, full photo always visible.
-      track.innerHTML = albumList.map((a,i)=>
-        '<div class="carousel-item ph" data-album="'+i+'">'
-        +'<img src="'+a.photos[0]+'" alt="">'
-        +'<span class="ph-cap">'+(a.label||a.name)+'</span></div>'
-      ).join('');
-      // shared lookup used by every physical copy of every tile (including the
-      // repeated peek-padding copies the carousel adds for the always-filled look)
-      onCarouselTileClick = (i)=> openLightbox(albumList[i].photos, 0);
-      // re-init this carousel now that real items exist (the shared carousel script
-      // already ran once against the placeholder — refresh it against the new DOM)
-      initFilmstripCarousel(document.getElementById('homeCarousel'));
+      // Load every cover photo BEFORE it ever appears on screen. Real hosted
+      // photos take real time to arrive — if we put them in the page first
+      // and let them load in, the layout visibly "settles" as each one
+      // finishes. Preloading off-screen means that settling happens before
+      // anything is shown, so the placeholder swaps straight to a fully
+      // correct, already-loaded carousel with nothing left to visibly jump.
+      function preloadImage(src, timeoutMs){
+        return new Promise(resolve=>{
+          const img = new Image();
+          let done = false;
+          const finish = ()=>{ if(!done){ done = true; resolve(); } };
+          img.onload = finish; img.onerror = finish; // resolve either way — a broken link shouldn't block the rest
+          img.src = src;
+          setTimeout(finish, timeoutMs || 3000); // safety net so one dead link can't stall the whole carousel
+        });
+      }
+
+      Promise.all(albumList.map(a=> preloadImage(a.photos[0]))).then(()=>{
+        // one carousel tile per album — its cover is the first photo in that album.
+        // Real <img> tags (not background-image) so each slide keeps its own true
+        // width at a fixed height — no cropping, full photo always visible.
+        track.innerHTML = albumList.map((a,i)=>
+          '<div class="carousel-item ph" data-album="'+i+'">'
+          +'<img src="'+a.photos[0]+'" alt="">'
+          +'<span class="ph-cap">'+(a.label||a.name)+'</span></div>'
+        ).join('');
+        // shared lookup used by every physical copy of every tile (including the
+        // repeated peek-padding copies the carousel adds for the always-filled look)
+        onCarouselTileClick = (i)=> openLightbox(albumList[i].photos, 0);
+        // re-init this carousel now that real items exist (the shared carousel script
+        // already ran once against the placeholder — refresh it against the new DOM)
+        initFilmstripCarousel(document.getElementById('homeCarousel'));
+      });
     }
 
     // ---------- FEATURED: group by Tile Name, newest submission per name wins ----------
