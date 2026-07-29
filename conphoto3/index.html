@@ -455,43 +455,48 @@
       track.style.transform = 'translateX(' + offsetForPos(p) + 'px)';
       items.forEach((it,k)=> it.classList.toggle('is-center', k === p));
     }
-    let pendingAfter = null; // tracks the current in-flight afterTransition, so a fast click can cancel it
-    function afterTransition(cb){
-      if(pendingAfter) pendingAfter.cancel(); // an earlier, interrupted transition's wait-up no longer applies
-      let done = false;
-      const handler = (e)=>{
-        // transitionend BUBBLES UP from child elements — including each
-        // photo's own zoom/shadow transition when it becomes (un)centered.
-        // Without this check, a photo finishing ITS short animation gets
-        // mistaken for the track's own (longer) slide finishing, firing
-        // this callback early and cutting the slide off mid-motion.
-        if(e && e.target !== track) return;
-        if(done) return; done = true;
-        track.removeEventListener('transitionend', handler);
-        clearTimeout(timer);
-        if(pendingAfter === entry) pendingAfter = null;
-        cb();
-      };
-      const timer = setTimeout(handler, 500); // safety net in case transitionend never fires
-      const entry = { cancel: ()=>{ done = true; track.removeEventListener('transitionend', handler); clearTimeout(timer); } };
-      pendingAfter = entry;
-      track.addEventListener('transitionend', handler);
+    function cycleWidthPx(){
+      // Width of exactly one full lap through the real album list — the
+      // exact distance at which the tripled strip repeats itself, so
+      // shifting the reference frame by this much can never change what's
+      // actually on screen.
+      const items = all();
+      let w = 0;
+      for(let k=0;k<N;k++) w += items[k].offsetWidth + gapPx();
+      return w;
+    }
+    function currentTranslateXPx(){
+      const t = getComputedStyle(track).transform;
+      if(!t || t === 'none') return 0;
+      const m = new DOMMatrixReadOnly(t);
+      return m.m41;
+    }
+    function shiftReferenceFrame(deltaPx){
+      // Re-express whatever is CURRENTLY on screen — whether at rest or
+      // mid-slide — under the new pos numbering, with zero visible change:
+      // read the actual current position, nudge it by exactly one lap, and
+      // re-apply instantly. Reading offsetHeight between the two writes
+      // forces the browser to commit that instant frame rather than
+      // folding it into the next animation.
+      const cur = currentTranslateXPx();
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(' + (cur + deltaPx) + 'px)';
+      track.offsetHeight;
+    }
+    function ensureSafeZone(){
+      // Keep pos within the middle third of the tripled buffer at all
+      // times — checked before every single step, not just after a
+      // transition happens to settle — so no burst of rapid clicks can
+      // ever outrun this and push pos past the edge of the physical
+      // (tripled) DOM into photos that don't exist.
+      while(pos < N * 0.5){ pos += N; shiftReferenceFrame(-cycleWidthPx()); }
+      while(pos > N * 2.5){ pos -= N; shiftReferenceFrame(cycleWidthPx()); }
     }
 
     function step(dir){
       pos += dir; // always a physically adjacent slide — smooth, never a jump
+      ensureSafeZone();
       goTo(pos, true);
-      afterTransition(()=>{
-        // Drifted too close to an edge of the tripled buffer? Snap invisibly
-        // back to the equivalent spot in the middle copy — same photo, so
-        // there's nothing to see — restoring a full buffer on both sides.
-        // Uses the CURRENT pos at the time this actually fires, never a
-        // stale value from a click that's since been superseded.
-        if(pos < N * 0.5 || pos > N * 2.5){
-          pos = N + realIndexAt(pos);
-          goTo(pos, false);
-        }
-      });
     }
 
     // Once the user has clicked, the carousel is "settled" — after this point
