@@ -47,7 +47,7 @@
   .nav-cta{font-size:12.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--rose);color:var(--rose);padding:11px 22px;border-radius:2px;transition:all .2s ease;}
   .nav-cta:hover{background:var(--rose);color:var(--cream);}
 
-  /* side dot nav (only used on Home & PORTFOLIO) */
+  /* side dot nav (only used on Home & Portfolio) */
   #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:16px;}
   #dots a{width:9px;height:9px;border-radius:50%;border:1px solid rgba(44,40,34,0.28);transition:all .3s ease;position:relative;display:block;}
   #dots a.on{background:var(--amber);border-color:var(--amber);transform:scale(1.3);}
@@ -218,18 +218,18 @@
     <nav class="links">
       <a class="current" href="index.html">Home</a>
       <div class="has-drop">
-        <a class="" href="PORTFOLIO.html">PORTFOLIO</a>
+        <a class="" href="portfolio.html">Portfolio</a>
         <div class="dropdown">
-          <a href="PORTFOLIO.html#nature">Nature</a>
-          <a href="PORTFOLIO.html#landscapes">Landscapes</a>
-          <a href="PORTFOLIO.html#portraits">Portraits</a>
-          <a href="PORTFOLIO.html#family">Family</a>
-          <a href="PORTFOLIO.html#engagement">Engagement</a>
-          <a href="PORTFOLIO.html#groups">Groups</a>
-          <a href="PORTFOLIO.html#events">Events</a>
-          <a href="PORTFOLIO.html#maternity">Maternity</a>
-          <a href="PORTFOLIO.html#pets">Pets</a>
-          <a href="PORTFOLIO.html#sports">Sports</a>
+          <a href="portfolio.html#nature">Nature</a>
+          <a href="portfolio.html#landscapes">Landscapes</a>
+          <a href="portfolio.html#portraits">Portraits</a>
+          <a href="portfolio.html#family">Family</a>
+          <a href="portfolio.html#engagement">Engagement</a>
+          <a href="portfolio.html#groups">Groups</a>
+          <a href="portfolio.html#events">Events</a>
+          <a href="portfolio.html#maternity">Maternity</a>
+          <a href="portfolio.html#pets">Pets</a>
+          <a href="portfolio.html#sports">Sports</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -249,7 +249,7 @@
     <p class="sub">Candid, unhurried portraiture and nature photography — family sessions, milestones, events, and fine-art prints of the outdoors.</p>
     <div class="hero-ctas">
       <a class="btn btn-rose" href="contact.html">Book a Session</a>
-      <a class="btn btn-line" href="PORTFOLIO.html">View PORTFOLIO</a>
+      <a class="btn btn-line" href="portfolio.html">View Portfolio</a>
     </div>
   </div>
   <div class="photo-strip-wrap">
@@ -279,7 +279,7 @@
     <div class="sec-head rv">
       <span class="label">Explore by Genre</span>
       <h2>A little bit of everything</h2>
-      <p>From family portraits to fine-art nature prints — see the full range in the PORTFOLIO.</p>
+      <p>From family portraits to fine-art nature prints — see the full range in the portfolio.</p>
     </div>
     <div class="genre-grid rv d1" id="featuredGrid">
       <a class="genre" href="print.html" style="background:linear-gradient(155deg,#B98B4E,#8A5F26);"><span class="genre-cap">Prints for Purchase</span></a>
@@ -344,7 +344,7 @@
       </div>
       <div class="foot-links">
         <a href="index.html">Home</a>
-        <a href="PORTFOLIO.html">PORTFOLIO</a>
+        <a href="portfolio.html">Portfolio</a>
         <a href="services.html">Services</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
@@ -679,7 +679,7 @@
     if(featuredList.length && grid){
       const slug = s => encodeURIComponent(s.trim().toLowerCase().replace(/\s+/g,'-'));
       const tilesHtml = featuredList.map(r=>
-        '<a class="genre" href="PORTFOLIO.html#'+slug(r.label||r.name)+'" style="background-image:url(\''+r.cover+'\');background-size:cover;background-position:center;">'
+        '<a class="genre" href="portfolio.html#'+slug(r.label||r.name)+'" style="background-image:url(\''+r.cover+'\');background-size:cover;background-position:center;">'
         +'<span class="genre-cap">'+r.name+'</span></a>'
       ).join('');
       // Prints for Purchase is a permanent tile — keep it, add the dynamic ones alongside it
