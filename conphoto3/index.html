@@ -361,19 +361,23 @@
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
   // Variable-width filmstrip carousel with a seamless infinite loop.
+  // Variable-width filmstrip carousel with a clean, seamless wraparound.
   // Each real slide keeps its own natural width (fixed height, no cropping).
-  // Looping works by cloning the first/last real slides onto the opposite
-  // ends of the track — scrolling "past the end" glides into a clone that
-  // looks identical to the real slide, then we silently snap back to the
-  // real one with transitions off, so the reset is invisible to the eye.
+  // No cloned slides are used — every visible tile is always a genuine,
+  // original DOM node, so its click listener is never missing. Looping
+  // works by indexing directly into the real photo list with wraparound
+  // math: normal next/prev between neighbouring photos slides smoothly;
+  // the one wrap moment (last photo → first, or first photo → last) cuts
+  // cleanly with no slide-across, the same way the lightbox's counter
+  // resets instantly from the last photo back to "1" with no animation.
   function initFilmstripCarousel(root){
     if(!root) return;
     const viewport = root.querySelector('.carousel-viewport');
     const track = root.querySelector('.carousel-track');
-    const realItems = [...track.querySelectorAll('.carousel-item:not(.carousel-clone)')];
+    const items = [...track.querySelectorAll('.carousel-item')];
     let prevBtn = root.querySelector('.car-prev');
     let nextBtn = root.querySelector('.car-next');
-    if(!viewport || !track || !realItems.length || !prevBtn || !nextBtn) return;
+    if(!viewport || !track || !items.length || !prevBtn || !nextBtn) return;
 
     // This can legitimately run more than once (e.g. once on placeholder content,
     // then again once real photos load) — replace the buttons with fresh clones
@@ -381,73 +385,45 @@
     const freshPrev = prevBtn.cloneNode(true); prevBtn.replaceWith(freshPrev); prevBtn = freshPrev;
     const freshNext = nextBtn.cloneNode(true); nextBtn.replaceWith(freshNext); nextBtn = freshNext;
 
-    // Clear any clones left over from a previous init
-    track.querySelectorAll('.carousel-clone').forEach(el=>el.remove());
+    const N = items.length;
+    let index = 0; // we always know exactly which real item is centered — no guessing needed
 
-    const firstClone = realItems[0].cloneNode(true);
-    const lastClone = realItems[realItems.length-1].cloneNode(true);
-    firstClone.classList.add('carousel-clone');
-    lastClone.classList.add('carousel-clone');
-    track.insertBefore(lastClone, realItems[0]);
-    track.appendChild(firstClone);
-
-    let index = 1; // position 1 = the first REAL slide (position 0 is the prepended clone)
-    const items = () => [...track.children];
-    const gapPx = () => parseFloat(getComputedStyle(track).gap) || 16;
-
+    function gapPx(){ return parseFloat(getComputedStyle(track).gap) || 16; }
     function offsetForIndex(i){
-      const all = items();
       let x = 0;
-      for(let k=0;k<i;k++) x += all[k].getBoundingClientRect().width + gapPx();
-      const targetWidth = all[i].getBoundingClientRect().width;
+      for(let k=0;k<i;k++) x += items[k].getBoundingClientRect().width + gapPx();
+      const targetWidth = items[i].getBoundingClientRect().width;
       return -(x - (viewport.clientWidth - targetWidth) / 2);
     }
-
     function goTo(i, animate){
       track.style.transition = animate ? '' : 'none';
       track.style.transform = 'translateX(' + offsetForIndex(i) + 'px)';
+      items.forEach((it,k)=> it.classList.toggle('is-center', k === i));
     }
 
-    function markCenter(){
-      const vwCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
-      let best = null, bestDist = Infinity;
-      items().forEach(it=>{
-        const r = it.getBoundingClientRect();
-        const d = Math.abs((r.left + r.width/2) - vwCenter);
-        if(d < bestDist){ bestDist = d; best = it; }
-      });
-      items().forEach(it=> it.classList.toggle('is-center', it === best));
-    }
-
-    function afterTransition(cb){
-      let done = false;
-      const handler = ()=>{ if(done) return; done = true; track.removeEventListener('transitionend', handler); cb(); };
-      track.addEventListener('transitionend', handler);
-      setTimeout(handler, 500); // safety net in case transitionend never fires
-    }
-
-    nextBtn.addEventListener('click', ()=>{
-      index += 1;
-      goTo(index, true);
-      markCenter();
-      if(index === items().length - 1){ // landed on the appended firstClone
-        afterTransition(()=>{ index = 1; goTo(index, false); markCenter(); });
+    function step(dir){
+      const raw = index + dir;
+      const wrapped = raw < 0 || raw >= N;
+      index = ((raw % N) + N) % N;
+      if(wrapped){
+        // The wrap moment: reposition instantly with no slide, matching how
+        // the lightbox counter resets from the last photo straight back to
+        // the first with no travelling animation.
+        goTo(index, false);
+        requestAnimationFrame(()=>{ track.style.transition = ''; }); // restore transitions for the next normal click
+      } else {
+        goTo(index, true);
       }
-    });
-    prevBtn.addEventListener('click', ()=>{
-      index -= 1;
-      goTo(index, true);
-      markCenter();
-      if(index === 0){ // landed on the prepended lastClone
-        afterTransition(()=>{ index = items().length - 2; goTo(index, false); markCenter(); });
-      }
-    });
+    }
+
+    prevBtn.addEventListener('click', ()=> step(-1));
+    nextBtn.addEventListener('click', ()=> step(1));
+
     if(track._resizeHandler) removeEventListener('resize', track._resizeHandler);
-    track._resizeHandler = ()=>{ goTo(index, false); markCenter(); };
+    track._resizeHandler = ()=> goTo(index, false);
     addEventListener('resize', track._resizeHandler, {passive:true});
 
     goTo(index, false);
-    markCenter();
   }
   document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
 
@@ -456,7 +432,7 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
