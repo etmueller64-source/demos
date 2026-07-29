@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>Portfolio - Conacher Photography</title>
+<title>PORTFOLIO - Conacher Photography</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@
   .nav-cta{font-size:12.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--rose);color:var(--rose);padding:11px 22px;border-radius:2px;transition:all .2s ease;}
   .nav-cta:hover{background:var(--rose);color:var(--cream);}
 
-  /* side dot nav (only used on Home & Portfolio) */
+  /* side dot nav (only used on Home & PORTFOLIO) */
   #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:16px;}
   #dots a{width:9px;height:9px;border-radius:50%;border:1px solid rgba(44,40,34,0.28);transition:all .3s ease;position:relative;display:block;}
   #dots a.on{background:var(--amber);border-color:var(--amber);transform:scale(1.3);}
@@ -175,18 +175,18 @@
     <nav class="links">
       <a class="" href="index.html">Home</a>
       <div class="has-drop">
-        <a class="current" href="portfolio.html">Portfolio</a>
+        <a class="current" href="PORTFOLIO.html">PORTFOLIO</a>
         <div class="dropdown">
-          <a href="portfolio.html#nature">Nature</a>
-          <a href="portfolio.html#landscapes">Landscapes</a>
-          <a href="portfolio.html#portraits">Portraits</a>
-          <a href="portfolio.html#family">Family</a>
-          <a href="portfolio.html#engagement">Engagement</a>
-          <a href="portfolio.html#groups">Groups</a>
-          <a href="portfolio.html#events">Events</a>
-          <a href="portfolio.html#maternity">Maternity</a>
-          <a href="portfolio.html#pets">Pets</a>
-          <a href="portfolio.html#sports">Sports</a>
+          <a href="PORTFOLIO.html#nature">Nature</a>
+          <a href="PORTFOLIO.html#landscapes">Landscapes</a>
+          <a href="PORTFOLIO.html#portraits">Portraits</a>
+          <a href="PORTFOLIO.html#family">Family</a>
+          <a href="PORTFOLIO.html#engagement">Engagement</a>
+          <a href="PORTFOLIO.html#groups">Groups</a>
+          <a href="PORTFOLIO.html#events">Events</a>
+          <a href="PORTFOLIO.html#maternity">Maternity</a>
+          <a href="PORTFOLIO.html#pets">Pets</a>
+          <a href="PORTFOLIO.html#sports">Sports</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -203,11 +203,11 @@
   <div class="wrap">
     <div class="page-hero-grid">
       <div class="page-hero-copy">
-        <span class="label">The Portfolio</span>
+        <span class="label">The PORTFOLIO</span>
         <h1>Every genre, one page.</h1>
         <p>Filter by the kind of session you're picturing - or browse everything below. Looking to buy a print instead? That's its own tab too.</p>
       </div>
-      <div class="hero-photo" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="hero-photo-cap">Photo slot - signature portfolio image</span></div>
+      <div class="hero-photo" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="hero-photo-cap">Photo slot - signature PORTFOLIO image</span></div>
     </div>
   </div>
 </div>
@@ -282,7 +282,7 @@
       </div>
       <div class="foot-links">
         <a href="index.html">Home</a>
-        <a href="portfolio.html">Portfolio</a>
+        <a href="PORTFOLIO.html">PORTFOLIO</a>
         <a href="services.html">Services</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
@@ -351,7 +351,7 @@
   tabs.forEach(tab=>{
     tab.addEventListener('click',()=> applyFilter(tab.dataset.genre));
   });
-  // Nav dropdown links arrive as portfolio.html#nature, #portraits, etc. -
+  // Nav dropdown links arrive as PORTFOLIO.html#nature, #portraits, etc. -
   // pre-filter the grid to match, so the header genre menu and the on-page
   // filter tabs are the same system instead of two separate things.
   const hashGenre = location.hash.replace('#','');
