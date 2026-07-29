@@ -417,8 +417,14 @@
     function offsetForPos(p){
       const items = all();
       let x = 0;
-      for(let k=0;k<p;k++) x += items[k].getBoundingClientRect().width + gapPx();
-      const w = items[p].getBoundingClientRect().width;
+      // offsetWidth (not getBoundingClientRect) on purpose: the coverflow
+      // scale() transform makes items visually bigger/smaller than the space
+      // the browser actually reserves for them in the row. getBoundingClientRect
+      // reflects that visual size, which threw the centering math off by a
+      // compounding amount across every item before the target. offsetWidth
+      // always reflects true layout size regardless of any transform applied.
+      for(let k=0;k<p;k++) x += items[k].offsetWidth + gapPx();
+      const w = items[p].offsetWidth;
       return -(x - (viewport.clientWidth - w) / 2);
     }
     function goTo(p, animate){
@@ -463,6 +469,17 @@
     addEventListener('resize', track._resizeHandler, {passive:true});
 
     goTo(pos, false);
+
+    // A photo's true rendered width isn't known until it actually finishes
+    // loading over the network — real hosted photos take real time, unlike
+    // quick local test images. Recompute centering (no animation, so this
+    // never looks like an extra slide) every time one finishes, so the
+    // layout converges to the correct position as real sizes come in,
+    // instead of staying wrong forever based on a too-early guess.
+    track.querySelectorAll('img').forEach(img=>{
+      if(img.complete) requestAnimationFrame(()=> goTo(pos, false));
+      else img.addEventListener('load', ()=> goTo(pos, false));
+    });
   }
   document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
 
@@ -471,7 +488,7 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
