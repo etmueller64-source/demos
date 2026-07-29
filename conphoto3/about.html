@@ -142,6 +142,39 @@
 
   @media (max-width:900px){ .about-grid{grid-template-columns:1fr;} .about-photo{height:340px;} }
 
+
+  /* ---------- Sheet-driven photo slots ----------
+     The photo's own proportions decide the size of the box, so nothing is
+     ever cropped - important for a photographer, whose framing is the work.
+     A max-height keeps an extreme panorama or a very tall portrait from
+     blowing out the row: those scale down and centre instead of cropping.
+     Until a photo arrives from the sheet, the placeholder gradient below
+     stays exactly as it is. ---------------------------------------------- */
+  .photo-slot{text-align:center;}
+  .photo-fit{
+    position:relative;display:inline-block;max-width:100%;line-height:0;
+    border-radius:var(--radius);overflow:hidden;box-shadow:0 26px 54px rgba(44,40,34,0.16);
+  }
+  .photo-fit img{display:block;width:auto;height:auto;max-width:100%;max-height:var(--slot-max,620px);}
+  .photo-fit::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent 58%,rgba(44,40,34,0.35) 100%);}
+  .photo-fit .photo-cap{position:absolute;left:16px;bottom:14px;z-index:2;line-height:1.45;
+    font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.92);}
+  .photo-fit.no-cap::after{content:none;}
+
+  /* once a real photo is in, the placeholder box stops imposing its own shape */
+  .hero-photo.has-photo,.svc-photo.has-photo,.about-photo.has-photo{
+    aspect-ratio:auto;height:auto;background:none;box-shadow:none;overflow:visible;
+  }
+  .hero-photo.has-photo::after,.svc-photo.has-photo::after,.about-photo.has-photo::after{content:none;}
+
+  /* photo fades in once it has actually loaded - no half-drawn image, no jump */
+  .photo-fit{opacity:0;transition:opacity .5s ease;}
+  .has-photo .photo-fit{opacity:1;}
+  @media (prefers-reduced-motion:reduce){ .photo-fit{transition:none;} }
+
+  @media (max-width:900px){ .photo-fit img{max-height:var(--slot-max-mob,460px);} }
+
 </style>
 </head>
 <body>
@@ -187,7 +220,7 @@
         <h1>Meet Debbie</h1>
         <p>The person behind the camera - a little about how Conacher Photography got started, and what to expect when you book a session.</p>
       </div>
-      <div class="hero-photo" style="background:linear-gradient(155deg,#8FA48A,#3C4E36);"><span class="hero-photo-cap">Photo slot - Debbie, on location</span></div>
+      <div class="hero-photo photo-slot" id="aboutHeroPhoto" style="background:linear-gradient(155deg,#8FA48A,#3C4E36);"><span class="hero-photo-cap">Photo slot - Debbie, on location</span></div>
     </div>
   </div>
 </div>
@@ -195,7 +228,7 @@
 <section style="padding-top:20px;">
   <div class="wrap">
     <div class="about-grid rv">
-      <div class="about-photo"></div>
+      <div class="about-photo photo-slot" id="aboutBioPhoto"></div>
       <div class="about-copy">
         <p>Photography started, for me, as a way of holding on to things - a good light, a quiet moment, the exact expression that only lasts a second. Somewhere along the way it became a craft I take seriously, and clients who become genuine friends.</p>
         <p>Whether it's a family portrait session in Sheppard's Bush, a team on the ice, or a quiet nature scene at golden hour, I approach every shoot the same way: patiently, candidly, and with an eye for the detail that makes it <em>yours</em>, not a stock photo of someone else's day.</p>
@@ -288,6 +321,136 @@
     render();
   });
 
+
+
+  // ============================================================
+  // Sheet-driven photo pipeline
+  // ------------------------------------------------------------
+  // Reads the same published "Website Data" tab the home page uses, and
+  // filters to just this page's rows. Debbie never touches code: she fills
+  // in the Google Form, the sheet gains a row, this page picks it up on the
+  // next load. See docs/photo-form-spec.md for the exact form fields.
+  // ============================================================
+  const SITE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const THIS_PAGE    = "about";
+
+  function parseCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+
+  // Same column contract as the home page, so one form and one tab feed
+  // the whole site. Rows for other pages are simply ignored here.
+  function extractRows(rows, page){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rows.findIndex(r=>r.some(c=>norm(c)==='page'));
+    if(headerIndex===-1) return null;
+    const header=rows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={
+      timestamp: find('timestamp'),
+      page:      find('page'),
+      section:   find('section'),
+      name:      find('name'),
+      label:     find('label','caption/label','genre'),
+      cover:     find('cover photo','cover'),
+      album:     find('album photos','photos','album')
+    };
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    return rows.slice(headerIndex+1)
+      .filter(r=>get(r,cols.page).toLowerCase()===page)
+      .map(r=>({
+        timestamp: get(r,cols.timestamp),
+        section:   get(r,cols.section).toLowerCase(),
+        name:      get(r,cols.name),
+        label:     get(r,cols.label),
+        // Cover Photo is the intended field, but fall back to the first
+        // Album Photo so a row still works if she pastes into the wrong one.
+        photo:     get(r,cols.cover) || get(r,cols.album).split(',').map(s=>s.trim()).filter(Boolean)[0] || ''
+      }))
+      .filter(r=>r.photo);
+  }
+
+  // Of several submissions for the same slot, the most recent one wins -
+  // so re-submitting the form is how you replace a photo. No cleanup needed.
+  // Safari won't reliably parse "2026-07-28 19:37:56" (space instead of "T")
+  // and returns Invalid Date, which would quietly break newest-wins on iPhone.
+  // Accept both shapes so old and new sheet rows sort correctly everywhere.
+  function parseTs(s){
+    if(!s) return 0;
+    const t = Date.parse(String(s).trim().replace(' ','T'));
+    return isNaN(t) ? 0 : t;
+  }
+
+  function newest(rows){
+    if(!rows.length) return null;
+    return rows.slice().sort((a,b)=> parseTs(a.timestamp) - parseTs(b.timestamp)).pop();
+  }
+
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  // Resolve either way: a broken link should never stall the rest of the page.
+  function preloadImage(src, timeoutMs){
+    return new Promise(resolve=>{
+      const img=new Image(); let done=false;
+      const finish=()=>{ if(!done){done=true;resolve();} };
+      img.onload=finish; img.onerror=finish;
+      img.src=src;
+      setTimeout(finish, timeoutMs||4000);
+    });
+  }
+
+  // Swap a placeholder for the real photo, at the photo's own proportions.
+  // Preloaded first so the slot never visibly resizes while it's on screen.
+  function fillSlot(el, url, caption, altText){
+    if(!el || !url) return Promise.resolve();
+    return preloadImage(url).then(()=>{
+      const cap = caption ? '<span class="photo-cap">'+esc(caption)+'</span>' : '';
+      el.innerHTML = '<span class="photo-fit'+(cap?'':' no-cap')+'">'
+        + '<img src="'+esc(url)+'" alt="'+esc(altText||caption||'')+'">'
+        + cap + '</span>';
+      el.classList.add('has-photo');
+    });
+  }
+
+  function loadPhotos(){
+    if(!SITE_CSV_URL || SITE_CSV_URL.includes('PASTE_YOUR')) return; // placeholders stay visible
+    fetch(SITE_CSV_URL)
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(text=>{
+        const rows = extractRows(parseCSV(text), THIS_PAGE);
+        if(rows) renderAbout(rows);
+      })
+      .catch(err=> console.error('Photo pipeline failed to load:', err));
+  }
+
+  function renderAbout(rows){
+    // Two slots on this page, each fed by its own Section value.
+    const hero = newest(rows.filter(r=>r.section==='hero'));
+    const bio  = newest(rows.filter(r=>r.section==='bio' || r.section==='about'));
+    if(hero) fillSlot(document.getElementById('aboutHeroPhoto'),
+                      hero.photo, hero.label, hero.label || 'Debbie Conacher on location');
+    if(bio)  fillSlot(document.getElementById('aboutBioPhoto'),
+                      bio.photo,  bio.label,  bio.label  || 'Debbie Conacher, photographer');
+  }
+  loadPhotos();
 
 })();
 </script>
