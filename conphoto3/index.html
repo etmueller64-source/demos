@@ -523,8 +523,15 @@
     // runs before or shortly after the reveal above) in case a browser
     // doesn't support decode(), or a photo's size shifts for any other reason.
     track.querySelectorAll('img').forEach(img=>{
-      if(img.complete) requestAnimationFrame(()=> { if(!settled) goTo(pos, false); });
-      else img.addEventListener('load', ()=> { if(!settled) goTo(pos, false); }, {once:true});
+      if(img.complete) requestAnimationFrame(()=> goTo(pos, false));
+      else img.addEventListener('load', ()=> {
+        // Before the user has touched the arrows, this is the initial
+        // layout-settle — snap instantly, nothing has been seen yet.
+        // After that, a late photo load should never cut off a slide the
+        // user is watching — ease into the correct spot instead of
+        // teleporting there.
+        goTo(pos, settled);
+      }, {once:true});
     });
   }
   document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
