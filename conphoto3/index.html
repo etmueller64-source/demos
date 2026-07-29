@@ -445,8 +445,15 @@
     }
     function goTo(p, animate){
       track.style.transition = animate ? '' : 'none';
+      const items = all();
+      // Match each photo's own transition to the same instant/animated mode as
+      // the track. Without this, an instant (recenter) position snap still let
+      // each photo's own scale change animate on its own normal timing —
+      // landing at the right spot, then visibly shrinking and re-growing a
+      // moment later as that separate animation caught up.
+      items.forEach(it => { it.style.transition = animate ? '' : 'none'; });
       track.style.transform = 'translateX(' + offsetForPos(p) + 'px)';
-      all().forEach((it,k)=> it.classList.toggle('is-center', k === p));
+      items.forEach((it,k)=> it.classList.toggle('is-center', k === p));
     }
     let pendingAfter = null; // tracks the current in-flight afterTransition, so a fast click can cancel it
     function afterTransition(cb){
@@ -522,7 +529,7 @@
   // Home page photo pipeline — reads the Google Sheet published
   // as CSV (see /docs/home-form-spec.md for the exact form/columns).
   // ============================================================
-  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+  const HOME_CSV_URL = "PASTE_YOUR_PUBLISHED_SHEET_CSV_LINK_HERE";
 
   function parseHomeCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
