@@ -459,7 +459,13 @@
     function afterTransition(cb){
       if(pendingAfter) pendingAfter.cancel(); // an earlier, interrupted transition's wait-up no longer applies
       let done = false;
-      const handler = ()=>{
+      const handler = (e)=>{
+        // transitionend BUBBLES UP from child elements — including each
+        // photo's own zoom/shadow transition when it becomes (un)centered.
+        // Without this check, a photo finishing ITS short animation gets
+        // mistaken for the track's own (longer) slide finishing, firing
+        // this callback early and cutting the slide off mid-motion.
+        if(e && e.target !== track) return;
         if(done) return; done = true;
         track.removeEventListener('transitionend', handler);
         clearTimeout(timer);
