@@ -488,8 +488,13 @@
       });
     }
 
-    prevBtn.addEventListener('click', ()=> step(-1));
-    nextBtn.addEventListener('click', ()=> step(1));
+    // Once the user has clicked, the carousel is "settled" — after this point
+    // a late-arriving image load event must never be allowed to force an
+    // instant (non-animated) re-snap, or it'll cut off whatever smooth
+    // transition is currently in flight and look like a hard jump.
+    let settled = false;
+    prevBtn.addEventListener('click', ()=>{ settled = true; step(-1); });
+    nextBtn.addEventListener('click', ()=>{ settled = true; step(1); });
 
     // Click-to-open works through a shared lookup, not a per-element listener —
     // so every physical copy of every album (original or peek-padding) opens
@@ -518,8 +523,8 @@
     // runs before or shortly after the reveal above) in case a browser
     // doesn't support decode(), or a photo's size shifts for any other reason.
     track.querySelectorAll('img').forEach(img=>{
-      if(img.complete) requestAnimationFrame(()=> goTo(pos, false));
-      else img.addEventListener('load', ()=> goTo(pos, false));
+      if(img.complete) requestAnimationFrame(()=> { if(!settled) goTo(pos, false); });
+      else img.addEventListener('load', ()=> { if(!settled) goTo(pos, false); }, {once:true});
     });
   }
   document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
