@@ -180,7 +180,7 @@
   .photo-slot{text-align:center;}
   .photo-fit{
     position:relative;display:inline-block;max-width:100%;line-height:0;
-    border-radius:var(--radius);overflow:hidden;box-shadow:0 26px 54px rgba(44,40,34,0.16);
+    border-radius:var(--radius);overflow:hidden;
   }
   .photo-fit img{display:block;width:auto;height:auto;max-width:100%;max-height:var(--slot-max,620px);}
   .photo-fit::after{content:"";position:absolute;inset:0;pointer-events:none;
@@ -510,6 +510,11 @@
         + '<img src="'+esc(url)+'" alt="'+esc(altText||caption||'')+'">'
         + cap + '</span>';
       el.classList.add('has-photo');
+      // The placeholder gradient is an inline style attribute, which no
+      // stylesheet rule (not even .has-photo{background:none}) can beat -
+      // inline styles always win over external CSS. Clear it directly so it
+      // can't show through behind or around the real photo.
+      el.style.background = '';
     });
   }
 
