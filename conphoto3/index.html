@@ -606,6 +606,54 @@
   // Splits any comma-separated links cell into individual usable image URLs
   function splitLinks(str){ return (str||'').split(',').map(s=>s.trim()).filter(Boolean); }
 
+  // ---------- Header genre dropdown ----------
+  // The "Portfolio" nav menu is duplicated in the header of every page, this
+  // one included. Its genre list is never stored separately - it's derived
+  // fresh, right here, from whatever Genre values exist on the Portfolio
+  // page's rows in the same shared sheet, so it can never drift out of sync
+  // with the Portfolio page or with Home's Featured links.
+  function slugify(s){
+    return String(s||'').trim().toLowerCase()
+      .replace(/&/g,'and')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+  function derivePortfolioGenres(rawRows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rawRows.findIndex(r=>r.some(c=>norm(c)==='page'));
+    if(headerIndex===-1) return [];
+    const header=rawRows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={ page: find('page'), section: find('section'), label: find('label','caption/label','genre') };
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    const seen = new Map(); // slug -> display name (first spelling wins)
+    rawRows.slice(headerIndex+1).forEach(r=>{
+      const page = get(r,cols.page).toLowerCase();
+      const section = get(r,cols.section).toLowerCase();
+      // A genre can be introduced from either place: a Portfolio submission
+      // (Photo or New Genre), or a Home Featured tile, whose Label question
+      // is literally titled "Genre" - both feed the same derived list.
+      const isPortfolioGenre = page==='portfolio' && (section==='photo' || section==='new genre');
+      const isFeaturedGenre  = page==='home' && section==='featured';
+      if(!isPortfolioGenre && !isFeaturedGenre) return;
+      const label = get(r,cols.label);
+      if(!label) return;
+      const slug = slugify(label);
+      if(!slug || seen.has(slug)) return;
+      seen.set(slug, label);
+    });
+    return [...seen.entries()].map(([slug,name])=>({slug,name})).sort((a,b)=>a.name.localeCompare(b.name));
+  }
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function renderNavDropdown(genres){
+    if(!genres.length) return; // sheet not connected yet / nothing submitted — static list stays as-is
+    const dd = document.querySelector('.has-drop .dropdown');
+    if(!dd) return;
+    dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
+  }
+
   function renderHome(homeRows){
     if(!homeRows) return; // sheet not connected — hardcoded fallback stays as-is
 
@@ -691,7 +739,11 @@
     if(!HOME_CSV_URL || HOME_CSV_URL.includes('PASTE_YOUR')) return; // fallback content stays visible
     fetch(HOME_CSV_URL)
       .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-      .then(text=> renderHome(extractHomeRows(parseHomeCSV(text))))
+      .then(text=>{
+        const rawRows = parseHomeCSV(text);
+        renderHome(extractHomeRows(rawRows));
+        renderNavDropdown(derivePortfolioGenres(rawRows));
+      })
       .catch(err=> console.error('Home photo pipeline failed to load:', err));
   }
 
