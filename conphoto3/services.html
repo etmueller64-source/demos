@@ -190,10 +190,10 @@
   .photo-fit.no-cap::after{content:none;}
 
   /* once a real photo is in, the placeholder box stops imposing its own shape */
-  .hero-photo.has-photo,.svc-photo.has-photo,.about-photo.has-photo{
+  .hero-photo.has-photo,.svc-photo.has-photo,.about-photo.has-photo,.extra-photo.has-photo{
     aspect-ratio:auto;height:auto;background:none;box-shadow:none;overflow:visible;
   }
-  .hero-photo.has-photo::after,.svc-photo.has-photo::after,.about-photo.has-photo::after{content:none;}
+  .hero-photo.has-photo::after,.svc-photo.has-photo::after,.about-photo.has-photo::after,.extra-photo.has-photo::after{content:none;}
 
   /* photo fades in once it has actually loaded - no half-drawn image, no jump */
   .photo-fit{opacity:0;transition:opacity .5s ease;}
@@ -314,11 +314,11 @@
     </div>
     <div class="extra-row rv d1">
       <div class="extra">
-        <div class="extra-photo" style="background:linear-gradient(155deg,#D8B26A,#A97E33);"></div>
+        <div class="extra-photo" data-extra="editing" style="background:linear-gradient(155deg,#D8B26A,#A97E33);"></div>
         <div class="extra-copy"><h4>Additional Edits</h4><p>Need more images from your session, beyond what's included?</p><div class="amt">From $45 / image</div></div>
       </div>
       <div class="extra">
-        <div class="extra-photo" style="background:linear-gradient(155deg,#7C8F6E,#4B5D45);"></div>
+        <div class="extra-photo" data-extra="print" style="background:linear-gradient(155deg,#7C8F6E,#4B5D45);"></div>
         <div class="extra-copy"><h4>Prints &amp; Canvases</h4><p>Landscape and nature images are available for purchase - sizes and pricing vary.</p><div class="amt"><a href="print.html" style="color:var(--amber-deep);font-weight:600;">See Print Pricing →</a></div></div>
       </div>
     </div>
@@ -553,6 +553,29 @@
 
     slots.forEach(s=>{
       if(s._row) fillSlot(s, s._row.photo, s._row.label, s._row.label || s.dataset.service);
+    });
+
+    // "A few extras" slots (Additional Edits / Prints & Canvases). Photo
+    // only, by design - no caption overlay - matched by Name the same way
+    // the service photos are, so submission order never matters.
+    const extraSlots = [...document.querySelectorAll('.extra-photo[data-extra]')];
+    const extraRows = rows.filter(r=>r.section==='extras' && r.photo);
+
+    const takenExtra = new Set();
+    const leftoverExtras = [];
+    extraRows.forEach(r=>{
+      const key = (r.name||'').trim().toLowerCase();
+      const slot = extraSlots.find(s=>s.dataset.extra===key);
+      if(slot){
+        const prev = slot._row;
+        if(!prev || parseTs(r.timestamp) >= parseTs(prev.timestamp)) slot._row = r;
+        takenExtra.add(slot);
+      } else leftoverExtras.push(r);
+    });
+    extraSlots.filter(s=>!takenExtra.has(s)).forEach((s,i)=>{ if(leftoverExtras[i]) s._row = leftoverExtras[i]; });
+
+    extraSlots.forEach(s=>{
+      if(s._row) fillSlot(s, s._row.photo, '', s.closest('.extra').querySelector('h4').textContent);
     });
   }
   loadPhotos();
