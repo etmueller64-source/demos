@@ -228,6 +228,7 @@
           <a href="portfolio.html#maternity">Maternity</a>
           <a href="portfolio.html#pets">Pets</a>
           <a href="portfolio.html#sports">Sports</a>
+          <a href="portfolio.html#collections" style="font-weight:600;">Collections</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -556,6 +557,7 @@
     const dd = document.querySelector('.has-drop .dropdown');
     if(!dd) return;
     dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections</a>'
       + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
   }
 
