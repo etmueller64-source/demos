@@ -30,7 +30,9 @@
   .concept-banner b{color:var(--amber);}
 
   /* header, Jen-Short-inspired: clean, logo left, dropdown services */
-  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);}
+  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);transition:transform .32s ease;}
+  /* Slides fully out of view on scroll-down, back in on scroll-up - so it stops permanently eating screen space meant for photos, per feedback. */
+  header.nav-hidden{transform:translateY(-100%);}
   .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:20px 40px;}
   .brand{display:flex;align-items:center;gap:12px;}
   .brand-logo{height:52px;width:auto;display:block;}
@@ -155,7 +157,10 @@
   .page-hero h1{font-size:clamp(36px,5.6vw,58px);margin-bottom:14px;}
   .page-hero p{color:var(--ink-soft);max-width:520px;margin:0 auto;}
 
-  .filter-bar{position:sticky;top:81px;z-index:60;background:rgba(250,246,239,0.97);backdrop-filter:blur(6px);border-top:1px solid var(--cream-deep);border-bottom:1px solid var(--cream-deep);padding:20px 0;}
+  .filter-bar{position:sticky;top:81px;z-index:60;background:rgba(250,246,239,0.97);backdrop-filter:blur(6px);border-top:1px solid var(--cream-deep);border-bottom:1px solid var(--cream-deep);padding:20px 0;transition:top .32s ease;}
+  /* When the header slides away, the filter bar sticks right at the very
+     top instead of leaving a blank gap where the header used to be. */
+  .filter-bar.nav-hidden{top:0;}
   .filter-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
   .f-tab{font-size:12.5px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--cream-deep);color:var(--ink-soft);transition:all .2s ease;background:var(--white);cursor:pointer;display:inline-block;}
   .f-tab:hover{border-color:var(--rose);color:var(--rose);}
@@ -372,6 +377,36 @@
 
 <script>
 (function(){
+  // Collapsing header on scroll: slides fully out of view scrolling down
+  // (so it stops permanently blocking the top third of every photo-heavy
+  // page), slides back in immediately scrolling up (so navigation is never
+  // more than one upward scroll away). Stays visible near the very top so
+  // it doesn't flicker in and out right at the start of the page.
+  (function(){
+    const header = document.querySelector('header');
+    if(!header) return;
+    const filterBar = document.querySelector('.filter-bar'); // only exists on the Portfolio page
+    const SHOW_NEAR_TOP = 120;
+    let lastY = window.scrollY, hidden = false, ticking = false;
+    function setHidden(state){
+      if(state === hidden) return;
+      hidden = state;
+      header.classList.toggle('nav-hidden', hidden);
+      if(filterBar) filterBar.classList.toggle('nav-hidden', hidden);
+    }
+    function onScroll(){
+      const y = Math.max(0, window.scrollY);
+      if(y <= SHOW_NEAR_TOP) setHidden(false);
+      else if(y > lastY) setHidden(true);   // scrolling down
+      else if(y < lastY) setHidden(false);  // scrolling up
+      lastY = y;
+      ticking = false;
+    }
+    addEventListener('scroll', ()=>{
+      if(!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+    }, {passive:true});
+  })();
+
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
@@ -697,7 +732,13 @@
     // GENRES is empty and the static placeholder grid is left alone.
     if(GENRES.length) renderGrid(GENRES);
     document.querySelectorAll('.shot[data-genre]').forEach(s=>{
-      const match = genreSlug==='all' || s.dataset.genre===genreSlug;
+      const isEmpty = s.classList.contains('shot-empty');
+      // "All" should only ever show real photos - an empty genre's
+      // placeholder card has no business appearing mixed in with everyone
+      // else's actual work. A specific genre's own tab still shows its own
+      // placeholder correctly, matched purely by data-genre, the same way
+      // for every genre - never hardcoded to any one of them.
+      const match = genreSlug==='all' ? !isEmpty : (s.dataset.genre===genreSlug);
       s.classList.toggle('hidden-shot', !match);
     });
   }
