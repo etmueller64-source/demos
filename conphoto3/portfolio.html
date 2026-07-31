@@ -172,7 +172,7 @@
      No fixed tile height, no object-fit:cover cropping anywhere in here. */
   .photo-grid{column-count:3;column-gap:18px;}
   .shot{display:block;width:100%;break-inside:avoid;margin:0 0 18px;border-radius:var(--radius);position:relative;overflow:hidden;box-shadow:0 20px 44px rgba(44,40,34,0.12);opacity:1;transition:opacity .35s ease;}
-  .shot.hidden-shot{display:none;}
+  .shot.hidden-shot{display:none !important;}
   .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.55) 100%);}
   .shot img{width:100%;height:auto;display:block;}
   .shot-cap{position:absolute;left:16px;bottom:14px;z-index:2;color:var(--white);}
@@ -657,6 +657,19 @@
     if(bar) bar.style.display = show ? '' : 'none';
   }
 
+  // Everything that makes this look like the general Portfolio page rather
+  // than one specific collection: the "Every genre, one page" intro/hero at
+  // the top, and the "Browse Prints for Purchase" banner at the bottom.
+  // Hidden together during collection detail view so it genuinely reads as
+  // its own page, per spec, not the Portfolio page with something stacked
+  // on top of it.
+  function showPageChrome(show){
+    const intro = document.getElementById('d-intro');
+    const printCta = document.getElementById('d-printcta');
+    if(intro) intro.style.display = show ? '' : 'none';
+    if(printCta) printCta.style.display = show ? '' : 'none';
+  }
+
   function setActiveTab(hashValue){
     document.querySelectorAll('.f-tab[data-genre], .f-tab.collections-tab').forEach(t=>{
       const match = t.hasAttribute('data-genre') ? (t.dataset.genre===hashValue) : (hashValue==='collections');
@@ -672,9 +685,17 @@
   function showGenreView(genreSlug){
     showFilterBar(true);
     clearCollectionHead();
+    showPageChrome(true);
     const grid = document.getElementById('photoGrid');
-    if(grid) grid.classList.remove('collections-grid');
+    if(!grid) return;
+    grid.classList.remove('collections-grid');
     setActiveTab(genreSlug);
+    // The grid may currently hold Collection tiles (or nothing at all, if
+    // this is the very first render) rather than genre tiles - rebuild it
+    // from the real data whenever that data exists, instead of assuming
+    // whatever's already in the DOM is correct. Before data has loaded,
+    // GENRES is empty and the static placeholder grid is left alone.
+    if(GENRES.length) renderGrid(GENRES);
     document.querySelectorAll('.shot[data-genre]').forEach(s=>{
       const match = genreSlug==='all' || s.dataset.genre===genreSlug;
       s.classList.toggle('hidden-shot', !match);
@@ -703,6 +724,7 @@
   function showCollectionsListView(){
     showFilterBar(true);
     clearCollectionHead();
+    showPageChrome(true);
     setActiveTab('collections');
     renderCollectionsGrid();
   }
@@ -711,6 +733,7 @@
     const c = COLLECTIONS.find(x=>x.slug===slug);
     if(!c){ location.hash = 'collections'; return; } // unknown collection - fall back to the list rather than show nothing
     showFilterBar(false);
+    showPageChrome(false);
     const head = document.getElementById('collectionDetailHead');
     const grid = document.getElementById('photoGrid');
     if(!head || !grid) return;
@@ -801,7 +824,6 @@
 
     if(GENRES.length){
       renderFilterBar(GENRES);
-      renderGrid(GENRES);
       renderNavDropdown(GENRES);
     }
     applyRoute(); // DOM was just replaced - re-apply whatever view the #hash calls for

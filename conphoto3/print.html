@@ -179,6 +179,7 @@
           <a href="portfolio.html#maternity">Maternity</a>
           <a href="portfolio.html#pets">Pets</a>
           <a href="portfolio.html#sports">Sports</a>
+          <a href="portfolio.html#collections" style="font-weight:600;">Collections</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -327,6 +328,88 @@
   });
 
 
+})();
+</script>
+
+<script>
+// ============================================================
+// Header genre dropdown - the only thing print.html needs from the shared
+// sheet. Every other page reads far more from it; this one just needs
+// enough to keep its own copy of the nav menu in sync with the rest of
+// the site.
+// ============================================================
+(function(){
+  const SITE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+
+  function parseCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  function slugify(s){
+    return String(s||'').trim().toLowerCase()
+      .replace(/&/g,'and')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+
+  function derivePortfolioGenres(rawRows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rawRows.findIndex(r=>r.some(c=>norm(c)==='page'));
+    if(headerIndex===-1) return [];
+    const header=rawRows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={ page: find('page'), section: find('section'), label: find('label','caption/label','genre') };
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    const seen = new Map();
+    rawRows.slice(headerIndex+1).forEach(r=>{
+      const page = get(r,cols.page).toLowerCase();
+      const section = get(r,cols.section).toLowerCase();
+      const isPortfolioGenre = page==='portfolio' && section==='genre';
+      const isFeaturedGenre  = page==='home' && section==='featured';
+      if(!isPortfolioGenre && !isFeaturedGenre) return;
+      const label = get(r,cols.label);
+      if(!label) return;
+      const slug = slugify(label);
+      if(!slug || seen.has(slug)) return;
+      seen.set(slug, label);
+    });
+    return [...seen.entries()].map(([slug,name])=>({slug,name})).sort((a,b)=>a.name.localeCompare(b.name));
+  }
+
+  function renderNavDropdown(genres){
+    if(!genres.length) return; // sheet not connected yet / nothing submitted - static list stays as-is
+    const dd = document.querySelector('.has-drop .dropdown');
+    if(!dd) return;
+    dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections</a>'
+      + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
+  }
+
+  if(!SITE_CSV_URL || SITE_CSV_URL.includes('PASTE_YOUR')) return; // static list stays visible
+  fetch(SITE_CSV_URL)
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+    .then(text=> renderNavDropdown(derivePortfolioGenres(parseCSV(text))))
+    .catch(err=> console.error('Nav genre pipeline failed to load:', err));
 })();
 </script>
 </body>
