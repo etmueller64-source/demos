@@ -483,7 +483,8 @@
       name:      find('name'),
       label:     find('label','caption/label','genre'),
       cover:     find('cover photo','cover'),
-      album:     find('album photos','photos','album')
+      album:     find('album photos','photos','album'),
+      story:     find('story')
     };
     const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
     return rows.slice(headerIndex+1)
@@ -496,6 +497,7 @@
           section:   get(r,cols.section).toLowerCase(),
           name:      get(r,cols.name),
           label:     get(r,cols.label),
+          story:     get(r,cols.story),              // Collection background text - its own column, not folded into Label
           cover:     cover,                        // Cover Photo column, on its own - used by Collections
           album:     albumList,                     // every photo on this row - a Genre or Collection row can have several
           photo:     cover || albumList[0] || ''    // single-photo convenience, used by Hero
@@ -596,7 +598,7 @@
       if(!map.has(slug)) map.set(slug, {name, story:'', cover:'', photos:[]});
       const c = map.get(slug);
       if(r.cover) c.cover = r.cover;
-      if(r.label) c.story = r.label;
+      if(r.story) c.story = r.story;
       r.album.forEach(url=> c.photos.push(url));
     });
     return [...map.entries()]
