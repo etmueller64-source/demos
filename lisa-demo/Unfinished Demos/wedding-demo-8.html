@@ -108,6 +108,10 @@
   footer{background:var(--paper);color:var(--ink-soft);padding:44px 0;text-align:center;font-size:12.5px;border-top:1px solid rgba(51,45,36,0.08);}
   footer a{color:var(--ink);}
 
+
+  /* --- real photos (hotlinked from lisakevents.com for demo) --- */
+  .wxwrap{position:relative;overflow:hidden;}
+  .wxphoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
   .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
   .rv.in{opacity:1;transform:none;}
 </style>
@@ -130,9 +134,9 @@
 
 <section class="opener">
   <div class="masonry">
-    <figure><div class="ph"><span>Photo slot — wedding detail</span></div></figure>
-    <figure><div class="ph"><span>Photo slot — wedding detail</span></div></figure>
-    <figure><div class="ph"><span>Photo slot — wedding detail</span></div></figure>
+    <figure><div class="ph wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_d1bc4dbeee574e8da03712415d242fb9~mv2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Wedding details — Emily Jean Photography" ></div></figure>
+    <figure><div class="ph wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_074ceb515d0d4e92997bc7eb43799c0d~mv2.jpg/v1/fill/w_700,h_1073,al_c,q_85/lke.jpg" alt="Styled shoot — Avenue Photo" loading="lazy"></div></figure>
+    <figure><div class="ph wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_bcfd00a9fb394552835efab25d583050~mv2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Mohsin and Janelle wedding" loading="lazy"></div></figure>
   </div>
 </section>
 
@@ -153,7 +157,7 @@
 
 <section>
   <div class="wrap about-grid">
-    <div class="about-photo rv"><span>Photo slot — Lisa, founder</span></div>
+    <div class="about-photo rv wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_5ed52d5c5c18412b8563b82ad40851e2~mv2.jpg/v1/fill/w_760,h_1140,al_c,q_85/lke.jpg" alt="Lisa, founder of Lisa K Events — photo by Allison Leigh Photography" loading="lazy"></div>
     <div class="about-copy rv">
       <span class="eyebrow" style="color:var(--greige-deep);">Meet Lisa</span>
       <h2 style="margin-top:16px;font-size:clamp(26px,3vw,36px);">Class, sophistication, and a whole lot of heart</h2>

@@ -107,6 +107,10 @@
 
   footer{padding:44px 0;text-align:center;font-size:13px;color:var(--ink-soft);border-top:1px solid rgba(58,52,44,0.08);}
 
+
+  /* --- real photos (hotlinked from lisakevents.com for demo) --- */
+  .wxwrap{position:relative;overflow:hidden;}
+  .wxphoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
   .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
   .rv.in{opacity:1;transform:none;}
 </style>
@@ -138,7 +142,7 @@
         <a class="btn btn-ghost" href="#">View Portfolio</a>
       </div>
     </div>
-    <div class="hero-photo"><span>Photo slot — wedding day</span></div>
+    <div class="hero-photo wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_97a50ff4d18544bd87e8481320512426~mv2.jpg/v1/fill/w_800,h_1067,al_c,q_85/lke.jpg" alt="Bride on her wedding day, planned by Lisa K Events" ></div>
   </div>
 </section>
 
@@ -176,9 +180,9 @@
       <h2>A few favourite moments</h2>
     </div>
     <div class="portfolio-grid rv">
-      <div><div class="ph"><span>Photo slot</span></div></div>
-      <div><div class="ph"><span>Photo slot</span></div></div>
-      <div><div class="ph"><span>Photo slot</span></div></div>
+      <div><div class="ph wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_d1bc4dbeee574e8da03712415d242fb9~mv2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Mike and Mel wedding details" loading="lazy"></div></div>
+      <div><div class="ph wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_7d0f9d54b3c44b87820ae7ce9bc26ee6~mv2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Patrick and Rachel reception reveal" loading="lazy"></div></div>
+      <div><div class="ph wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_468293d8b6854e63afb8abab0d163453~mv2_d_1667_2500_s_2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Kane and Jamie wedding" loading="lazy"></div></div>
     </div>
     <div style="text-align:center;margin-top:36px;">
       <a class="btn btn-ghost" href="#">View Full Portfolio</a>
@@ -197,7 +201,7 @@
 
 <section class="about-section">
   <div class="wrap about-grid">
-    <div class="about-photo rv"><span>Photo slot — Lisa, founder</span></div>
+    <div class="about-photo rv wxwrap"><img class="wxphoto" src="https://static.wixstatic.com/media/554c58_5ed52d5c5c18412b8563b82ad40851e2~mv2.jpg/v1/fill/w_760,h_1013,al_c,q_85/lke.jpg" alt="Lisa, founder of Lisa K Events — photo by Allison Leigh Photography" loading="lazy"></div>
     <div class="about-copy rv">
       <span class="eyebrow">Meet Lisa</span>
       <h2 style="margin-top:14px;font-size:clamp(26px,3vw,34px);">Hi, I'm Lisa — thanks for stopping by</h2>
