@@ -358,9 +358,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   // clicking can ever outrun the safe buffer and run out of photos.
   function initCarousel(outer){
     const track = outer.querySelector('.carousel-track');
+    const viewport = outer.querySelector('.carousel');
     const prevBtn = outer.querySelector('.car-arrow.prev');
     const nextBtn = outer.querySelector('.car-arrow.next');
-    if(!track || !prevBtn || !nextBtn) return;
+    if(!track || !viewport || !prevBtn || !nextBtn) return;
 
     const real = [...track.children];
     const N = real.length;
@@ -380,7 +381,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
     function offsetForPos(p){
       const items = all();
-      const outerWidth = outer.clientWidth;
+      const outerWidth = viewport.clientWidth;
       const g = gapPx();
       let x = 0;
       for(let k = 0; k < p; k++) x += items[k].offsetWidth + g;
