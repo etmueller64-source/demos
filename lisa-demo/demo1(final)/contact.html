@@ -192,9 +192,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 }
 
 /* mosaic band for inner-page heroes */
-.hero-band{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:780px;margin:48px auto 0}
-.hero-band .ph{aspect-ratio:4/3;opacity:.9}
-@media(max-width:640px){.hero-band{grid-template-columns:repeat(2,1fr)}.hero-band .ph:nth-child(n+3){display:none}}
 
 </style>
 </head>
@@ -213,19 +210,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   </div>
 </header>
 
-<section style="padding:190px 0 70px;background:linear-gradient(175deg,var(--butter-mist),var(--ivory));text-align:center;">
+<section style="padding:190px 0 100px;background:linear-gradient(175deg,var(--butter-mist),var(--ivory));text-align:center;">
   <div class="wrap">
     <p class="eyebrow rv">Contact</p>
     <h1 class="rv" style="margin-top:22px;">Let's plan something <span class="disp-it">special</span></h1>
-  
-    <div class="hero-band rv" aria-hidden="true"><div class="ph ph-c" data-label="Hello"></div><div class="ph ph-a" data-label="Your day"></div><div class="ph ph-b" data-label="The vision"></div><div class="ph ph-c" data-label="Cheers"></div></div>
   </div>
 </section>
 
 <div class="ribbon" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
 <section class="blk">
-  <div class="wrap" class="g2 wide-l top">
+  <div class="wrap g2 wide-l top">
     <div>
       <p class="eyebrow rv" style="margin-bottom:34px;">Tell us about your day</p>
       <form onsubmit="event.preventDefault();this.style.display='none';document.getElementById('thanks').style.display='block';">

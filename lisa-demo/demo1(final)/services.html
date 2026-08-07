@@ -192,9 +192,37 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 }
 
 /* mosaic band for inner-page heroes */
-.hero-band{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:780px;margin:48px auto 0}
-.hero-band .ph{aspect-ratio:4/3;opacity:.9}
-@media(max-width:640px){.hero-band{grid-template-columns:repeat(2,1fr)}.hero-band .ph:nth-child(n+3){display:none}}
+/* -------- offset photo cluster: an asymmetric little collage instead of a grid -------- */
+.cluster{position:relative;max-width:920px;height:480px;margin:52px auto 0;}
+.cluster .ph{position:absolute;box-shadow:0 24px 50px rgba(62,58,52,.14);}
+.cluster .ph::after{content:attr(data-label);font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-soft);}
+@media(max-width:700px){.cluster{height:360px;max-width:92vw;}}
+
+/* -------- chapter blocks: large faint numeral + offset photo pair, replacing the boxed 2-col layout -------- */
+.chapter{position:relative;padding:96px 0;}
+.chapter-num{position:absolute;top:-18px;font-family:var(--serif);font-style:italic;font-size:clamp(160px,20vw,280px);line-height:1;color:var(--sand-mist);z-index:0;user-select:none;pointer-events:none;}
+.chapter-num.right{right:0;}
+.chapter-num.left{left:0;}
+.chapter-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center;}
+.chapter-inner.rev{direction:rtl;}
+.chapter-inner.rev > *{direction:ltr;}
+.chapter-photos{position:relative;height:440px;}
+.chapter-photos .ph{position:absolute;box-shadow:0 24px 54px rgba(62,58,52,.16);}
+.chapter-photos .ph::after{content:attr(data-label);font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--ink-soft);}
+@media(max-width:900px){
+  .chapter-inner,.chapter-inner.rev{grid-template-columns:1fr;direction:ltr;}
+  .chapter-photos{height:340px;max-width:420px;margin:0 auto;}
+  .chapter-num{font-size:110px;top:-10px;}
+}
+
+.pull{text-align:center;padding:70px 0;}
+.pull p{font-family:var(--serif);font-style:italic;font-size:clamp(24px,3.2vw,36px);max-width:14ch;margin:0 auto;color:var(--ink);}
+.pull p span{color:var(--sky);}
+
+.svc-list{margin-top:22px;padding:0;list-style:none;max-width:44ch;}
+.svc-list li{padding:13px 0;border-top:1px solid var(--hairline);color:var(--ink-soft);font-size:15.5px;display:flex;gap:14px;}
+.svc-list li:last-child{border-bottom:1px solid var(--hairline);}
+.svc-list li::before{content:'\2014';color:var(--sky);flex:0 0 auto;}
 
 </style>
 </head>
@@ -218,32 +246,66 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <p class="eyebrow rv">Services</p>
     <h1 class="rv" style="margin-top:22px;">Every detail, <span class="disp-it">handled</span></h1>
   
-    <div class="hero-band rv" aria-hidden="true"><div class="ph ph-b" data-label="Weddings"></div><div class="ph ph-c" data-label="Styling"></div><div class="ph ph-a" data-label="Corporate"></div><div class="ph ph-b" data-label="Galas"></div></div>
+    <div class="cluster rv" aria-hidden="true">
+      <div class="ph ph-b" data-label="Weddings" style="left:0;top:16px;width:48%;height:390px;transform:rotate(-2deg);"></div>
+      <div class="ph ph-c" data-label="Styling" style="right:6%;top:0;width:32%;height:240px;transform:rotate(2deg);"></div>
+      <div class="ph ph-a" data-label="Corporate &amp; Galas" style="right:0;bottom:0;width:38%;height:230px;transform:rotate(-1deg);"></div>
+    </div>
   </div>
 </section>
 
 <div class="ribbon" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
-<section class="blk">
-  <div class="wrap" class="g2 wide-l">
-    <div>
-      <p class="eyebrow rv">01 &mdash; Weddings</p>
-      <h2 class="rv" style="margin:20px 0 24px;">Full-Service Event Design <span class="disp-it">&amp; Planning</span></h2>
-      <p class="rv" style="color:var(--ink-soft);">We are a full-planning boutique company. Share your vision and I will execute full planning for your wedding. From start to finish, I'll provide assistance with every detail pertaining to your special day. Full planning will make you feel at ease as we are with you every step of the way.</p>
-      <a class="btn rv" style="margin-top:34px;" href="contact.html">Inquire</a>
+<section class="chapter">
+  <span class="chapter-num left" aria-hidden="true">01</span>
+  <div class="wrap">
+    <div class="chapter-inner">
+      <div>
+        <p class="eyebrow rv">01 &mdash; Weddings</p>
+        <h2 class="rv" style="margin:20px 0 24px;">Full-Service Event Design <span class="disp-it">&amp; Planning</span></h2>
+        <p class="rv" style="color:var(--ink-soft);">We are a full-planning boutique company. Share your vision and I will execute full planning for your wedding. From start to finish, I'll provide assistance with every detail pertaining to your special day. Full planning will make you feel at ease as we are with you every step of the way.</p>
+        <p class="rv" style="color:var(--ink-soft);margin-top:18px;">Every couple works with me differently &mdash; some arrive with a fully-formed vision, others just a feeling they want their day to have. Either way, the process starts with listening, then translating that into a day that feels unmistakably yours.</p>
+        <ul class="svc-list rv">
+          <li>Venue sourcing &amp; vendor curation</li>
+          <li>Design concept &amp; styling direction</li>
+          <li>Full timeline, budget &amp; logistics management</li>
+          <li>Vendor communication &amp; contract negotiation</li>
+          <li>On-site coordination, start to last dance</li>
+        </ul>
+        <a class="btn rv" style="margin-top:34px;" href="contact.html">Inquire</a>
+      </div>
+      <div class="chapter-photos rv">
+        <div class="ph ph-b" data-label="Wedding &mdash; photo to come" style="left:0;top:0;width:64%;height:100%;"></div>
+        <div class="ph ph-c" data-label="Detail &mdash; photo to come" style="right:0;bottom:-30px;width:44%;height:52%;transform:rotate(2deg);"></div>
+      </div>
     </div>
-    <div class="ph ph-b r34 rv" data-label="Wedding &mdash; photo to come"></div>
   </div>
 </section>
 
-<section class="blk" style="padding-top:0;">
-  <div class="wrap" class="g2 wide-r">
-    <div class="ph ph-c r34 rv" data-label="Celebration &mdash; photo to come"></div>
-    <div>
-      <p class="eyebrow rv">02 &mdash; Events</p>
-      <h2 class="rv" style="margin:20px 0 24px;">Social, Corporate <span class="disp-it">&amp; Holiday</span></h2>
-      <p class="rv" style="color:var(--ink-soft);">My versatile background allows me to help design, plan and execute your event seamlessly. Contact me about planning services for birthdays, anniversaries, galas, engagements, proposals, bridal and baby showers, launch events and more.</p>
-      <a class="btn rv" style="margin-top:34px;" href="contact.html">Inquire</a>
+<div class="pull rv"><p>Class, sophistication, and <span>caring</span> in every detail.</p></div>
+
+<section class="chapter" style="padding-top:0;">
+  <span class="chapter-num right" aria-hidden="true">02</span>
+  <div class="wrap">
+    <div class="chapter-inner rev">
+      <div>
+        <p class="eyebrow rv">02 &mdash; Events</p>
+        <h2 class="rv" style="margin:20px 0 24px;">Social, Corporate <span class="disp-it">&amp; Holiday</span></h2>
+        <p class="rv" style="color:var(--ink-soft);">My versatile background allows me to help design, plan and execute your event seamlessly. Contact me about planning services for birthdays, anniversaries, galas, engagements, proposals, bridal and baby showers, launch events and more.</p>
+        <p class="rv" style="color:var(--ink-soft);margin-top:18px;">The same care that goes into a wedding goes into every celebration &mdash; whether it's an intimate gathering of ten or a corporate gala for two hundred, the details are what people remember.</p>
+        <ul class="svc-list rv">
+          <li>Birthdays &amp; anniversaries</li>
+          <li>Corporate galas &amp; launch events</li>
+          <li>Engagements &amp; proposals</li>
+          <li>Bridal &amp; baby showers</li>
+          <li>Holiday &amp; seasonal celebrations</li>
+        </ul>
+        <a class="btn rv" style="margin-top:34px;" href="contact.html">Inquire</a>
+      </div>
+      <div class="chapter-photos rv">
+        <div class="ph ph-c" data-label="Celebration &mdash; photo to come" style="right:0;top:0;width:64%;height:100%;"></div>
+        <div class="ph ph-a" data-label="Detail &mdash; photo to come" style="left:0;bottom:-30px;width:44%;height:52%;transform:rotate(-2deg);"></div>
+      </div>
     </div>
   </div>
 </section>
