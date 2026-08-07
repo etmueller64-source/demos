@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newmarket Church of the Nazarene — Demo 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F5F0;
+    --ink:#2B2A28;
+    --ink-soft:#66625B;
+    --blue:#5E7C8A;
+    --blue-deep:#3F5A67;
+    --gold:#C7A046;
+    --sage:#7C8F6E;
+    --white:#FFFFFF;
+    --line:#E4DFD3;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Work Sans',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Frank Ruhl Libre',serif;font-weight:600;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:999px;font-size:14.5px;font-weight:600;transition:transform .2s ease,box-shadow .2s ease;}
+  .btn-primary{background:var(--blue-deep);color:var(--white);box-shadow:0 14px 28px rgba(63,90,103,0.28);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(63,90,103,0.34);}
+  .btn-ghost{border:1.5px solid var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--blue);color:var(--blue-deep);}
+
+  /* -------- signature arch shape, reused for hero image / video slot / badges -------- */
+  .arch{border-radius:50% 50% 10px 10px / 30% 30% 10px 10px;overflow:hidden;position:relative;}
+  .arch-badge{width:56px;height:56px;border-radius:50% 50% 6px 6px / 34% 34% 6px 6px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+
+  /* -------- header -------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(247,245,240,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;font-family:'Frank Ruhl Libre',serif;font-size:19px;font-weight:600;}
+  .brand-mark{width:38px;height:38px;background:linear-gradient(160deg,var(--blue),var(--blue-deep));border-radius:50% 50% 8px 8px / 30% 30% 8px 8px;}
+  nav.links{display:flex;gap:34px;font-size:14.5px;font-weight:500;color:var(--ink-soft);}
+  nav.links a:hover{color:var(--blue-deep);}
+  .nav-cta{display:flex;align-items:center;gap:18px;}
+  @media (max-width:860px){ nav.links{display:none;} }
+
+  /* -------- hero -------- */
+  .hero{padding:76px 0 92px;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;}
+  .hero h1{font-size:clamp(36px,4.6vw,56px);margin:20px 0 22px;}
+  .hero p.lede{font-size:18px;color:var(--ink-soft);max-width:460px;margin-bottom:32px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px;}
+  .hero-meta{display:flex;gap:26px;flex-wrap:wrap;}
+  .hero-meta div{font-size:13.5px;color:var(--ink-soft);}
+  .hero-meta b{display:block;font-family:'Frank Ruhl Libre',serif;font-size:16px;color:var(--ink);margin-bottom:2px;}
+  .hero-photo{aspect-ratio:4/5;background:linear-gradient(150deg,#8FA7B4,#3F5A67);display:flex;align-items:flex-end;padding:22px;box-shadow:0 30px 60px rgba(63,90,103,0.22);}
+  .hero-photo span{color:#fff;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.85;}
+  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr;} .hero-photo{max-width:420px;margin:0 auto;} }
+
+  /* -------- this sunday strip -------- */
+  .sunday{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .sunday-row{display:flex;justify-content:space-between;align-items:center;padding:26px 0;flex-wrap:wrap;gap:20px;}
+  .sunday-items{display:flex;gap:44px;flex-wrap:wrap;}
+  .sunday-item{display:flex;align-items:center;gap:14px;}
+  .sunday-item .arch-badge{background:linear-gradient(155deg,var(--gold),#A57F2C);}
+  .sunday-item b{display:block;font-family:'Frank Ruhl Libre',serif;font-size:16px;}
+  .sunday-item span{font-size:13px;color:var(--ink-soft);}
+
+  /* -------- section shell -------- */
+  section{padding:88px 0;}
+  .section-head{max-width:600px;margin-bottom:48px;}
+  .section-head h2{font-size:clamp(28px,3.4vw,38px);margin-top:16px;}
+  .section-head p{color:var(--ink-soft);margin-top:14px;font-size:16px;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+
+  /* -------- welcome / about -------- */
+  .about-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:64px;align-items:center;}
+  .about-photo{aspect-ratio:1/1;background:linear-gradient(150deg,#B7C2A6,#5F7350);}
+  .about-copy p{color:var(--ink-soft);font-size:16px;margin-bottom:16px;}
+  @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
+
+  /* -------- video -------- */
+  .video-section{background:var(--white);}
+  .video-frame{aspect-ratio:16/9;max-width:920px;margin:0 auto;background:linear-gradient(150deg,#3F5A67,#22333B);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 30px 60px rgba(43,42,40,0.16);}
+  .play-btn{width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,0.14);border:1.5px solid rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;}
+  .video-frame .cap{position:absolute;left:22px;bottom:18px;color:rgba(255,255,255,0.85);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;}
+
+  /* -------- ministries -------- */
+  .ministry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .ministry-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px;}
+  .ministry-card .arch-badge{margin-bottom:20px;}
+  .ministry-card:nth-child(1) .arch-badge{background:linear-gradient(155deg,var(--blue),var(--blue-deep));}
+  .ministry-card:nth-child(2) .arch-badge{background:linear-gradient(155deg,var(--sage),#546B45);}
+  .ministry-card:nth-child(3) .arch-badge{background:linear-gradient(155deg,var(--gold),#A57F2C);}
+  .ministry-card h3{font-size:19px;margin-bottom:10px;}
+  .ministry-card p{color:var(--ink-soft);font-size:14.5px;}
+  @media (max-width:860px){ .ministry-grid{grid-template-columns:1fr;} }
+
+  /* -------- events -------- */
+  .events-section{background:var(--white);}
+  .events-list{border-top:1px solid var(--line);}
+  .event-row{display:flex;align-items:center;gap:28px;padding:24px 0;border-bottom:1px solid var(--line);}
+  .event-date{width:64px;flex:0 0 auto;text-align:center;}
+  .event-date b{display:block;font-family:'Frank Ruhl Libre',serif;font-size:24px;color:var(--blue-deep);}
+  .event-date span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);}
+  .event-info h3{font-size:17px;margin-bottom:4px;}
+  .event-info p{font-size:14px;color:var(--ink-soft);}
+  .event-row a{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--blue-deep);white-space:nowrap;}
+
+  /* -------- visit -------- */
+  .visit{background:linear-gradient(160deg,#3F5A67,#22333B);color:#fff;}
+  .visit h2{color:#fff;}
+  .visit .section-head p{color:rgba(255,255,255,0.72);}
+  .visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+  .visit-details div{margin-bottom:22px;}
+  .visit-details b{display:block;font-family:'Frank Ruhl Libre',serif;font-size:17px;margin-bottom:4px;}
+  .visit-details span{font-size:14.5px;color:rgba(255,255,255,0.72);}
+  .map-placeholder{aspect-ratio:4/3;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+  @media (max-width:860px){ .visit-grid{grid-template-columns:1fr;} }
+
+  footer{padding:44px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
+
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .rv.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <div class="brand"><div class="brand-mark"></div>Newmarket&nbsp;Nazarene</div>
+    <nav class="links">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Ministries</a>
+      <a href="#">Events</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="nav-cta"><a class="btn btn-primary" href="#">Plan a Visit</a></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Newmarket Church of the Nazarene</div>
+      <h1>Come as you are. You'll leave knowing you belong.</h1>
+      <p class="lede">A warm, welcoming church in the heart of downtown Newmarket — real people, honest worship, and a community that means it when we say everyone's invited.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#">Plan Your Visit</a>
+        <a class="btn btn-ghost" href="#watch">Watch a Welcome Message</a>
+      </div>
+      <div class="hero-meta">
+        <div><b>Sundays, 10:00 AM</b>Morning Worship</div>
+        <div><b>Downtown Newmarket</b>5 min from the GO station</div>
+        <div><b>All ages welcome</b>Kids' program included</div>
+      </div>
+    </div>
+    <div class="arch hero-photo rv"><span>Photo/video slot — Sunday morning worship</span></div>
+  </div>
+</section>
+
+<div class="sunday">
+  <div class="wrap sunday-row">
+    <div class="sunday-items">
+      <div class="sunday-item"><div class="arch-badge"></div><div><b>10:00 AM</b><span>Sunday Worship</span></div></div>
+      <div class="sunday-item"><div class="arch-badge"></div><div><b>Casual</b><span>Come as you are — no dress code</span></div></div>
+      <div class="sunday-item"><div class="arch-badge"></div><div><b>Kids Welcome</b><span>Program runs during the service</span></div></div>
+    </div>
+    <a class="btn btn-ghost" href="#">Get Directions</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap about-grid">
+    <div class="arch about-photo rv"><div></div></div>
+    <div class="about-copy rv">
+      <div class="eyebrow">Who we are</div>
+      <h2 style="margin-top:16px;">A community first, a building second</h2>
+      <p style="margin-top:20px;">We're a small, close-knit congregation that's been part of downtown Newmarket for years — not because we have all the answers, but because we've found that faith is easier to carry together than alone.</p>
+      <p>Whether you grew up in church, walked away from one, or have never set foot in one before, you'll find people here who are glad you came, no strings attached.</p>
+      <a class="btn btn-ghost" style="margin-top:8px;" href="#">Meet Our Pastor</a>
+    </div>
+  </div>
+</section>
+
+<section class="video-section" id="watch">
+  <div class="wrap">
+    <div class="section-head center rv">
+      <div class="eyebrow" style="justify-content:center;">New here?</div>
+      <h2>A quick welcome, from us to you</h2>
+      <p>Two minutes from our pastor on what to expect your first Sunday — no surprises, just a heads-up.</p>
+    </div>
+    <div class="video-frame rv">
+      <div class="play-btn">&#9658;</div>
+      <span class="cap">Video slot — welcome message (to be added)</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head rv">
+      <div class="eyebrow">Get involved</div>
+      <h2>A place to plug in, whenever you're ready</h2>
+      <p>No pressure to jump in on week one — but when you're ready, here's where people connect.</p>
+    </div>
+    <div class="ministry-grid">
+      <div class="ministry-card rv">
+        <div class="arch-badge"></div>
+        <h3>Kids &amp; Families</h3>
+        <p>A safe, energetic program for kids during the Sunday service, plus family events through the year.</p>
+      </div>
+      <div class="ministry-card rv">
+        <div class="arch-badge"></div>
+        <h3>Community Groups</h3>
+        <p>Small groups that meet through the week for conversation, prayer, and honestly, good company.</p>
+      </div>
+      <div class="ministry-card rv">
+        <div class="arch-badge"></div>
+        <h3>Outreach</h3>
+        <p>Hands-on ways we support our Newmarket neighbours — from food drives to seasonal volunteering.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="events-section">
+  <div class="wrap">
+    <div class="section-head rv">
+      <div class="eyebrow">What's coming up</div>
+      <h2>Upcoming events</h2>
+    </div>
+    <div class="events-list rv">
+      <div class="event-row">
+        <div class="event-date"><b>14</b><span>Sept</span></div>
+        <div class="event-info"><h3>Community Welcome Sunday</h3><p>Coffee, conversation, and an easy first visit — stay after the service.</p></div>
+        <a href="#">Details →</a>
+      </div>
+      <div class="event-row">
+        <div class="event-date"><b>21</b><span>Sept</span></div>
+        <div class="event-info"><h3>Family Potluck Evening</h3><p>Bring a dish, bring the kids — everyone's welcome at the table.</p></div>
+        <a href="#">Details →</a>
+      </div>
+      <div class="event-row">
+        <div class="event-date"><b>05</b><span>Oct</span></div>
+        <div class="event-info"><h3>Fall Community Cleanup</h3><p>Serving our downtown Newmarket neighbours, rain or shine.</p></div>
+        <a href="#">Details →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="visit">
+  <div class="wrap">
+    <div class="visit-grid">
+      <div class="rv">
+        <div class="eyebrow" style="color:var(--gold);">Plan your visit</div>
+        <h2 style="margin-top:16px;">We'd love to save you a seat</h2>
+        <div class="visit-details" style="margin-top:32px;">
+          <div><b>Address</b><span>Downtown Newmarket, Ontario (placeholder — add real address)</span></div>
+          <div><b>Service Time</b><span>Sundays at 10:00 AM</span></div>
+          <div><b>Parking</b><span>Free on-site parking available</span></div>
+        </div>
+        <a class="btn btn-primary" style="margin-top:8px;" href="#">Plan Your Visit</a>
+      </div>
+      <div class="map-placeholder rv">Map embed slot</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Newmarket Church of the Nazarene · Downtown Newmarket, Ontario · Demo homepage, Direction 1</div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+</script>
+
+</body>
+</html>
