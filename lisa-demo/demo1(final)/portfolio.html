@@ -196,6 +196,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .hero-band .ph{aspect-ratio:4/3;opacity:.9}
 @media(max-width:640px){.hero-band{grid-template-columns:repeat(2,1fr)}.hero-band .ph:nth-child(n+3){display:none}}
 
+
+/* real photos inside placeholder frames */
+.ph>img.wx{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ph.has-img::after{display:none}
 </style>
 </head>
 <body>
@@ -226,17 +230,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <section class="blk">
   <div class="wrap">
     <div class="pf-grid">
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r23" data-label="Mike &amp; Mel"></div><p class="eyebrow tile-cap">Mike &amp; Mel</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-b r34" data-label="Elijah &amp; Priya"></div><p class="eyebrow tile-cap">Elijah &amp; Priya</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r23" data-label="Patrick &amp; Rachel"></div><p class="eyebrow tile-cap">Patrick &amp; Rachel</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-b r45" data-label="Matteo &amp; Jennifer"></div><p class="eyebrow tile-cap">Matteo &amp; Jennifer</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r34" data-label="Nathan &amp; Irene"></div><p class="eyebrow tile-cap">Nathan &amp; Irene</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r45" data-label="Harry &amp; Lindsey"></div><p class="eyebrow tile-cap">Harry &amp; Lindsey</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r23" data-label="Gary &amp; Nadine"></div><p class="eyebrow tile-cap">Gary &amp; Nadine</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r34" data-label="Martin &amp; Tania"></div><p class="eyebrow tile-cap">Martin &amp; Tania</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-b r23" data-label="Tyler &amp; Aisha"></div><p class="eyebrow tile-cap">Tyler &amp; Aisha</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r45" data-label="Mohsin &amp; Janelle"></div><p class="eyebrow tile-cap">Mohsin &amp; Janelle</p></a>
-      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r34" data-label="Kane &amp; Jamie"></div><p class="eyebrow tile-cap">Kane &amp; Jamie</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r23 has-img" data-label="Mike &amp; Mel"><img class="wx" src="https://static.wixstatic.com/media/554c58_d1bc4dbeee574e8da03712415d242fb9~mv2.jpg/v1/fill/w_700,h_1050,al_c,q_85/lke.jpg" alt="Mike and Mel wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Mike &amp; Mel</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-b r34 has-img" data-label="Elijah &amp; Priya"><img class="wx" src="https://static.wixstatic.com/media/554c58_bf7bc993d93345939b3856fa881b8425~mv2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Elijah and Priya wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Elijah &amp; Priya</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r23 has-img" data-label="Patrick &amp; Rachel"><img class="wx" src="https://static.wixstatic.com/media/554c58_7d0f9d54b3c44b87820ae7ce9bc26ee6~mv2.jpg/v1/fill/w_700,h_1050,al_c,q_85/lke.jpg" alt="Patrick and Rachel wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Patrick &amp; Rachel</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-b r45 has-img" data-label="Matteo &amp; Jennifer"><img class="wx" src="https://static.wixstatic.com/media/554c58_d6b46ee1ae8c489782404ab0e35a8768~mv2.jpg/v1/fill/w_700,h_875,al_c,q_85/lke.jpg" alt="Matteo and Jennifer wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Matteo &amp; Jennifer</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r34 has-img" data-label="Nathan &amp; Irene"><img class="wx" src="https://static.wixstatic.com/media/554c58_37abb70116464a72a4e2221cea109074~mv2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Nathan and Irene wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Nathan &amp; Irene</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r45 has-img" data-label="Harry &amp; Lindsey"><img class="wx" src="https://static.wixstatic.com/media/554c58_074ceb515d0d4e92997bc7eb43799c0d~mv2.jpg/v1/fill/w_700,h_875,al_c,q_85/lke.jpg" alt="Harry and Lindsey wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Harry &amp; Lindsey</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r23 has-img" data-label="Gary &amp; Nadine"><img class="wx" src="https://static.wixstatic.com/media/554c58_5d08b7c21066461b9f7c1104eeb34437~mv2.jpg/v1/fill/w_700,h_1050,al_c,q_85/lke.jpg" alt="Gary and Nadine wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Gary &amp; Nadine</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r34 has-img" data-label="Martin &amp; Tania"><img class="wx" src="https://static.wixstatic.com/media/554c58_b287d0b23d234d8691e55cb46a245c22~mv2_d_3515_5273_s_4_2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Martin and Tania wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Martin &amp; Tania</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-b r23 has-img" data-label="Tyler &amp; Aisha"><img class="wx" src="https://static.wixstatic.com/media/554c58_d8c468ef015f42968911eb27fbee98c8~mv2_d_3701_5544_s_4_2.jpg/v1/fill/w_700,h_1050,al_c,q_85/lke.jpg" alt="Tyler and Aisha wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Tyler &amp; Aisha</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-c r45 has-img" data-label="Mohsin &amp; Janelle"><img class="wx" src="https://static.wixstatic.com/media/554c58_bcfd00a9fb394552835efab25d583050~mv2.jpg/v1/fill/w_700,h_875,al_c,q_85/lke.jpg" alt="Mohsin and Janelle wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Mohsin &amp; Janelle</p></a>
+      <a href="wedding-mike-mel.html" class="rv"><div class="ph ph-a r34 has-img" data-label="Kane &amp; Jamie"><img class="wx" src="https://static.wixstatic.com/media/554c58_468293d8b6854e63afb8abab0d163453~mv2_d_1667_2500_s_2.jpg/v1/fill/w_700,h_933,al_c,q_85/lke.jpg" alt="Kane and Jamie wedding, planned by Lisa K Events" loading="lazy"></div><p class="eyebrow tile-cap">Kane &amp; Jamie</p></a>
     </div>
   </div>
 </section>
