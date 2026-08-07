@@ -213,33 +213,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   </div>
 </header>
 
-<!-- HERO: text, matching the gradient-mist treatment used on Services/Contact -->
-<section style="padding:190px 0 60px;background:linear-gradient(175deg,var(--sky-mist),var(--ivory));text-align:center;">
-  <div class="wrap">
-    <p class="eyebrow rv in">Toronto &middot; Weddings &amp; Events</p>
-    <h1 class="rv in" style="font-size:clamp(40px,5.4vw,64px);margin:20px 0 18px;">Light, airy, <span class="disp-it">unforgettable</span></h1>
-    <p class="lede rv in" style="color:var(--ink-soft);margin:0 auto;">Boutique full planning &amp; design for weddings and celebrations.</p>
-    <a class="btn rv in" style="margin-top:30px;" href="contact.html">Start planning</a>
+<!-- HERO: full-viewport mosaic with centered overlay card -->
+<section class="mosaic-hero">
+  <div class="mosaic" aria-hidden="true">
+    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_97a50ff4d18544bd87e8481320512426~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt=""></div>
+    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_074ceb515d0d4e92997bc7eb43799c0d~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_bcfd00a9fb394552835efab25d583050~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_b287d0b23d234d8691e55cb46a245c22~mv2_d_3515_5273_s_4_2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_53f9b217d816415d8645fad0bfe8700a~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_9568fa9619ef4d32add0406f09e686d2~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
   </div>
-</section>
-
-<div class="ribbon" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-
-<!-- CAROUSEL: the same interaction as the Conacher site - arrows, centred/scaled active photo, loops both directions -->
-<section class="blk" style="padding-top:64px;">
-  <div class="carousel-outer">
-    <button class="car-arrow prev" aria-label="Previous photo">&#8592;</button>
-    <div class="carousel" data-carousel>
-      <div class="carousel-track">
-        <div class="car-item"><img class="photo" src="https://static.wixstatic.com/media/554c58_97a50ff4d18544bd87e8481320512426~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="Lisa K Events wedding"></div>
-        <div class="car-item"><img class="photo" src="https://static.wixstatic.com/media/554c58_074ceb515d0d4e92997bc7eb43799c0d~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="Lisa K Events wedding" loading="lazy"></div>
-        <div class="car-item"><img class="photo" src="https://static.wixstatic.com/media/554c58_bcfd00a9fb394552835efab25d583050~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="Lisa K Events wedding" loading="lazy"></div>
-        <div class="car-item"><img class="photo" src="https://static.wixstatic.com/media/554c58_b287d0b23d234d8691e55cb46a245c22~mv2_d_3515_5273_s_4_2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="Lisa K Events wedding" loading="lazy"></div>
-        <div class="car-item"><img class="photo" src="https://static.wixstatic.com/media/554c58_53f9b217d816415d8645fad0bfe8700a~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="Lisa K Events wedding" loading="lazy"></div>
-        <div class="car-item"><img class="photo" src="https://static.wixstatic.com/media/554c58_9568fa9619ef4d32add0406f09e686d2~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="Lisa K Events wedding" loading="lazy"></div>
-      </div>
-    </div>
-    <button class="car-arrow next" aria-label="Next photo">&#8594;</button>
+  <div class="hero-card rv in">
+    <p class="eyebrow">Toronto &middot; Weddings &amp; Events</p>
+    <h1 style="font-size:clamp(40px,5.4vw,64px);margin:20px 0 18px;">Light, airy, <span class="disp-it">unforgettable</span></h1>
+    <p style="color:var(--ink-soft);">Boutique full planning &amp; design for weddings and celebrations.</p>
+    <a class="btn" style="margin-top:30px;" href="contact.html">Start planning</a>
   </div>
 </section>
 
@@ -261,22 +249,28 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   </div>
 </section>
 
-<!-- HORIZONTAL SCROLL PORTFOLIO -->
+<!-- CAROUSEL PORTFOLIO -->
 <section class="blk">
   <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-bottom:46px;">
     <div>
       <p class="eyebrow rv">The portfolio</p>
       <h2 class="rv" style="margin-top:16px;">Scroll through <span class="disp-it">our couples</span></h2>
     </div>
-    <p class="tiny rv">Drag or scroll &rarr;</p>
+    <p class="tiny rv">Click a couple to see their day</p>
   </div>
-  <div class="hscroll rv">
-    <a href="wedding-mike-mel.html"><div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_d1bc4dbeee574e8da03712415d242fb9~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Mike and Mel wedding details" loading="lazy"></div><p class="eyebrow">Mike &amp; Mel</p></a>
-    <a href="portfolio.html"><div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_bf7bc993d93345939b3856fa881b8425~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Elijah and Priya wedding" loading="lazy"></div><p class="eyebrow">Elijah &amp; Priya</p></a>
-    <a href="portfolio.html"><div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_7d0f9d54b3c44b87820ae7ce9bc26ee6~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Patrick and Rachel reception reveal" loading="lazy"></div><p class="eyebrow">Patrick &amp; Rachel</p></a>
-    <a href="portfolio.html"><div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_37abb70116464a72a4e2221cea109074~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Nathan and Irene wedding details at McLean House" loading="lazy"></div><p class="eyebrow">Nathan &amp; Irene</p></a>
-    <a href="portfolio.html"><div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_d8c468ef015f42968911eb27fbee98c8~mv2_d_3701_5544_s_4_2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Tyler and Aisha wedding" loading="lazy"></div><p class="eyebrow">Tyler &amp; Aisha</p></a>
-    <a href="portfolio.html"><div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_468293d8b6854e63afb8abab0d163453~mv2_d_1667_2500_s_2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Kane and Jamie wedding" loading="lazy"></div><p class="eyebrow">Kane &amp; Jamie</p></a>
+  <div class="carousel-outer rv">
+    <button class="car-arrow prev" aria-label="Previous couple">&#8592;</button>
+    <div class="carousel" data-carousel>
+      <div class="carousel-track">
+        <div class="car-item"><a href="wedding-mike-mel.html"><div class="car-photo"><img class="photo" src="https://static.wixstatic.com/media/554c58_d1bc4dbeee574e8da03712415d242fb9~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Mike and Mel wedding details" loading="lazy"></div><p class="eyebrow">Mike &amp; Mel</p></a></div>
+        <div class="car-item"><a href="portfolio.html"><div class="car-photo"><img class="photo" src="https://static.wixstatic.com/media/554c58_bf7bc993d93345939b3856fa881b8425~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Elijah and Priya wedding" loading="lazy"></div><p class="eyebrow">Elijah &amp; Priya</p></a></div>
+        <div class="car-item"><a href="portfolio.html"><div class="car-photo"><img class="photo" src="https://static.wixstatic.com/media/554c58_7d0f9d54b3c44b87820ae7ce9bc26ee6~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Patrick and Rachel reception reveal" loading="lazy"></div><p class="eyebrow">Patrick &amp; Rachel</p></a></div>
+        <div class="car-item"><a href="portfolio.html"><div class="car-photo"><img class="photo" src="https://static.wixstatic.com/media/554c58_37abb70116464a72a4e2221cea109074~mv2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Nathan and Irene wedding details at McLean House" loading="lazy"></div><p class="eyebrow">Nathan &amp; Irene</p></a></div>
+        <div class="car-item"><a href="portfolio.html"><div class="car-photo"><img class="photo" src="https://static.wixstatic.com/media/554c58_d8c468ef015f42968911eb27fbee98c8~mv2_d_3701_5544_s_4_2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Tyler and Aisha wedding" loading="lazy"></div><p class="eyebrow">Tyler &amp; Aisha</p></a></div>
+        <div class="car-item"><a href="portfolio.html"><div class="car-photo"><img class="photo" src="https://static.wixstatic.com/media/554c58_468293d8b6854e63afb8abab0d163453~mv2_d_1667_2500_s_2.jpg/v1/fill/w_640,h_853,al_c,q_85/lke.jpg" alt="Kane and Jamie wedding" loading="lazy"></div><p class="eyebrow">Kane &amp; Jamie</p></a></div>
+      </div>
+    </div>
+    <button class="car-arrow next" aria-label="Next couple">&#8594;</button>
   </div>
 </section>
 
@@ -315,26 +309,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .photo{width:100%;height:100%;object-fit:cover;display:block}
 .pframe.r34{aspect-ratio:3/4}
 .pframe.r45{aspect-ratio:4/5}
-.hscroll{display:flex;gap:28px;overflow-x:auto;padding:4px 5vw 26px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.hscroll a{flex:0 0 clamp(240px,26vw,320px);scroll-snap-align:start}
-.hscroll .pframe{aspect-ratio:3/4;margin-bottom:14px}
-.hscroll::-webkit-scrollbar{height:6px}
-.hscroll::-webkit-scrollbar-thumb{background:var(--sand);border-radius:3px}
-.hscroll::-webkit-scrollbar-track{background:var(--sand-mist)}
-
+.mosaic-hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:140px 4vw 60px}
+.mosaic{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:14px;padding:14px;z-index:0}
+.mosaic .pframe{width:100%;height:100%}
+.mosaic::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(253,251,246,.32),rgba(253,251,246,.12) 40%,rgba(253,251,246,.32))}
+.hero-card{position:relative;z-index:2;background:rgba(253,251,246,.95);border:1px solid var(--hairline);padding:64px 56px;text-align:center;max-width:620px;box-shadow:0 30px 80px rgba(62,58,52,.16)}
+@media(max-width:700px){.mosaic{grid-template-columns:repeat(2,1fr)}.mosaic .pframe:nth-child(n+5){display:none}.hero-card{padding:44px 28px}}
 /* -------- carousel: same mechanics as the Conacher Photography site -------- */
 .carousel-outer{position:relative;padding:0 68px;}
 .carousel{overflow:hidden;}
-.carousel-track{display:flex;gap:18px;transition:transform .45s cubic-bezier(.2,.65,.25,1);will-change:transform;}
-.car-item{flex:0 0 auto;height:480px;position:relative;overflow:hidden;border:1px solid var(--hairline);background:var(--sand-mist);transform:scale(.92);transition:transform .4s ease,box-shadow .4s ease;box-shadow:0 10px 30px rgba(62,58,52,.08);}
-.car-item img{height:100%;width:auto;display:block;}
-.car-item.is-center{transform:scale(1.03);box-shadow:0 30px 60px rgba(62,58,52,.18);z-index:2;}
-.car-arrow{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:var(--ivory);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;font-size:17px;color:var(--ink);transition:background .2s,border-color .2s;padding:0;}
+.carousel-track{display:flex;gap:28px;transition:transform .45s cubic-bezier(.2,.65,.25,1);will-change:transform;}
+.car-item{flex:0 0 auto;transform:scale(.94);transition:transform .4s ease;}
+.car-item.is-center{transform:scale(1.02);}
+.car-item a{display:block;}
+.car-photo{height:420px;border:1px solid var(--hairline);background:var(--sand-mist);overflow:hidden;box-shadow:0 10px 30px rgba(62,58,52,.08);transition:box-shadow .4s ease;}
+.car-item.is-center .car-photo{box-shadow:0 26px 54px rgba(62,58,52,.18);}
+.car-photo img{height:100%;width:auto;display:block;}
+.car-item .eyebrow{margin-top:14px;text-align:center;}
+.car-arrow{position:absolute;top:calc(50% - 14px);transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:var(--ivory);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;font-size:17px;color:var(--ink);transition:background .2s,border-color .2s;padding:0;}
 .car-arrow:hover{background:var(--sky-mist);border-color:var(--sky);}
 .car-arrow.prev{left:6px;}
 .car-arrow.next{right:6px;}
 @media(max-width:760px){
-  .car-item{height:340px;}
+  .car-photo{height:300px;}
   .carousel-outer{padding:0 8px;}
   .car-arrow{width:42px;height:42px;font-size:15px;}
 }
@@ -369,15 +366,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     const N = real.length;
     if(N < 2) return;
 
-    // Triple the real items so there's always a full buffer of neighbours
-    // on both sides, regardless of which real item is centred.
     real.forEach(it => track.appendChild(it.cloneNode(true)));
     real.forEach(it => track.appendChild(it.cloneNode(true)));
 
     function all(){ return [...track.children]; }
-    function realIndexAt(p){ return ((p % N) + N) % N; }
 
-    let pos = N; // start on the middle copy
+    let pos = N;
 
     function gapPx(){
       const cs = getComputedStyle(track);
@@ -435,8 +429,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     prevBtn.addEventListener('click', () => step(-1));
     nextBtn.addEventListener('click', () => step(1));
 
-    // Settle instantly at start, then correct again once every image's
-    // real size is known (some may still be loading at first paint).
     goTo(pos, false);
     const imgs = track.querySelectorAll('img');
     let settled = false;
