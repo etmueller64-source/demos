@@ -30,7 +30,9 @@
   .concept-banner b{color:var(--amber);}
 
   /* header, Jen-Short-inspired: clean, logo left, dropdown services */
-  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);}
+  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);transition:transform .32s ease;}
+  /* Slides fully out of view on scroll-down, back in on scroll-up - so it stops permanently eating screen space meant for photos, per feedback. */
+  header.nav-hidden{transform:translateY(-100%);}
   .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:20px 40px;}
   .brand{display:flex;align-items:center;gap:12px;}
   .brand-logo{height:52px;width:auto;display:block;}
@@ -155,40 +157,78 @@
   .page-hero h1{font-size:clamp(36px,5.6vw,58px);margin-bottom:14px;}
   .page-hero p{color:var(--ink-soft);max-width:520px;margin:0 auto;}
 
-  .filter-bar{position:sticky;top:81px;z-index:60;background:rgba(250,246,239,0.97);backdrop-filter:blur(6px);border-top:1px solid var(--cream-deep);border-bottom:1px solid var(--cream-deep);padding:20px 0;}
+  .filter-bar{position:sticky;top:81px;z-index:60;background:rgba(250,246,239,0.97);backdrop-filter:blur(6px);border-top:1px solid var(--cream-deep);border-bottom:1px solid var(--cream-deep);padding:20px 0;transition:top .32s ease;}
+  /* When the header slides away, the filter bar sticks right at the very
+     top instead of leaving a blank gap where the header used to be. */
+  .filter-bar.nav-hidden{top:0;}
   .filter-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-  .f-tab{font-size:12.5px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--cream-deep);color:var(--ink-soft);transition:all .2s ease;background:var(--white);cursor:pointer;}
+  .f-tab{font-size:12.5px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--cream-deep);color:var(--ink-soft);transition:all .2s ease;background:var(--white);cursor:pointer;display:inline-block;}
   .f-tab:hover{border-color:var(--rose);color:var(--rose);}
   .f-tab.active{background:var(--rose);border-color:var(--rose);color:var(--cream);}
   .f-tab.print-tab{border-color:var(--amber);color:var(--amber-deep);font-weight:600;}
   .f-tab.print-tab:hover{background:var(--amber);color:var(--white);}
+  .f-tab.collections-tab{border-color:var(--ink);color:var(--ink);font-weight:600;}
+  .f-tab.collections-tab:hover,.f-tab.collections-tab.active{background:var(--ink);border-color:var(--ink);color:var(--cream);}
 
   .grid-wrap{padding:56px 0;}
-  .photo-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;}
-  .shot{flex:0 1 calc(33.333% - 12px);border-radius:var(--radius);height:320px;position:relative;overflow:hidden;box-shadow:0 20px 44px rgba(44,40,34,0.12);opacity:1;transform:scale(1);transition:opacity .35s ease,transform .35s ease;}
-  .shot.hidden-shot{display:none;}
+
+  /* True masonry - every photo shows in full, at its own proportions, with
+     the browser bin-packing them column by column so nothing leaves a gap.
+     No fixed tile height, no object-fit:cover cropping anywhere in here. */
+  .photo-grid{column-count:3;column-gap:18px;}
+  .shot{display:block;width:100%;break-inside:avoid;margin:0 0 18px;border-radius:var(--radius);position:relative;overflow:hidden;box-shadow:0 20px 44px rgba(44,40,34,0.12);opacity:1;transition:opacity .35s ease;}
+  .shot.hidden-shot{display:none !important;}
   .shot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.55) 100%);}
-  .shot img{width:100%;height:100%;object-fit:cover;display:block;}
+  .shot img{width:100%;height:auto;display:block;}
   .shot-cap{position:absolute;left:16px;bottom:14px;z-index:2;color:var(--white);}
-  .shot-cap .g{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber-deep);background:rgba(255,255,255,0.9);padding:2px 8px;border-radius:2px;display:inline-block;margin-bottom:6px;}
-  .shot-cap h4{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--white);}
+  .shot-cap .g{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber-deep);background:rgba(255,255,255,0.9);padding:2px 8px;border-radius:2px;display:inline-block;}
   .grid-note{text-align:center;font-size:12px;color:var(--ink-soft);margin-top:24px;}
-  /* A genre that's been created but has no photos in it yet - shown instead
-     of an empty-looking gap in the grid when that filter is selected. */
-  .shot.shot-empty{background:var(--cream-deep);box-shadow:none;display:flex;align-items:center;justify-content:center;text-align:center;}
+  /* A genre that's been created but has no photos in it yet. */
+  .shot.shot-empty{background:var(--cream-deep);box-shadow:none;display:flex;align-items:center;justify-content:center;text-align:center;min-height:220px;}
   .shot.shot-empty::after{content:none;}
   .shot-empty .empty-msg{color:var(--ink-soft);font-size:14.5px;line-height:1.7;padding:20px;}
   .shot-empty .empty-msg b{display:block;color:var(--ink);font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin-bottom:4px;}
+
+  /* ---------- Collections: list of covers ---------- */
+  .collections-grid{column-count:2;column-gap:22px;}
+  .collection-tile{display:block;width:100%;break-inside:avoid;margin:0 0 22px;border-radius:var(--radius);position:relative;overflow:hidden;box-shadow:0 20px 44px rgba(44,40,34,0.14);cursor:pointer;background:none;border:none;padding:0;text-align:left;}
+  .collection-tile img{width:100%;height:auto;display:block;transition:transform .5s ease;}
+  .collection-tile:hover img{transform:scale(1.035);}
+  .collection-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(44,40,34,0.72) 100%);}
+  .collection-tile .ct-name{position:absolute;left:26px;right:26px;bottom:24px;z-index:2;color:var(--white);font-family:'Fraunces',serif;font-weight:600;font-size:clamp(22px,2.4vw,30px);line-height:1.2;}
+  @media (max-width:700px){ .collections-grid{column-count:1;} }
+
+  /* ---------- Collection detail: the filter bar is hidden here so it reads
+     as its own page, per spec - a big hero, title, story, then that
+     collection's own masonry grid. ---------- */
+  .collection-back{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:28px;cursor:pointer;}
+  .collection-back:hover{color:var(--rose);}
+  .collection-hero{margin-bottom:36px;text-align:center;}
+  .collection-hero .photo-fit{max-width:100%;}
+  .collection-hero .photo-fit img{max-height:560px;}
+  .collection-head{text-align:center;max-width:720px;margin:0 auto 48px;}
+  .collection-head h1{font-size:clamp(30px,4.2vw,46px);margin-bottom:16px;}
+  .collection-head .story{color:var(--ink-soft);font-size:16.5px;white-space:pre-line;}
 
   .print-cta{background:var(--cream-deep);border-radius:var(--radius);max-width:1180px;margin:0 auto;padding:64px 50px;text-align:center;}
   .print-cta h2{font-size:clamp(26px,3.6vw,36px);margin-bottom:14px;}
   .print-cta p{color:var(--ink-soft);max-width:460px;margin:0 auto 28px;}
 
   @media (max-width:900px){
-    .shot{flex:0 1 calc(50% - 9px);}
+    .photo-grid{column-count:2;}
     .filter-row{padding:0 20px;}
   }
-  @media (max-width:600px){ .shot{flex:0 1 100%;} }
+  @media (max-width:600px){ .photo-grid{column-count:1;} }
+
+  /* ---------- lightbox: click any photo to browse the full set it belongs to ---------- */
+  #lightbox{position:fixed;inset:0;background:rgba(30,25,20,0.94);z-index:400;display:none;align-items:center;justify-content:center;padding:40px;}
+  #lightbox.open{display:flex;}
+  #lightbox img{max-width:min(1100px,90vw);max-height:80vh;border-radius:2px;box-shadow:0 30px 70px rgba(0,0,0,0.5);object-fit:contain;background:#00000022;}
+  #lightbox .lb-close{position:absolute;top:26px;right:32px;color:var(--cream);font-size:30px;background:none;border:none;cursor:pointer;line-height:1;}
+  #lightbox .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);color:var(--cream);font-size:30px;background:none;border:none;cursor:pointer;padding:14px;opacity:0.85;transition:opacity .2s;}
+  #lightbox .lb-arrow:hover{opacity:1;}
+  #lightbox .lb-prev{left:14px;} #lightbox .lb-next{right:14px;}
+  #lightbox .lb-count{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:var(--cream);font-size:13px;letter-spacing:0.08em;font-family:'Jost',sans-serif;}
 
 </style>
 </head>
@@ -216,6 +256,7 @@
           <a href="portfolio.html#maternity">Maternity</a>
           <a href="portfolio.html#pets">Pets</a>
           <a href="portfolio.html#sports">Sports</a>
+          <a href="portfolio.html#collections" style="font-weight:600;">Collections</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -244,17 +285,18 @@
 <div class="filter-bar" id="d-filter">
   <div class="wrap">
     <div class="filter-row">
-      <button class="f-tab active" data-genre="all">All</button>
-      <button class="f-tab" data-genre="nature">Nature</button>
-      <button class="f-tab" data-genre="landscapes">Landscapes</button>
-      <button class="f-tab" data-genre="portraits">Portraits</button>
-      <button class="f-tab" data-genre="family">Family</button>
-      <button class="f-tab" data-genre="engagement">Engagement</button>
-      <button class="f-tab" data-genre="groups">Groups</button>
-      <button class="f-tab" data-genre="events">Events</button>
-      <button class="f-tab" data-genre="maternity">Maternity</button>
-      <button class="f-tab" data-genre="pets">Pets</button>
-      <button class="f-tab" data-genre="sports">Sports</button>
+      <a class="f-tab active" data-genre="all" href="#all">All</a>
+      <a class="f-tab" data-genre="nature" href="#nature">Nature</a>
+      <a class="f-tab" data-genre="landscapes" href="#landscapes">Landscapes</a>
+      <a class="f-tab" data-genre="portraits" href="#portraits">Portraits</a>
+      <a class="f-tab" data-genre="family" href="#family">Family</a>
+      <a class="f-tab" data-genre="engagement" href="#engagement">Engagement</a>
+      <a class="f-tab" data-genre="groups" href="#groups">Groups</a>
+      <a class="f-tab" data-genre="events" href="#events">Events</a>
+      <a class="f-tab" data-genre="maternity" href="#maternity">Maternity</a>
+      <a class="f-tab" data-genre="pets" href="#pets">Pets</a>
+      <a class="f-tab" data-genre="sports" href="#sports">Sports</a>
+      <a class="f-tab collections-tab" href="#collections">Collections</a>
       <a class="f-tab print-tab" href="print.html">Prints for Purchase ↗</a>
     </div>
   </div>
@@ -262,32 +304,32 @@
 
 <div class="grid-wrap" id="d-grid">
   <div class="wrap">
+    <div id="collectionDetailHead" style="display:none;"></div>
     <div class="photo-grid" id="photoGrid">
-    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#7C8F6E,#4B5D45);"><span class="shot-cap"><span class="g">Nature</span><h4>Morning Mist, King City</h4></span></div>
-    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#8FA48A,#526B4C);"><span class="shot-cap"><span class="g">Nature</span><h4>Autumn Trail</h4></span></div>
-    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#6D8560,#3C4E36);"><span class="shot-cap"><span class="g">Nature</span><h4>Forest Light</h4></span></div>
-    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="shot-cap"><span class="g">Landscapes</span><h4>Sunset Over the GTA</h4></span></div>
-    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#B7C2CC,#7D8B99);"><span class="shot-cap"><span class="g">Landscapes</span><h4>Winter Field, Bradford</h4></span></div>
-    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#D8B26A,#A97E33);"><span class="shot-cap"><span class="g">Landscapes</span><h4>Golden Hour, Keswick</h4></span></div>
-    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);"><span class="shot-cap"><span class="g">Portraits</span><h4>Studio Portrait</h4></span></div>
-    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#C7A788,#8F6B4E);"><span class="shot-cap"><span class="g">Portraits</span><h4>Outdoor Portrait</h4></span></div>
-    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#A98F76,#6E543C);"><span class="shot-cap"><span class="g">Portraits</span><h4>Headshot Session</h4></span></div>
-    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#C9A768,#9C6D26);"><span class="shot-cap"><span class="g">Family</span><h4>Family, Sheppard's Bush</h4></span></div>
-    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#D8C3A0,#A9895A);"><span class="shot-cap"><span class="g">Family</span><h4>Newborn &amp; Family</h4></span></div>
-    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#BFA37E,#8C6F45);"><span class="shot-cap"><span class="g">Family</span><h4>Extended Family, Aurora</h4></span></div>
-    <div class="shot" data-genre="engagement" style="background:linear-gradient(155deg,#8C7B6B,#5C4F42);"><span class="shot-cap"><span class="g">Engagement</span><h4>Engagement, Richmond Hill</h4></span></div>
-    <div class="shot" data-genre="engagement" style="background:linear-gradient(155deg,#A6917D,#6E5A46);"><span class="shot-cap"><span class="g">Engagement</span><h4>Ring Detail</h4></span></div>
-    <div class="shot" data-genre="groups" style="background:linear-gradient(155deg,#7D8B7A,#4E5C4B);"><span class="shot-cap"><span class="g">Groups</span><h4>Friends Session</h4></span></div>
-    <div class="shot" data-genre="groups" style="background:linear-gradient(155deg,#94826F,#5E4C3A);"><span class="shot-cap"><span class="g">Groups</span><h4>Bridal Party</h4></span></div>
-    <div class="shot" data-genre="events" style="background:linear-gradient(155deg,#8B6B57,#5A4433);"><span class="shot-cap"><span class="g">Events</span><h4>Wedding Reception, Aurora</h4></span></div>
-    <div class="shot" data-genre="events" style="background:linear-gradient(155deg,#6E7B85,#3F4E56);"><span class="shot-cap"><span class="g">Events</span><h4>Corporate Event</h4></span></div>
-    <div class="shot" data-genre="maternity" style="background:linear-gradient(155deg,#C7A98A,#9A7752);"><span class="shot-cap"><span class="g">Maternity</span><h4>Maternity, Golden Hour</h4></span></div>
-    <div class="shot" data-genre="maternity" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);"><span class="shot-cap"><span class="g">Maternity</span><h4>Studio Maternity</h4></span></div>
-    <div class="shot" data-genre="pets" style="background:linear-gradient(155deg,#B08856,#7C5E37);"><span class="shot-cap"><span class="g">Pets</span><h4>Golden Retriever Portrait</h4></span></div>
-    <div class="shot" data-genre="pets" style="background:linear-gradient(155deg,#8F7A63,#5E4B37);"><span class="shot-cap"><span class="g">Pets</span><h4>Cat &amp; Family</h4></span></div>
-    <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#5C6B7A,#33404C);"><span class="shot-cap"><span class="g">Sports</span><h4>Hockey Action, Newmarket</h4></span></div>
-    <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#6E5A4E,#3F312A);"><span class="shot-cap"><span class="g">Sports</span><h4>Team Photo</h4></span></div>
-    
+    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#7C8F6E,#4B5D45);height:280px;"><span class="shot-cap"><span class="g">Nature</span></span></div>
+    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#8FA48A,#526B4C);height:340px;"><span class="shot-cap"><span class="g">Nature</span></span></div>
+    <div class="shot" data-genre="nature" style="background:linear-gradient(155deg,#6D8560,#3C4E36);height:230px;"><span class="shot-cap"><span class="g">Nature</span></span></div>
+    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#C9A768,#9C6D26);height:300px;"><span class="shot-cap"><span class="g">Landscapes</span></span></div>
+    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#B7C2CC,#7D8B99);height:260px;"><span class="shot-cap"><span class="g">Landscapes</span></span></div>
+    <div class="shot" data-genre="landscapes" style="background:linear-gradient(155deg,#D8B26A,#A97E33);height:320px;"><span class="shot-cap"><span class="g">Landscapes</span></span></div>
+    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);height:360px;"><span class="shot-cap"><span class="g">Portraits</span></span></div>
+    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#C7A788,#8F6B4E);height:250px;"><span class="shot-cap"><span class="g">Portraits</span></span></div>
+    <div class="shot" data-genre="portraits" style="background:linear-gradient(155deg,#A98F76,#6E543C);height:300px;"><span class="shot-cap"><span class="g">Portraits</span></span></div>
+    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#C9A768,#9C6D26);height:270px;"><span class="shot-cap"><span class="g">Family</span></span></div>
+    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#D8C3A0,#A9895A);height:330px;"><span class="shot-cap"><span class="g">Family</span></span></div>
+    <div class="shot" data-genre="family" style="background:linear-gradient(155deg,#BFA37E,#8C6F45);height:240px;"><span class="shot-cap"><span class="g">Family</span></span></div>
+    <div class="shot" data-genre="engagement" style="background:linear-gradient(155deg,#8C7B6B,#5C4F42);height:310px;"><span class="shot-cap"><span class="g">Engagement</span></span></div>
+    <div class="shot" data-genre="engagement" style="background:linear-gradient(155deg,#A6917D,#6E5A46);height:260px;"><span class="shot-cap"><span class="g">Engagement</span></span></div>
+    <div class="shot" data-genre="groups" style="background:linear-gradient(155deg,#7D8B7A,#4E5C4B);height:290px;"><span class="shot-cap"><span class="g">Groups</span></span></div>
+    <div class="shot" data-genre="groups" style="background:linear-gradient(155deg,#94826F,#5E4C3A);height:340px;"><span class="shot-cap"><span class="g">Groups</span></span></div>
+    <div class="shot" data-genre="events" style="background:linear-gradient(155deg,#8B6B57,#5A4433);height:250px;"><span class="shot-cap"><span class="g">Events</span></span></div>
+    <div class="shot" data-genre="events" style="background:linear-gradient(155deg,#6E7B85,#3F4E56);height:320px;"><span class="shot-cap"><span class="g">Events</span></span></div>
+    <div class="shot" data-genre="maternity" style="background:linear-gradient(155deg,#C7A98A,#9A7752);height:280px;"><span class="shot-cap"><span class="g">Maternity</span></span></div>
+    <div class="shot" data-genre="maternity" style="background:linear-gradient(155deg,#B99A87,#7A5F4C);height:350px;"><span class="shot-cap"><span class="g">Maternity</span></span></div>
+    <div class="shot" data-genre="pets" style="background:linear-gradient(155deg,#B08856,#7C5E37);height:260px;"><span class="shot-cap"><span class="g">Pets</span></span></div>
+    <div class="shot" data-genre="pets" style="background:linear-gradient(155deg,#8F7A63,#5E4B37);height:300px;"><span class="shot-cap"><span class="g">Pets</span></span></div>
+    <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#5C6B7A,#33404C);height:270px;"><span class="shot-cap"><span class="g">Sports</span></span></div>
+    <div class="shot" data-genre="sports" style="background:linear-gradient(155deg,#6E5A4E,#3F312A);height:310px;"><span class="shot-cap"><span class="g">Sports</span></span></div>
     </div>
     <p class="grid-note">Placeholder imagery shown by genre - the live site would feature Debbie's real session photography throughout.</p>
   </div>
@@ -302,6 +344,14 @@
     </div>
   </div>
 </section>
+
+<div id="lightbox">
+  <button class="lb-close" aria-label="Close">&times;</button>
+  <button class="lb-arrow lb-prev" aria-label="Previous photo">&#8592;</button>
+  <img id="lbImage" src="" alt="">
+  <button class="lb-arrow lb-next" aria-label="Next photo">&#8594;</button>
+  <span class="lb-count" id="lbCount"></span>
+</div>
 
 <footer>
   <div class="wrap">
@@ -327,6 +377,36 @@
 
 <script>
 (function(){
+  // Collapsing header on scroll: slides fully out of view scrolling down
+  // (so it stops permanently blocking the top third of every photo-heavy
+  // page), slides back in immediately scrolling up (so navigation is never
+  // more than one upward scroll away). Stays visible near the very top so
+  // it doesn't flicker in and out right at the start of the page.
+  (function(){
+    const header = document.querySelector('header');
+    if(!header) return;
+    const filterBar = document.querySelector('.filter-bar'); // only exists on the Portfolio page
+    const SHOW_NEAR_TOP = 120;
+    let lastY = window.scrollY, hidden = false, ticking = false;
+    function setHidden(state){
+      if(state === hidden) return;
+      hidden = state;
+      header.classList.toggle('nav-hidden', hidden);
+      if(filterBar) filterBar.classList.toggle('nav-hidden', hidden);
+    }
+    function onScroll(){
+      const y = Math.max(0, window.scrollY);
+      if(y <= SHOW_NEAR_TOP) setHidden(false);
+      else if(y > lastY) setHidden(true);   // scrolling down
+      else if(y < lastY) setHidden(false);  // scrolling up
+      lastY = y;
+      ticking = false;
+    }
+    addEventListener('scroll', ()=>{
+      if(!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+    }, {passive:true});
+  })();
+
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
@@ -373,33 +453,6 @@
   // freshly rendered set of genres - re-running this after that happens is
   // what keeps clicking/filtering working on the real data, not just the
   // placeholder grid.
-  window.wireFilterTabs = function wireFilterTabs(){
-    const tabs = document.querySelectorAll('.f-tab[data-genre]');
-    const shots = document.querySelectorAll('.shot');
-    function applyFilter(g){
-      tabs.forEach(t=>t.classList.toggle('active', t.dataset.genre===g));
-      shots.forEach(s=>{
-        const match = (g==='all') || (s.dataset.genre===g);
-        s.classList.toggle('hidden-shot', !match);
-      });
-    }
-    tabs.forEach(tab=>{
-      tab.addEventListener('click',()=> applyFilter(tab.dataset.genre));
-    });
-    // Nav dropdown links arrive as portfolio.html#nature, #portraits, etc. -
-    // pre-filter the grid to match, so the header genre menu and the on-page
-    // filter tabs are the same system instead of two separate things.
-    const hashGenre = location.hash.replace('#','');
-    if(hashGenre && [...tabs].some(t=>t.dataset.genre===hashGenre)){
-      applyFilter(hashGenre);
-      setTimeout(()=>{
-        const grid=document.getElementById('d-grid');
-        if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
-      }, 50);
-    }
-  }
-  wireFilterTabs(); // static placeholder grid, until/unless real data arrives
-
   const secs=[...document.querySelectorAll('[id^="d-"]')];
   const dots=document.querySelectorAll('#dots a');
   if(secs.length && dots.length){
@@ -415,15 +468,17 @@
 // Sheet-driven portfolio pipeline
 // ------------------------------------------------------------
 // Reads the same published "Website Data" tab every other page reads.
-// Genres are never a stored list anywhere - they're derived fresh, every
-// load, from whatever Genre values show up on Portfolio rows (both "New
-// Genre" rows, which have no photo yet, and "Photo" rows, which do). That
-// way the nav dropdown (every page), this page's filter chips, and Home's
-// Featured links are always reading the exact same underlying set.
+// Genres and Collections are never a stored list anywhere - both are
+// derived fresh, every load, from whatever rows exist for them (Genre also
+// picks up Home's Featured rows, since that Label question is literally
+// titled "Genre" - see deriveGenres). That way the nav dropdown (every
+// page), this page, and Home's Featured links are always reading the exact
+// same underlying set.
 // ============================================================
 (function(){
   const SITE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
   const THIS_PAGE = "portfolio";
+  let GENRES = [], COLLECTIONS = [];
 
   function parseCSV(text){
     const rows=[]; let row=[],field='',inQuotes=false;
@@ -447,8 +502,9 @@
   }
 
   // Same column contract as every other page. Unlike those pages, this one
-  // does NOT drop rows with no photo - a "New Genre" row is supposed to have
-  // none, that's how an empty genre gets created.
+  // does NOT drop rows with no photo - a Genre or Collection row can
+  // legitimately have none (that's how an empty genre, or a
+  // story/cover-only collection update, gets created).
   function extractRows(rows, page){
     const norm=c=>(c||'').trim().toLowerCase();
     const headerIndex=rows.findIndex(r=>r.some(c=>norm(c)==='page'));
@@ -462,20 +518,24 @@
       name:      find('name'),
       label:     find('label','caption/label','genre'),
       cover:     find('cover photo','cover'),
-      album:     find('album photos','photos','album')
+      album:     find('album photos','photos','album'),
+      story:     find('story')
     };
     const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
     return rows.slice(headerIndex+1)
       .filter(r=>get(r,cols.page).toLowerCase()===page)
       .map(r=>{
         const albumList = get(r,cols.album).split(',').map(s=>s.trim()).filter(Boolean);
+        const cover = get(r,cols.cover);
         return {
           timestamp: get(r,cols.timestamp),
           section:   get(r,cols.section).toLowerCase(),
           name:      get(r,cols.name),
           label:     get(r,cols.label),
-          album:     albumList,                              // every photo on this row - a Photo row can have several
-          photo:     get(r,cols.cover) || albumList[0] || ''  // single-photo convenience, used by Hero
+          story:     get(r,cols.story),              // Collection background text - its own column, not folded into Label
+          cover:     cover,                        // Cover Photo column, on its own - used by Collections
+          album:     albumList,                     // every photo on this row - a Genre or Collection row can have several
+          photo:     cover || albumList[0] || ''    // single-photo convenience, used by Hero
         };
       });
   }
@@ -494,9 +554,9 @@
   const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
                           .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-  // Turns a free-text genre name into a URL/attribute-safe key, e.g.
-  // "Events & Teams" -> "events-and-teams". Used for data-genre, #hash
-  // anchors, and dropdown links - never shown to a visitor directly.
+  // Turns free text into a URL/attribute-safe key, e.g. "Events & Teams" ->
+  // "events-and-teams". Used for data-genre/data-collection, #hash anchors,
+  // and dropdown links - never shown to a visitor directly.
   function slugify(s){
     return String(s||'').trim().toLowerCase()
       .replace(/&/g,'and')
@@ -526,10 +586,11 @@
     });
   }
 
-  // Every genre that exists anywhere in the shared sheet - a Portfolio
-  // "New Genre" row, a Portfolio "Photo" row (which may carry several
-  // photos at once - each becomes its own tile here), or a Home Featured
-  // row (its Label question is literally titled "Genre"). Deduped
+  // Every genre that exists anywhere in the shared sheet: a Portfolio row
+  // with Section "Genre" (this covers both the "New Genre" and "Add Photos
+  // to Genre" form paths - the Apps Script writes both to the same
+  // canonical section, since the site treats them identically) or a Home
+  // Featured row, whose Label question is literally titled "Genre". Deduped
   // case/whitespace-insensitively, keeping whichever spelling came first.
   function deriveGenres(portfolioRows, featuredRows){
     const map = new Map(); // slug -> {name, photos:[]}
@@ -542,12 +603,10 @@
       return map.get(slug);
     };
     portfolioRows.forEach(r=>{
-      if(r.section!=='photo' && r.section!=='new genre') return;
+      if(r.section!=='genre') return;
       const g = register(r.label);
       if(!g) return;
-      if(r.section==='photo'){
-        r.album.forEach(url=> g.photos.push({photo:url, name:r.name}));
-      }
+      r.album.forEach(url=> g.photos.push({photo:url, name:''}));
     });
     (featuredRows||[]).forEach(r=>{
       if(r.section==='featured') register(r.label); // name-only - no photos added from Featured
@@ -557,26 +616,50 @@
       .sort((a,b)=>a.name.localeCompare(b.name));
   }
 
+  // Every collection: grouped by Collection Name, combining every row
+  // submitted for it (a "New Collection" row and any number of later "Add
+  // to Existing Collection" rows). Cover and Story keep whichever value was
+  // most recently non-blank - an "Add to Existing" submission left blank on
+  // purpose (skipping the update) never overwrites a value that's already
+  // there. Photos accumulate across every row, they never replace each other.
+  function deriveCollections(rows){
+    const map = new Map(); // slug -> {name, story, cover, photos:[]}
+    rows.forEach(r=>{
+      if(r.section!=='collection') return;
+      const name = (r.name||'').trim();
+      if(!name) return;
+      const slug = slugify(name);
+      if(!slug) return;
+      if(!map.has(slug)) map.set(slug, {name, story:'', cover:'', photos:[]});
+      const c = map.get(slug);
+      if(r.cover) c.cover = r.cover;
+      if(r.story) c.story = r.story;
+      r.album.forEach(url=> c.photos.push(url));
+    });
+    return [...map.entries()]
+      .map(([slug,c])=>({slug, name:c.name, story:c.story, cover:c.cover, photos:c.photos}))
+      .sort((a,b)=>a.name.localeCompare(b.name));
+  }
+
   function renderFilterBar(genres){
     const row = document.querySelector('.filter-row');
     if(!row) return;
-    const printTab = row.querySelector('.print-tab');
-    const printHtml = printTab ? printTab.outerHTML
-      : '<a class="f-tab print-tab" href="print.html">Prints for Purchase ↗</a>';
-    row.innerHTML = '<button class="f-tab active" data-genre="all">All</button>'
-      + genres.map(g=>'<button class="f-tab" data-genre="'+esc(g.slug)+'">'+esc(g.name)+'</button>').join('')
-      + printHtml;
+    row.innerHTML = '<a class="f-tab" data-genre="all" href="#all">All</a>'
+      + genres.map(g=>'<a class="f-tab" data-genre="'+esc(g.slug)+'" href="#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a class="f-tab collections-tab" href="#collections">Collections</a>'
+      + '<a class="f-tab print-tab" href="print.html">Prints for Purchase ↗</a>';
   }
 
   function renderGrid(genres){
     const grid = document.getElementById('photoGrid');
     if(!grid) return;
+    grid.classList.remove('collections-grid');
     grid.innerHTML = genres.map(g=>{
       if(g.photos.length){
         return g.photos.map(p=>
           '<div class="shot" data-genre="'+esc(g.slug)+'">'
-          + '<img src="'+esc(p.photo)+'" alt="'+esc((p.name||g.name))+'">'
-          + '<span class="shot-cap"><span class="g">'+esc(g.name)+'</span><h4>'+esc(p.name||g.name)+'</h4></span>'
+          + '<img src="'+esc(p.photo)+'" alt="'+esc(g.name)+'">'
+          + '<span class="shot-cap"><span class="g">'+esc(g.name)+'</span></span>'
           + '</div>'
         ).join('');
       }
@@ -587,14 +670,188 @@
     }).join('');
   }
 
-  // The dropdown menu under "Portfolio" in the header - same list of genres,
-  // rendered the same way, on every single page of the site (not just this
-  // one), so it's always one click to jump straight to a filtered view here.
+  // The dropdown menu under "Portfolio" in the header - same list of
+  // genres, rendered the same way, on every page of the site, plus the
+  // pinned Collections link every page also carries statically.
   function renderNavDropdown(genres){
     const dd = document.querySelector('.has-drop .dropdown');
     if(!dd) return;
     dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections</a>'
       + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
+  }
+
+  // ---------------------------------------------------------------------
+  // View router. Three views live on this one page, switched purely by
+  // #hash, no reload: the genre grid (default), the Collections list, and
+  // a single collection's own detail view (which hides the filter bar
+  // entirely, so it reads as its own page, per spec).
+  // ---------------------------------------------------------------------
+  function showFilterBar(show){
+    const bar = document.getElementById('d-filter');
+    if(bar) bar.style.display = show ? '' : 'none';
+  }
+
+  // Everything that makes this look like the general Portfolio page rather
+  // than one specific collection: the "Every genre, one page" intro/hero at
+  // the top, and the "Browse Prints for Purchase" banner at the bottom.
+  // Hidden together during collection detail view so it genuinely reads as
+  // its own page, per spec, not the Portfolio page with something stacked
+  // on top of it.
+  function showPageChrome(show){
+    const intro = document.getElementById('d-intro');
+    const printCta = document.getElementById('d-printcta');
+    if(intro) intro.style.display = show ? '' : 'none';
+    if(printCta) printCta.style.display = show ? '' : 'none';
+  }
+
+  function setActiveTab(hashValue){
+    document.querySelectorAll('.f-tab[data-genre], .f-tab.collections-tab').forEach(t=>{
+      const match = t.hasAttribute('data-genre') ? (t.dataset.genre===hashValue) : (hashValue==='collections');
+      t.classList.toggle('active', match);
+    });
+  }
+
+  function clearCollectionHead(){
+    const head = document.getElementById('collectionDetailHead');
+    if(head){ head.style.display='none'; head.innerHTML=''; }
+  }
+
+  function showGenreView(genreSlug){
+    showFilterBar(true);
+    clearCollectionHead();
+    showPageChrome(true);
+    const grid = document.getElementById('photoGrid');
+    if(!grid) return;
+    grid.classList.remove('collections-grid');
+    setActiveTab(genreSlug);
+    // The grid may currently hold Collection tiles (or nothing at all, if
+    // this is the very first render) rather than genre tiles - rebuild it
+    // from the real data whenever that data exists, instead of assuming
+    // whatever's already in the DOM is correct. Before data has loaded,
+    // GENRES is empty and the static placeholder grid is left alone.
+    if(GENRES.length) renderGrid(GENRES);
+    document.querySelectorAll('.shot[data-genre]').forEach(s=>{
+      const isEmpty = s.classList.contains('shot-empty');
+      // "All" should only ever show real photos - an empty genre's
+      // placeholder card has no business appearing mixed in with everyone
+      // else's actual work. A specific genre's own tab still shows its own
+      // placeholder correctly, matched purely by data-genre, the same way
+      // for every genre - never hardcoded to any one of them.
+      const match = genreSlug==='all' ? !isEmpty : (s.dataset.genre===genreSlug);
+      s.classList.toggle('hidden-shot', !match);
+    });
+  }
+
+  function renderCollectionsGrid(){
+    const grid = document.getElementById('photoGrid');
+    if(!grid) return;
+    grid.classList.add('collections-grid');
+    if(!COLLECTIONS.length){
+      grid.innerHTML = '<div class="shot shot-empty"><span class="empty-msg"><b>Nothing here yet</b>Collections coming soon!</span></div>';
+      return;
+    }
+    grid.innerHTML = COLLECTIONS.map(c=>
+      '<button type="button" class="collection-tile" data-collection="'+esc(c.slug)+'">'
+      + (c.cover ? '<img src="'+esc(c.cover)+'" alt="'+esc(c.name)+'">' : '')
+      + '<span class="ct-name">'+esc(c.name)+'</span>'
+      + '</button>'
+    ).join('');
+    grid.querySelectorAll('.collection-tile').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ location.hash = 'collections/'+btn.dataset.collection; });
+    });
+  }
+
+  function showCollectionsListView(){
+    showFilterBar(true);
+    clearCollectionHead();
+    showPageChrome(true);
+    setActiveTab('collections');
+    renderCollectionsGrid();
+  }
+
+  function showCollectionDetailView(slug){
+    const c = COLLECTIONS.find(x=>x.slug===slug);
+    if(!c){ location.hash = 'collections'; return; } // unknown collection - fall back to the list rather than show nothing
+    showFilterBar(false);
+    showPageChrome(false);
+    const head = document.getElementById('collectionDetailHead');
+    const grid = document.getElementById('photoGrid');
+    if(!head || !grid) return;
+    grid.classList.remove('collections-grid');
+    head.style.display = '';
+    head.innerHTML = '<a class="collection-back">&larr; Back to Collections</a>'
+      + (c.cover ? '<div class="collection-hero has-photo"><span class="photo-fit no-cap"><img src="'+esc(c.cover)+'" alt="'+esc(c.name)+'"></span></div>' : '')
+      + '<div class="collection-head"><h1>'+esc(c.name)+'</h1>'
+      + (c.story ? '<p class="story">'+esc(c.story)+'</p>' : '')
+      + '</div>';
+    head.querySelector('.collection-back').addEventListener('click', ()=>{ location.hash = 'collections'; });
+
+    grid.innerHTML = c.photos.length
+      ? c.photos.map((url,i)=>'<div class="shot" data-idx="'+i+'"><img src="'+esc(url)+'" alt="'+esc(c.name)+'"></div>').join('')
+      : '<div class="shot shot-empty"><span class="empty-msg"><b>Nothing here yet</b>Photos coming soon!</span></div>';
+    grid.querySelectorAll('.shot[data-idx]').forEach(el=>{
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', ()=> openLightbox(c.photos, parseInt(el.dataset.idx,10)));
+    });
+    window.scrollTo({top:0, behavior:'instant'}); // reads as its own page - always starts at the top
+  }
+
+  let scrolledForInitialHash = false;
+  function applyRoute(){
+    const h = decodeURIComponent(location.hash.replace('#',''));
+    let handled = true;
+    if(!h || h==='all')                       showGenreView('all');
+    else if(h==='collections')                showCollectionsListView();
+    else if(h.indexOf('collections/')===0)    showCollectionDetailView(h.slice('collections/'.length));
+    else {
+      // Only treat this as a genre if it's actually a known one (from data,
+      // or from the static placeholder grid before data has loaded) -
+      // anything else, like the #d-intro/#d-filter side-dot anchors, isn't
+      // ours to handle, so leave it alone for the browser's native anchor
+      // scroll rather than blank the grid over an unrecognised hash.
+      const knownStatic = [...document.querySelectorAll('.shot[data-genre]')].map(s=>s.dataset.genre);
+      const known = new Set([...GENRES.map(g=>g.slug), ...knownStatic]);
+      if(known.has(h)) showGenreView(h);
+      else handled = false;
+    }
+    if(handled && h && !scrolledForInitialHash){
+      scrolledForInitialHash = true;
+      setTimeout(()=>{
+        const grid = document.getElementById('d-grid');
+        if(grid) grid.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 50);
+    }
+  }
+  window.addEventListener('hashchange', applyRoute);
+
+  // ---------------------------------------------------------------------
+  // Lightbox - identical to the one on the Home page, so browsing photos
+  // inside a collection feels like the same site throughout.
+  // ---------------------------------------------------------------------
+  let lbPhotos = [], lbIndex = 0;
+  function openLightbox(photos, startIndex){
+    lbPhotos = photos; lbIndex = startIndex;
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function updateLightbox(){
+    document.getElementById('lbImage').src = lbPhotos[lbIndex];
+    document.getElementById('lbCount').textContent = (lbIndex+1)+' / '+lbPhotos.length;
+  }
+  function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); }
+  const lb = document.getElementById('lightbox');
+  if(lb){
+    lb.querySelector('.lb-close').addEventListener('click', closeLightbox);
+    lb.querySelector('.lb-prev').addEventListener('click', ()=>{ lbIndex=(lbIndex-1+lbPhotos.length)%lbPhotos.length; updateLightbox(); });
+    lb.querySelector('.lb-next').addEventListener('click', ()=>{ lbIndex=(lbIndex+1)%lbPhotos.length; updateLightbox(); });
+    lb.addEventListener('click', e=>{ if(e.target.id==='lightbox') closeLightbox(); });
+    document.addEventListener('keydown', e=>{
+      if(!lb.classList.contains('open')) return;
+      if(e.key==='Escape') closeLightbox();
+      if(e.key==='ArrowLeft') lb.querySelector('.lb-prev').click();
+      if(e.key==='ArrowRight') lb.querySelector('.lb-next').click();
+    });
   }
 
   function renderPortfolio(rows, featuredRows){
@@ -602,17 +859,20 @@
     if(hero) fillSlot(document.getElementById('pfHeroPhoto'),
                       hero.photo, hero.label, hero.label || 'Signature portfolio image');
 
-    const genres = deriveGenres(rows, featuredRows);
-    if(!genres.length) return; // nothing submitted yet - static placeholders stay visible
+    GENRES = deriveGenres(rows, featuredRows);
+    COLLECTIONS = deriveCollections(rows);
+    if(!GENRES.length && !COLLECTIONS.length) return; // nothing submitted yet - static placeholders stay visible
 
-    renderFilterBar(genres);
-    renderGrid(genres);
-    renderNavDropdown(genres);
-    wireFilterTabs(); // DOM was just replaced - re-bind clicks and re-check the #hash
+    if(GENRES.length){
+      renderFilterBar(GENRES);
+      renderNavDropdown(GENRES);
+    }
+    applyRoute(); // DOM was just replaced - re-apply whatever view the #hash calls for
   }
 
   function loadPortfolio(){
-    if(!SITE_CSV_URL || SITE_CSV_URL.includes('PASTE_YOUR')) return;
+    if(!SITE_CSV_URL || SITE_CSV_URL.includes('PASTE_YOUR')) { applyRoute(); return; }
+    applyRoute(); // route the static placeholder content immediately, don't wait on the network
     fetch(SITE_CSV_URL)
       .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
       .then(text=>{

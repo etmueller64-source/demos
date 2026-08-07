@@ -30,7 +30,9 @@
   .concept-banner b{color:var(--amber);}
 
   /* header, Jen-Short-inspired: clean, logo left, dropdown services */
-  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);}
+  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);transition:transform .32s ease;}
+  /* Slides fully out of view on scroll-down, back in on scroll-up - so it stops permanently eating screen space meant for photos, per feedback. */
+  header.nav-hidden{transform:translateY(-100%);}
   .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:20px 40px;}
   .brand{display:flex;align-items:center;gap:12px;}
   .brand-logo{height:52px;width:auto;display:block;}
@@ -228,6 +230,7 @@
           <a href="portfolio.html#maternity">Maternity</a>
           <a href="portfolio.html#pets">Pets</a>
           <a href="portfolio.html#sports">Sports</a>
+          <a href="portfolio.html#collections" style="font-weight:600;">Collections</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -364,6 +367,36 @@
 
 <script>
 (function(){
+  // Collapsing header on scroll: slides fully out of view scrolling down
+  // (so it stops permanently blocking the top third of every photo-heavy
+  // page), slides back in immediately scrolling up (so navigation is never
+  // more than one upward scroll away). Stays visible near the very top so
+  // it doesn't flicker in and out right at the start of the page.
+  (function(){
+    const header = document.querySelector('header');
+    if(!header) return;
+    const filterBar = document.querySelector('.filter-bar'); // only exists on the Portfolio page
+    const SHOW_NEAR_TOP = 120;
+    let lastY = window.scrollY, hidden = false, ticking = false;
+    function setHidden(state){
+      if(state === hidden) return;
+      hidden = state;
+      header.classList.toggle('nav-hidden', hidden);
+      if(filterBar) filterBar.classList.toggle('nav-hidden', hidden);
+    }
+    function onScroll(){
+      const y = Math.max(0, window.scrollY);
+      if(y <= SHOW_NEAR_TOP) setHidden(false);
+      else if(y > lastY) setHidden(true);   // scrolling down
+      else if(y < lastY) setHidden(false);  // scrolling up
+      lastY = y;
+      ticking = false;
+    }
+    addEventListener('scroll', ()=>{
+      if(!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+    }, {passive:true});
+  })();
+
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
@@ -556,6 +589,7 @@
     const dd = document.querySelector('.has-drop .dropdown');
     if(!dd) return;
     dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections</a>'
       + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
   }
 
