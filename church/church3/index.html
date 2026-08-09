@@ -122,6 +122,19 @@
   .map-placeholder{aspect-ratio:4/3;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
   @media (max-width:860px){ .visit-grid{grid-template-columns:1fr;} }
 
+  /* -------- upcoming-events ticker: auto-scrolling banner, next 5 featured events -------- */
+  .ticker-band{background:linear-gradient(100deg,var(--blue-deep),var(--blue));overflow:hidden;position:relative;}
+  .ticker-band::before,.ticker-band::after{content:"";position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;}
+  .ticker-band::before{left:0;background:linear-gradient(90deg,var(--blue-deep),transparent);}
+  .ticker-band::after{right:0;background:linear-gradient(270deg,var(--blue),transparent);}
+  .ticker-track{display:flex;width:max-content;animation:ticker-scroll 34s linear infinite;}
+  .ticker-band:hover .ticker-track{animation-play-state:paused;}
+  .ticker-item{display:flex;align-items:baseline;gap:10px;padding:16px 40px;white-space:nowrap;color:#fff;font-size:14.5px;font-weight:500;border-right:1px solid rgba(255,255,255,0.22);}
+  .ticker-item .tk-date{font-family:'Frank Ruhl Libre',serif;font-weight:600;color:var(--gold);}
+  @keyframes ticker-scroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media(prefers-reduced-motion:reduce){ .ticker-track{animation:none;} }
+  @media(max-width:700px){ .ticker-item{padding:14px 26px;font-size:13.5px;} }
+
   footer{padding:44px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
 
   .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
@@ -143,6 +156,22 @@
     <div class="nav-cta"><a class="btn btn-primary" href="contact.html">Plan a Visit</a></div>
   </div>
 </header>
+
+<div class="ticker-band">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="tk-date">Sept 14</span><span>Community Welcome Sunday</span></div>
+    <div class="ticker-item"><span class="tk-date">Sept 21</span><span>Family Potluck Evening</span></div>
+    <div class="ticker-item"><span class="tk-date">Oct 5</span><span>Fall Community Cleanup</span></div>
+    <div class="ticker-item"><span class="tk-date">Oct 19</span><span>Youth Games Night</span></div>
+    <div class="ticker-item"><span class="tk-date">Nov 2</span><span>Community Welcome Sunday</span></div>
+    <!-- duplicated once below so the scroll loop is seamless - see JS -->
+    <div class="ticker-item"><span class="tk-date">Sept 14</span><span>Community Welcome Sunday</span></div>
+    <div class="ticker-item"><span class="tk-date">Sept 21</span><span>Family Potluck Evening</span></div>
+    <div class="ticker-item"><span class="tk-date">Oct 5</span><span>Fall Community Cleanup</span></div>
+    <div class="ticker-item"><span class="tk-date">Oct 19</span><span>Youth Games Night</span></div>
+    <div class="ticker-item"><span class="tk-date">Nov 2</span><span>Community Welcome Sunday</span></div>
+  </div>
+</div>
 
 <section class="hero">
   <div class="wrap hero-grid">
@@ -280,6 +309,70 @@
 <script>
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+
+  // ============================================================
+  // Ticker banner - the next 5 "FEATURED:" calendar events, same public
+  // calendar feed as events.html. Since it's just today's date compared
+  // against the calendar every time the page loads, it moves forward on
+  // its own as events pass - nothing to manually refresh.
+  // ============================================================
+  (function(){
+    const CALENDAR_ICS_URL = "PASTE_YOUR_PUBLIC_CALENDAR_ICS_URL_HERE";
+    const FEATURED_PREFIX = /^\s*featured:\s*/i;
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+    function unfoldICS(text){ return text.replace(/\r\n/g,'\n').replace(/\n[ \t]/g,''); }
+    function unescapeICSText(s){ return (s||'').replace(/\\n/gi,'\n').replace(/\\,/g,',').replace(/\\;/g,';').replace(/\\\\/g,'\\'); }
+    function parseICSDate(raw){
+      const m = (raw||'').match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?/);
+      if(!m) return null;
+      const y=+m[1], mo=+m[2]-1, d=+m[3], h=+(m[4]||0), mi=+(m[5]||0), s=+(m[6]||0);
+      return m[7] ? new Date(Date.UTC(y,mo,d,h,mi,s)) : new Date(y,mo,d,h,mi,s);
+    }
+    function parseICS(text){
+      const lines = unfoldICS(text).split('\n');
+      const events = []; let cur = null;
+      lines.forEach(line=>{
+        if(line.indexOf('BEGIN:VEVENT')===0) cur = {};
+        else if(line.indexOf('END:VEVENT')===0){ if(cur) events.push(cur); cur = null; }
+        else if(cur){
+          const idx = line.indexOf(':');
+          if(idx===-1) return;
+          const key = line.slice(0,idx).split(';')[0].toUpperCase();
+          const value = line.slice(idx+1);
+          if(key==='SUMMARY') cur.title = unescapeICSText(value);
+          else if(key==='DTSTART') cur.start = parseICSDate(value);
+        }
+      });
+      return events.filter(e=>e.title && e.start);
+    }
+
+    function renderTicker(events){
+      const track = document.getElementById('tickerTrack');
+      if(!track) return;
+      if(!events.length) return; // nothing scheduled - static demo strip stays as-is
+      const itemsHTML = events.map(e =>
+        '<div class="ticker-item"><span class="tk-date">'+MONTHS[e.start.getMonth()]+' '+e.start.getDate()+'</span><span>'+esc(e.title)+'</span></div>'
+      ).join('');
+      // Duplicated once so the CSS scroll animation (translateX to -50%) loops seamlessly.
+      track.innerHTML = itemsHTML + itemsHTML;
+    }
+
+    if(!CALENDAR_ICS_URL || CALENDAR_ICS_URL.includes('PASTE_YOUR')) return; // static demo strip stays visible
+    fetch(CALENDAR_ICS_URL)
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(icsText=>{
+        const now = new Date();
+        const next5 = parseICS(icsText)
+          .filter(e => FEATURED_PREFIX.test(e.title) && e.start >= now)
+          .map(e => ({ title: e.title.replace(FEATURED_PREFIX,'').trim(), start: e.start }))
+          .sort((a,b)=>a.start-b.start)
+          .slice(0,5);
+        renderTicker(next5);
+      })
+      .catch(err=> console.error('Ticker calendar feed failed to load:', err));
+  })();
 </script>
 
 </body>
