@@ -18,7 +18,7 @@
   --butter:#F9E7B6;
   --sand-mist:#F1ECE4;
   --sky-mist:#E9F0F7;
-  --butter-mist:#FCF4DC;
+  --butter-mist:#FEF9EB;
   --hairline:#DED5C8;
   --serif:'Cormorant Garamond',Georgia,serif;
   --sans:'Jost',Helvetica,Arial,sans-serif;
@@ -43,7 +43,7 @@ a{color:inherit;text-decoration:none}
 .ribbon span{flex:1}
 .ribbon span:nth-child(1){background:var(--butter)}
 .ribbon span:nth-child(2){background:var(--sky)}
-.ribbon span:nth-child(3){background:var(--sand)}
+.ribbon span:nth-child(3){display:none}
 .ribbon span:nth-child(4){background:var(--ivory)}
 .ribbon span:nth-child(5){background:var(--sky)}
 .ribbon span:nth-child(6){background:var(--butter)}
@@ -358,10 +358,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   // clicking can ever outrun the safe buffer and run out of photos.
   function initCarousel(outer){
     const track = outer.querySelector('.carousel-track');
-    const viewport = outer.querySelector('.carousel');
     const prevBtn = outer.querySelector('.car-arrow.prev');
     const nextBtn = outer.querySelector('.car-arrow.next');
-    if(!track || !viewport || !prevBtn || !nextBtn) return;
+    if(!track || !prevBtn || !nextBtn) return;
 
     const real = [...track.children];
     const N = real.length;
@@ -381,7 +380,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
     function offsetForPos(p){
       const items = all();
-      const outerWidth = viewport.clientWidth;
+      const outerWidth = outer.clientWidth;
       const g = gapPx();
       let x = 0;
       for(let k = 0; k < p; k++) x += items[k].offsetWidth + g;
