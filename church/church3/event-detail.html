@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spring Community Cleanup — Newmarket Church of the Nazarene</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F5F0; --ink:#2B2A28; --ink-soft:#66625B;
+    --blue:#5E7C8A; --blue-deep:#3F5A67; --gold:#C7A046; --sage:#7C8F6E;
+    --white:#FFFFFF; --line:#E4DFD3; --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Work Sans',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Frank Ruhl Libre',serif;font-weight:600;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;} a{color:inherit;text-decoration:none;} img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:999px;font-size:14.5px;font-weight:600;transition:transform .2s ease,box-shadow .2s ease;}
+  .btn-primary{background:var(--blue-deep);color:var(--white);box-shadow:0 14px 28px rgba(63,90,103,0.28);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(63,90,103,0.34);}
+  .arch{border-radius:50% 50% 10px 10px / 30% 30% 10px 10px;overflow:hidden;position:relative;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(247,245,240,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;font-family:'Frank Ruhl Libre',serif;font-size:19px;font-weight:600;}
+  .brand-mark{width:38px;height:38px;background:linear-gradient(160deg,var(--blue),var(--blue-deep));border-radius:50% 50% 8px 8px / 30% 30% 8px 8px;}
+  nav.links{display:flex;gap:34px;font-size:14.5px;font-weight:500;color:var(--ink-soft);}
+  nav.links a:hover{color:var(--blue-deep);}
+  .nav-cta{display:flex;align-items:center;gap:18px;}
+  @media (max-width:860px){ nav.links{display:none;} }
+
+  .back-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-soft);margin:40px 0 30px;}
+  .back-link:hover{color:var(--blue-deep);}
+
+  .ev-hero{aspect-ratio:21/8;margin-bottom:40px;}
+  .ev-head{text-align:center;max-width:640px;margin:0 auto 56px;}
+  .ev-head span.date{display:block;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;margin-bottom:14px;}
+  .ev-head h1{font-size:clamp(30px,4vw,44px);margin-bottom:16px;}
+  .ev-head p{color:var(--ink-soft);font-size:16px;}
+
+  /* -------- masonry gallery: every photo shows in full, no cropping -------- */
+  .gallery{column-count:3;column-gap:16px;padding-bottom:96px;}
+  .gallery .ph{break-inside:avoid;margin:0 0 16px;border-radius:10px;overflow:hidden;box-shadow:0 16px 34px rgba(63,90,103,0.1);}
+  @media(max-width:860px){ .gallery{column-count:2;} }
+  @media(max-width:560px){ .gallery{column-count:1;} }
+
+  footer{padding:44px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="index.html"><div class="brand-mark"></div>Newmarket&nbsp;Nazarene</a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta"><a class="btn btn-primary" href="contact.html">Plan a Visit</a></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <a class="back-link" href="events.html">&larr; Back to Events</a>
+
+  <div class="arch ev-hero" id="evHero" style="background:linear-gradient(150deg,#8FA7B4,#5F7350);"></div>
+
+  <div class="ev-head">
+    <span class="date" id="evDate">May 2026</span>
+    <h1 id="evTitle">Spring Community Cleanup</h1>
+    <p id="evDesc">A morning spent tidying up downtown Newmarket alongside our neighbours — proof that a few hours and some garbage bags go a long way.</p>
+  </div>
+
+  <div class="gallery" id="evGallery">
+    <div class="ph" style="aspect-ratio:3/4;background:linear-gradient(150deg,#8FA7B4,#3F5A67);"></div>
+    <div class="ph" style="aspect-ratio:4/3;background:linear-gradient(150deg,#B7C2A6,#5F7350);"></div>
+    <div class="ph" style="aspect-ratio:1/1;background:linear-gradient(150deg,#D9C079,#A57F2C);"></div>
+    <div class="ph" style="aspect-ratio:3/4;background:linear-gradient(150deg,#8FA7B4,#5F7350);"></div>
+    <div class="ph" style="aspect-ratio:4/5;background:linear-gradient(150deg,#B7C2A6,#3F5A67);"></div>
+    <div class="ph" style="aspect-ratio:1/1;background:linear-gradient(150deg,#D9C079,#5F7350);"></div>
+    <div class="ph" style="aspect-ratio:4/3;background:linear-gradient(150deg,#8FA7B4,#A57F2C);"></div>
+    <div class="ph" style="aspect-ratio:3/4;background:linear-gradient(150deg,#B7C2A6,#546B45);"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">Newmarket Church of the Nazarene · Downtown Newmarket, Ontario</div>
+</footer>
+
+<script>
+(function(){
+  // Same data pipeline as events.html: pull the matching "FEATURED:" calendar
+  // event by slug (for the real date/title/description), then pull that
+  // event's photos from the Sheet (matched the same way). If neither source
+  // is configured yet, the static sample content above stays exactly as-is.
+  const CALENDAR_ICS_URL = "PASTE_YOUR_PUBLIC_CALENDAR_ICS_URL_HERE";
+  const PHOTOS_CSV_URL   = "PASTE_YOUR_PHOTOS_SHEET_CSV_URL_HERE";
+  const FEATURED_PREFIX  = /^\s*featured:\s*/i;
+
+  function slugify(s){
+    return String(s||'').trim().toLowerCase()
+      .replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  }
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  function unfoldICS(text){ return text.replace(/\r\n/g,'\n').replace(/\n[ \t]/g,''); }
+  function unescapeICSText(s){ return (s||'').replace(/\\n/gi,'\n').replace(/\\,/g,',').replace(/\\;/g,';').replace(/\\\\/g,'\\'); }
+  function parseICSDate(raw){
+    const m = (raw||'').match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?/);
+    if(!m) return null;
+    const y=+m[1], mo=+m[2]-1, d=+m[3], h=+(m[4]||0), mi=+(m[5]||0), s=+(m[6]||0);
+    return m[7] ? new Date(Date.UTC(y,mo,d,h,mi,s)) : new Date(y,mo,d,h,mi,s);
+  }
+  function parseICS(text){
+    const lines = unfoldICS(text).split('\n');
+    const events = []; let cur = null;
+    lines.forEach(line=>{
+      if(line.indexOf('BEGIN:VEVENT')===0) cur = {};
+      else if(line.indexOf('END:VEVENT')===0){ if(cur) events.push(cur); cur = null; }
+      else if(cur){
+        const idx = line.indexOf(':');
+        if(idx===-1) return;
+        const key = line.slice(0,idx).split(';')[0].toUpperCase();
+        const value = line.slice(idx+1);
+        if(key==='SUMMARY') cur.title = unescapeICSText(value);
+        else if(key==='DTSTART') cur.start = parseICSDate(value);
+        else if(key==='DESCRIPTION') cur.description = unescapeICSText(value);
+      }
+    });
+    return events.filter(e=>e.title && e.start);
+  }
+
+  function parseCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+  function extractPhotoRows(rawRows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex = rawRows.findIndex(r=>r.some(c=>norm(c)==='event title'));
+    if(headerIndex===-1) return [];
+    const header = rawRows[headerIndex].map(norm);
+    const find = (...names)=> header.findIndex(h=>names.includes(h));
+    const cols = { title: find('event title'), cover: find('cover photo'), gallery: find('gallery photos') };
+    const get = (r,i)=> (i>=0 && r[i]!=null) ? r[i].trim() : '';
+    return rawRows.slice(headerIndex+1).map(r=>({
+      title: get(r,cols.title),
+      cover: get(r,cols.cover),
+      gallery: get(r,cols.gallery).split(',').map(s=>s.trim()).filter(Boolean)
+    })).filter(r=>r.title);
+  }
+
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function render(event, photoRow){
+    document.title = event.title + ' — Newmarket Church of the Nazarene';
+    document.getElementById('evTitle').textContent = event.title;
+    document.getElementById('evDate').textContent = MONTHS[event.start.getMonth()] + ' ' + event.start.getFullYear();
+    document.getElementById('evDesc').textContent = event.description || '';
+
+    const hero = document.getElementById('evHero');
+    const gallery = document.getElementById('evGallery');
+
+    if(photoRow && photoRow.cover){
+      hero.style.background = 'none';
+      hero.innerHTML = '<img src="'+esc(photoRow.cover)+'" alt="'+esc(event.title)+'" style="width:100%;height:100%;object-fit:cover;">';
+    }
+    if(photoRow && photoRow.gallery.length){
+      gallery.innerHTML = photoRow.gallery.map(url=>
+        '<div class="ph"><img src="'+esc(url)+'" alt="'+esc(event.title)+'" style="width:100%;display:block;"></div>'
+      ).join('');
+    } else {
+      // We have a real matched event but no photos submitted for it yet.
+      gallery.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--ink-soft);">'
+        + '<h3 style="margin-bottom:8px;">Nothing here yet</h3><p>Photos from this event are coming soon.</p></div>';
+    }
+  }
+
+  function loadEventDetail(){
+    const slug = new URLSearchParams(location.search).get('event');
+    if(!slug) return; // no ?event= given - static sample content stays as-is
+    if(!CALENDAR_ICS_URL || CALENDAR_ICS_URL.includes('PASTE_YOUR')) return; // not configured yet
+
+    fetch(CALENDAR_ICS_URL)
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(icsText=>{
+        const featured = parseICS(icsText)
+          .filter(e => FEATURED_PREFIX.test(e.title))
+          .map(e => ({ title: e.title.replace(FEATURED_PREFIX,'').trim(), start: e.start, description: e.description||'' }));
+        const match = featured.find(e => slugify(e.title) === slug);
+        if(!match){
+          document.getElementById('evTitle').textContent = 'Event not found';
+          document.getElementById('evDesc').textContent = 'We couldn\'t find that event — it may have been removed or renamed.';
+          document.getElementById('evGallery').innerHTML = '';
+          return;
+        }
+        if(!PHOTOS_CSV_URL || PHOTOS_CSV_URL.includes('PASTE_YOUR')){ render(match, null); return; }
+        fetch(PHOTOS_CSV_URL)
+          .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+          .then(csvText=>{
+            const rows = extractPhotoRows(parseCSV(csvText));
+            const photoRow = rows.find(r => slugify(r.title) === slug) || null;
+            render(match, photoRow);
+          })
+          .catch(err=>{ console.error('Photo sheet failed to load:', err); render(match, null); });
+      })
+      .catch(err=> console.error('Calendar feed failed to load:', err));
+  }
+  loadEventDetail();
+})();
+</script>
+
+</body>
+</html>

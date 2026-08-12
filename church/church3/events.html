@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events — Newmarket Church of the Nazarene</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F5F0; --ink:#2B2A28; --ink-soft:#66625B;
+    --blue:#5E7C8A; --blue-deep:#3F5A67; --gold:#C7A046; --sage:#7C8F6E;
+    --white:#FFFFFF; --line:#E4DFD3; --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Work Sans',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Frank Ruhl Libre',serif;font-weight:600;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;} a{color:inherit;text-decoration:none;} img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:999px;font-size:14.5px;font-weight:600;transition:transform .2s ease,box-shadow .2s ease;}
+  .btn-primary{background:var(--blue-deep);color:var(--white);box-shadow:0 14px 28px rgba(63,90,103,0.28);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(63,90,103,0.34);}
+  .arch{border-radius:50% 50% 10px 10px / 30% 30% 10px 10px;overflow:hidden;position:relative;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(247,245,240,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;font-family:'Frank Ruhl Libre',serif;font-size:19px;font-weight:600;}
+  .brand-mark{width:38px;height:38px;background:linear-gradient(160deg,var(--blue),var(--blue-deep));border-radius:50% 50% 8px 8px / 30% 30% 8px 8px;}
+  nav.links{display:flex;gap:34px;font-size:14.5px;font-weight:500;color:var(--ink-soft);}
+  nav.links a:hover{color:var(--blue-deep);}
+  nav.links a.on{color:var(--blue-deep);}
+  .nav-cta{display:flex;align-items:center;gap:18px;}
+  @media (max-width:860px){ nav.links{display:none;} }
+
+  .page-hero{padding:64px 0 56px;text-align:center;}
+  .page-hero h1{font-size:clamp(34px,4.6vw,54px);margin:18px 0 16px;}
+  .page-hero p{color:var(--ink-soft);font-size:17px;max-width:560px;margin:0 auto;}
+
+  section{padding:0 0 96px;}
+  .section-head{max-width:600px;margin-bottom:40px;}
+  .section-head h2{font-size:clamp(26px,3.2vw,34px);margin-top:14px;}
+  .section-head p{color:var(--ink-soft);margin-top:12px;font-size:15.5px;}
+
+  /* -------- carousel: same mechanics used across every site we've built -------- */
+  .carousel-outer{position:relative;padding:0 62px;margin-bottom:10px;}
+  .carousel{overflow:hidden;}
+  .carousel-track{display:flex;gap:24px;transition:transform .45s cubic-bezier(.2,.65,.25,1);will-change:transform;}
+  .car-item{flex:0 0 auto;transform:scale(.9);transition:transform .4s ease;}
+  .car-item.is-center{transform:scale(1.08);z-index:2;}
+  .car-arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:var(--white);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;font-size:16px;color:var(--ink);transition:background .2s,border-color .2s;padding:0;}
+  .car-arrow:hover{background:var(--bg);border-color:var(--blue);}
+  .car-arrow.prev{left:0;}
+  .car-arrow.next{right:0;}
+  @media(max-width:760px){ .carousel-outer{padding:0 6px;} .car-arrow{width:40px;height:40px;font-size:14px;} }
+
+  /* -------- upcoming: text-forward, no photo - nothing to fake here, it hasn't happened yet -------- */
+  .ev-upcoming{width:270px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;box-shadow:0 10px 26px rgba(63,90,103,0.06);}
+  .car-item.is-center .ev-upcoming{box-shadow:0 22px 44px rgba(63,90,103,0.14);}
+  .ev-upcoming .ev-date{display:flex;align-items:baseline;gap:8px;margin-bottom:16px;}
+  .ev-upcoming .ev-date b{font-family:'Frank Ruhl Libre',serif;font-size:30px;color:var(--blue-deep);}
+  .ev-upcoming .ev-date span{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);}
+  .ev-upcoming h3{font-size:18px;margin-bottom:10px;}
+  .ev-upcoming p{color:var(--ink-soft);font-size:14px;margin-bottom:16px;}
+  .ev-tag{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);}
+  .ev-tag.past{color:var(--blue-deep);}
+
+  /* -------- past: photo-forward, links into that event's gallery -------- */
+  .ev-past{display:block;width:270px;}
+  .ev-photo{aspect-ratio:4/5;box-shadow:0 10px 26px rgba(63,90,103,0.1);transition:box-shadow .4s ease;}
+  .car-item.is-center .ev-photo{box-shadow:0 26px 50px rgba(63,90,103,0.2);}
+  .ev-past-copy{padding-top:16px;}
+  .ev-past-copy h3{font-size:17px;margin-bottom:6px;}
+  .ev-past-copy span.date{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;}
+
+  .no-photos-note{background:var(--white);border:1px dashed var(--line);border-radius:var(--radius);padding:20px 24px;font-size:14px;color:var(--ink-soft);max-width:640px;margin:0 auto 40px;text-align:center;}
+  .no-photos-note b{color:var(--ink);}
+
+  /* -------- a past event with no photo submission yet: same size/shape as a
+     photo card, but honest about there being nothing to show yet -------- */
+  .ev-photo.pending{background:var(--white)!important;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;}
+  .ev-photo.pending span{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+
+  footer{padding:44px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .rv.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="index.html"><div class="brand-mark"></div>Newmarket&nbsp;Nazarene</a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html">Ministries</a>
+      <a href="events.html" class="on">Events</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta"><a class="btn btn-primary" href="contact.html">Plan a Visit</a></div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">Events</div>
+    <h1>What's happening, and what just did</h1>
+    <p>A look at what's coming up, and a few photos from the gatherings behind us.</p>
+  </div>
+</section>
+
+<!-- UPCOMING -->
+<section>
+  <div class="wrap">
+    <div class="section-head rv">
+      <div class="eyebrow">Coming up</div>
+      <h2>Upcoming events</h2>
+      <p>These haven't happened yet, so there's nothing to photograph — check back after for the gallery.</p>
+    </div>
+  </div>
+  <div class="carousel-outer rv" id="upcomingCarousel">
+    <button class="car-arrow prev" aria-label="Previous event">&#8592;</button>
+    <div class="carousel" data-carousel>
+      <div class="carousel-track" id="upcomingTrack">
+        <div class="car-item"><a href="#"><div class="ev-upcoming">
+          <div class="ev-date"><b>14</b><span>Sept</span></div>
+          <h3>Community Welcome Sunday</h3>
+          <p>Coffee, conversation, and an easy first visit — stay after the service.</p>
+          <span class="ev-tag">Upcoming</span>
+        </div></a></div>
+        <div class="car-item"><a href="#"><div class="ev-upcoming">
+          <div class="ev-date"><b>21</b><span>Sept</span></div>
+          <h3>Family Potluck Evening</h3>
+          <p>Bring a dish, bring the kids — everyone's welcome at the table.</p>
+          <span class="ev-tag">Upcoming</span>
+        </div></a></div>
+        <div class="car-item"><a href="#"><div class="ev-upcoming">
+          <div class="ev-date"><b>05</b><span>Oct</span></div>
+          <h3>Fall Community Cleanup</h3>
+          <p>Serving our downtown Newmarket neighbours, rain or shine.</p>
+          <span class="ev-tag">Upcoming</span>
+        </div></a></div>
+        <div class="car-item"><a href="#"><div class="ev-upcoming">
+          <div class="ev-date"><b>19</b><span>Oct</span></div>
+          <h3>Youth Games Night</h3>
+          <p>An evening for the youth group — games, snacks, and good company.</p>
+          <span class="ev-tag">Upcoming</span>
+        </div></a></div>
+      </div>
+    </div>
+    <button class="car-arrow next" aria-label="Next event">&#8594;</button>
+  </div>
+</section>
+
+<!-- PAST -->
+<section>
+  <div class="wrap">
+    <div class="section-head rv">
+      <div class="eyebrow">Looking back</div>
+      <h2>Past events</h2>
+      <p>Click any event to see the photos from that day.</p>
+    </div>
+  </div>
+  <div class="carousel-outer rv" id="pastCarousel">
+    <button class="car-arrow prev" aria-label="Previous event">&#8592;</button>
+    <div class="carousel" data-carousel>
+      <div class="carousel-track" id="pastTrack">
+        <div class="car-item"><a href="event-detail.html" class="ev-past">
+          <div class="arch ev-photo" style="background:linear-gradient(150deg,#8FA7B4,#3F5A67);"></div>
+          <div class="ev-past-copy"><span class="date">August 2026</span><h3>Summer Block Party</h3><span class="ev-tag past">View Gallery &rarr;</span></div>
+        </a></div>
+        <div class="car-item"><a href="event-detail.html" class="ev-past">
+          <div class="arch ev-photo" style="background:linear-gradient(150deg,#B7C2A6,#5F7350);"></div>
+          <div class="ev-past-copy"><span class="date">July 2026</span><h3>Vacation Bible School</h3><span class="ev-tag past">View Gallery &rarr;</span></div>
+        </a></div>
+        <div class="car-item"><a href="event-detail.html" class="ev-past">
+          <div class="arch ev-photo" style="background:linear-gradient(150deg,#D9C079,#A57F2C);"></div>
+          <div class="ev-past-copy"><span class="date">June 2026</span><h3>Baptism Sunday</h3><span class="ev-tag past">View Gallery &rarr;</span></div>
+        </a></div>
+        <div class="car-item"><a href="event-detail.html" class="ev-past">
+          <div class="arch ev-photo" style="background:linear-gradient(150deg,#8FA7B4,#5F7350);"></div>
+          <div class="ev-past-copy"><span class="date">May 2026</span><h3>Spring Community Cleanup</h3><span class="ev-tag past">View Gallery &rarr;</span></div>
+        </a></div>
+      </div>
+    </div>
+    <button class="car-arrow next" aria-label="Next event">&#8594;</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Newmarket Church of the Nazarene · Downtown Newmarket, Ontario</div>
+</footer>
+
+<script>
+  function initCarousel(outer){
+    const track = outer.querySelector('.carousel-track');
+    const viewport = outer.querySelector('.carousel');
+    const prevBtn = outer.querySelector('.car-arrow.prev');
+    const nextBtn = outer.querySelector('.car-arrow.next');
+    if(!track || !viewport || !prevBtn || !nextBtn) return;
+
+    const real = [...track.children];
+    const N = real.length;
+    if(N < 2) return;
+
+    // Clone enough copies of the real list that there's always at least a
+    // full viewport-width of buffer on both sides of center - a small list
+    // (say, 4 events) on a wide screen needs more than the usual 3 copies,
+    // or the loop can genuinely run out of cloned items before it wraps
+    // around, leaving a visible gap instead of smoothly continuing.
+    let copies = 3;
+    while(copies < 9){
+      const approxItemWidth = (real[0].offsetWidth || 270) + 24;
+      if(approxItemWidth * N * copies > viewport.clientWidth * 3) break;
+      copies++;
+    }
+    for(let c = 1; c < copies; c++) real.forEach(it => track.appendChild(it.cloneNode(true)));
+
+    function all(){ return [...track.children]; }
+    let pos = N * Math.floor(copies / 2);
+
+    function gapPx(){
+      const cs = getComputedStyle(track);
+      return parseFloat(cs.columnGap || cs.gap || '0') || 0;
+    }
+    function offsetForPos(p){
+      const items = all();
+      const outerWidth = viewport.clientWidth;
+      const g = gapPx();
+      let x = 0;
+      for(let k = 0; k < p; k++) x += items[k].offsetWidth + g;
+      const centerItemWidth = items[p] ? items[p].offsetWidth : 0;
+      return -(x - (outerWidth - centerItemWidth) / 2);
+    }
+    function goTo(p, animate){
+      track.style.transition = animate ? '' : 'none';
+      const items = all();
+      items.forEach(it => { it.style.transition = animate ? '' : 'none'; });
+      track.style.transform = 'translateX(' + offsetForPos(p) + 'px)';
+      items.forEach((it,k) => it.classList.toggle('is-center', k === p));
+    }
+    function cycleWidthPx(){
+      const items = all();
+      const g = gapPx();
+      let w = 0;
+      for(let k = 0; k < N; k++) w += items[k].offsetWidth + g;
+      return w;
+    }
+    function currentTranslateXPx(){
+      const t = getComputedStyle(track).transform;
+      if(!t || t === 'none') return 0;
+      const m = new DOMMatrixReadOnly(t);
+      return m.m41;
+    }
+    function shiftReferenceFrame(deltaPx){
+      const cur = currentTranslateXPx();
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(' + (cur + deltaPx) + 'px)';
+      track.offsetHeight;
+    }
+    function ensureSafeZone(){
+      while(pos < N){ pos += N; shiftReferenceFrame(-cycleWidthPx()); }
+      while(pos > N * (copies - 1)){ pos -= N; shiftReferenceFrame(cycleWidthPx()); }
+    }
+    function step(dir){
+      pos += dir;
+      ensureSafeZone();
+      goTo(pos, true);
+    }
+    prevBtn.addEventListener('click', () => step(-1));
+    nextBtn.addEventListener('click', () => step(1));
+    goTo(pos, false);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => goTo(pos, false), 120);
+    });
+  }
+  // Carousels are initialized once the data pipeline below has decided what
+  // content to show (real events or the demo fallback) - never both, so
+  // click handlers never end up stacked on the same arrow buttons.
+
+  // ============================================================
+  // Live data pipeline
+  // ------------------------------------------------------------
+  // Upcoming/Past event LISTINGS come straight from a public Google
+  // Calendar - only events whose title starts with "FEATURED:" are pulled
+  // in (Sunday service and anything else stays invisible to the site,
+  // automatically, with nothing to exclude by hand). PHOTOS for past
+  // events come from a separate Sheet (fed by a simple Google Form),
+  // matched back to the calendar event by title.
+  // ============================================================
+  const CALENDAR_ICS_URL = "PASTE_YOUR_PUBLIC_CALENDAR_ICS_URL_HERE";
+  const PHOTOS_CSV_URL   = "PASTE_YOUR_PHOTOS_SHEET_CSV_URL_HERE";
+  const FEATURED_PREFIX  = /^\s*featured:\s*/i;
+
+  function slugify(s){
+    return String(s||'').trim().toLowerCase()
+      .replace(/&/g,'and')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  // -------- .ics parsing (just enough for single, non-recurring events -
+  // recurring VEVENTs with an RRULE are intentionally not expanded, since
+  // every event we care about is a one-off "FEATURED:" special, not a
+  // repeating series) --------
+  function unfoldICS(text){
+    return text.replace(/\r\n/g,'\n').replace(/\n[ \t]/g,'');
+  }
+  function unescapeICSText(s){
+    return (s||'').replace(/\\n/gi,'\n').replace(/\\,/g,',').replace(/\\;/g,';').replace(/\\\\/g,'\\');
+  }
+  function parseICSDate(raw){
+    const m = (raw||'').match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z)?)?/);
+    if(!m) return null;
+    const y=+m[1], mo=+m[2]-1, d=+m[3], h=+(m[4]||0), mi=+(m[5]||0), s=+(m[6]||0);
+    return m[7] ? new Date(Date.UTC(y,mo,d,h,mi,s)) : new Date(y,mo,d,h,mi,s);
+  }
+  function parseICS(text){
+    const lines = unfoldICS(text).split('\n');
+    const events = []; let cur = null;
+    lines.forEach(line=>{
+      if(line.indexOf('BEGIN:VEVENT')===0) cur = {};
+      else if(line.indexOf('END:VEVENT')===0){ if(cur) events.push(cur); cur = null; }
+      else if(cur){
+        const idx = line.indexOf(':');
+        if(idx===-1) return;
+        const key = line.slice(0,idx).split(';')[0].toUpperCase();
+        const value = line.slice(idx+1);
+        if(key==='SUMMARY') cur.title = unescapeICSText(value);
+        else if(key==='DTSTART') cur.start = parseICSDate(value);
+        else if(key==='DESCRIPTION') cur.description = unescapeICSText(value);
+      }
+    });
+    return events.filter(e=>e.title && e.start);
+  }
+
+  const MAX_EVENTS_SHOWN = 10; // "the next 10" / "the most recent 10" - change freely
+
+  function splitFeaturedEvents(rawEvents){
+    const now = new Date();
+    const featured = rawEvents
+      .filter(e => FEATURED_PREFIX.test(e.title))
+      .map(e => {
+        const title = e.title.replace(FEATURED_PREFIX,'').trim();
+        return { title, start: e.start, description: e.description||'', slug: slugify(title) };
+      });
+    return {
+      // Sorted so the soonest upcoming / most recent past events are first,
+      // then cut to the cap - so as today's date moves forward, an event
+      // that just happened quietly drops out of "upcoming" and appears at
+      // the front of "past" on its own, no one has to remove anything by hand.
+      upcoming: featured.filter(e=>e.start >= now).sort((a,b)=>a.start-b.start).slice(0, MAX_EVENTS_SHOWN),
+      past:     featured.filter(e=>e.start < now).sort((a,b)=>b.start-a.start).slice(0, MAX_EVENTS_SHOWN)
+    };
+  }
+
+  // -------- photo sheet (same CSV pattern used across every site) --------
+  function parseCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+  function extractPhotoRows(rawRows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex = rawRows.findIndex(r=>r.some(c=>norm(c)==='event title'));
+    if(headerIndex===-1) return [];
+    const header = rawRows[headerIndex].map(norm);
+    const find = (...names)=> header.findIndex(h=>names.includes(h));
+    const cols = { title: find('event title'), cover: find('cover photo'), gallery: find('gallery photos') };
+    const get = (r,i)=> (i>=0 && r[i]!=null) ? r[i].trim() : '';
+    return rawRows.slice(headerIndex+1).map(r=>({
+      title: get(r,cols.title),
+      cover: get(r,cols.cover),
+      gallery: get(r,cols.gallery).split(',').map(s=>s.trim()).filter(Boolean)
+    })).filter(r=>r.title);
+  }
+  function findPhotoRow(photoRows, title){
+    const key = slugify(title);
+    return photoRows.find(r => slugify(r.title) === key) || null;
+  }
+
+  // -------- rendering --------
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const GRADIENTS = [
+    'linear-gradient(150deg,#8FA7B4,#3F5A67)','linear-gradient(150deg,#B7C2A6,#5F7350)',
+    'linear-gradient(150deg,#D9C079,#A57F2C)','linear-gradient(150deg,#8FA7B4,#5F7350)'
+  ];
+
+  function renderUpcoming(events){
+    const track = document.getElementById('upcomingTrack');
+    if(!track) return;
+    if(!events.length){
+      track.innerHTML = '<div class="car-item"><div class="ev-upcoming"><h3>Nothing scheduled yet</h3><p>Check back soon for upcoming events.</p></div></div>';
+      return;
+    }
+    track.innerHTML = events.map(e=>{
+      const d = e.start;
+      return '<div class="car-item"><a href="#"><div class="ev-upcoming">'
+        + '<div class="ev-date"><b>'+d.getDate()+'</b><span>'+MONTHS[d.getMonth()]+'</span></div>'
+        + '<h3>'+esc(e.title)+'</h3>'
+        + (e.description ? '<p>'+esc(e.description)+'</p>' : '')
+        + '<span class="ev-tag">Upcoming</span></div></a></div>';
+    }).join('');
+  }
+
+  function renderPast(events, photoRows){
+    const track = document.getElementById('pastTrack');
+    if(!track) return;
+    if(!events.length){
+      track.innerHTML = '<div class="car-item"><div class="ev-upcoming"><h3>Nothing here yet</h3><p>Past events will show up here once they happen.</p></div></div>';
+      return;
+    }
+    track.innerHTML = events.map((e,i)=>{
+      const d = e.start;
+      const dateLabel = MONTHS[d.getMonth()]+' '+d.getFullYear();
+      const photo = findPhotoRow(photoRows, e.title);
+      const grad = GRADIENTS[i % GRADIENTS.length];
+      const photoBlock = photo && photo.cover
+        ? '<div class="arch ev-photo" style="background-image:url(\''+esc(photo.cover)+'\');background-size:cover;background-position:center;"></div>'
+        : '<div class="arch ev-photo pending"><span>Photos coming soon</span></div>';
+      return '<div class="car-item"><a href="event-detail.html?event='+esc(e.slug)+'" class="ev-past">'
+        + photoBlock
+        + '<div class="ev-past-copy"><span class="date">'+dateLabel+'</span><h3>'+esc(e.title)+'</h3>'
+        + '<span class="ev-tag past">'+(photo ? 'View Gallery &rarr;' : 'Details &rarr;')+'</span></div>'
+        + '</a></div>';
+    }).join('');
+  }
+
+  function reinitCarousel(id){
+    const outer = document.getElementById(id);
+    if(outer) initCarousel(outer);
+  }
+
+  function loadEventsPipeline(){
+    const initBoth = () => { reinitCarousel('upcomingCarousel'); reinitCarousel('pastCarousel'); };
+
+    if(!CALENDAR_ICS_URL || CALENDAR_ICS_URL.includes('PASTE_YOUR')){
+      initBoth(); // no calendar configured yet - demo cards stay, initialize once
+      return;
+    }
+    fetch(CALENDAR_ICS_URL)
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(icsText=>{
+        const { upcoming, past } = splitFeaturedEvents(parseICS(icsText));
+
+        const applyPhotosAndRender = photoRows => {
+          renderUpcoming(upcoming);
+          renderPast(past, photoRows);
+          initBoth();
+        };
+
+        if(!PHOTOS_CSV_URL || PHOTOS_CSV_URL.includes('PASTE_YOUR')){
+          applyPhotosAndRender([]);
+          return;
+        }
+        fetch(PHOTOS_CSV_URL)
+          .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+          .then(csvText=> applyPhotosAndRender(extractPhotoRows(parseCSV(csvText))))
+          .catch(err=>{ console.error('Photo sheet failed to load:', err); applyPhotosAndRender([]); });
+      })
+      .catch(err=>{ console.error('Calendar feed failed to load:', err); initBoth(); }); // fetch failed - fall back to demo cards, initialize once
+  }
+  loadEventsPipeline();
+
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+</script>
+
+</body>
+</html>

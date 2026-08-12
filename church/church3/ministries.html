@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ministries — Newmarket Church of the Nazarene</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F5F0; --ink:#2B2A28; --ink-soft:#66625B;
+    --blue:#5E7C8A; --blue-deep:#3F5A67; --gold:#C7A046; --sage:#7C8F6E;
+    --white:#FFFFFF; --line:#E4DFD3; --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Work Sans',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Frank Ruhl Libre',serif;font-weight:600;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;} a{color:inherit;text-decoration:none;} img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-deep);font-weight:600;}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:999px;font-size:14.5px;font-weight:600;transition:transform .2s ease,box-shadow .2s ease;}
+  .btn-primary{background:var(--blue-deep);color:var(--white);box-shadow:0 14px 28px rgba(63,90,103,0.28);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(63,90,103,0.34);}
+  .btn-ghost{border:1.5px solid var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--blue);color:var(--blue-deep);}
+  .arch{border-radius:50% 50% 10px 10px / 30% 30% 10px 10px;overflow:hidden;position:relative;}
+  .arch-badge{width:56px;height:56px;border-radius:50% 50% 6px 6px / 34% 34% 6px 6px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(247,245,240,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;font-family:'Frank Ruhl Libre',serif;font-size:19px;font-weight:600;}
+  .brand-mark{width:38px;height:38px;background:linear-gradient(160deg,var(--blue),var(--blue-deep));border-radius:50% 50% 8px 8px / 30% 30% 8px 8px;}
+  nav.links{display:flex;gap:34px;font-size:14.5px;font-weight:500;color:var(--ink-soft);}
+  nav.links a:hover{color:var(--blue-deep);}
+  nav.links a.on{color:var(--blue-deep);}
+  .nav-cta{display:flex;align-items:center;gap:18px;}
+  @media (max-width:860px){ nav.links{display:none;} }
+
+  .page-hero{padding:64px 0 56px;text-align:center;}
+  .page-hero h1{font-size:clamp(34px,4.6vw,54px);margin:18px 0 16px;}
+  .page-hero p{color:var(--ink-soft);font-size:17px;max-width:560px;margin:0 auto;}
+
+  section{padding:88px 0;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+
+  .ministry-block{padding:0 0 96px;}
+  .ministry-block:last-child{padding-bottom:0;}
+  .ministry-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:60px;align-items:center;}
+  .ministry-grid.rev{grid-template-columns:1.15fr 0.85fr;}
+  .ministry-grid.rev .ministry-photo{order:2;}
+  .ministry-photo{aspect-ratio:4/5;}
+  .ministry-copy p{color:var(--ink-soft);font-size:16px;margin-bottom:16px;}
+  .ministry-copy ul{margin:18px 0 0;padding:0;list-style:none;}
+  .ministry-copy li{padding:12px 0;border-top:1px solid var(--line);color:var(--ink-soft);font-size:15px;display:flex;gap:12px;}
+  .ministry-copy li:last-child{border-bottom:1px solid var(--line);}
+  .ministry-copy li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);flex:0 0 auto;margin-top:8px;}
+  @media (max-width:860px){ .ministry-grid,.ministry-grid.rev{grid-template-columns:1fr;} .ministry-grid.rev .ministry-photo{order:0;} .ministry-photo{max-width:380px;margin:0 auto;} }
+
+  .cta-section{background:linear-gradient(160deg,#3F5A67,#22333B);color:#fff;text-align:center;}
+  .cta-section h2{color:#fff;}
+  .cta-section p{color:rgba(255,255,255,0.72);max-width:480px;margin:16px auto 30px;}
+
+  footer{padding:44px 0;text-align:center;font-size:13px;color:var(--ink-soft);}
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .rv.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="index.html"><div class="brand-mark"></div>Newmarket&nbsp;Nazarene</a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="ministries.html" class="on">Ministries</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta"><a class="btn btn-primary" href="contact.html">Plan a Visit</a></div>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">Ministries</div>
+    <h1>A place to plug in, whenever you're ready</h1>
+    <p>No pressure to jump in on week one — but when you're ready, here's where people connect.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="ministry-block">
+    <div class="ministry-grid">
+      <div class="arch ministry-photo rv" style="background:linear-gradient(150deg,var(--blue),var(--blue-deep));"><span></span></div>
+      <div class="ministry-copy rv">
+        <div class="eyebrow">Kids &amp; Families</div>
+        <h2 style="margin:16px 0 20px;">A safe, energetic place for kids</h2>
+        <p>Our kids' program runs alongside the Sunday service, so grown-ups get to actually be present for worship while kids get age-appropriate teaching, games, and a whole lot of energy burned off.</p>
+        <ul>
+          <li>Runs every Sunday during the 10:00 AM service</li>
+          <li>Age groups from nursery through grade 6</li>
+          <li>Family events through the year — potlucks, seasonal gatherings</li>
+        </ul>
+        <a class="btn btn-ghost" style="margin-top:24px;" href="contact.html">Ask a Question</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ministry-block">
+    <div class="ministry-grid rev">
+      <div class="ministry-copy rv">
+        <div class="eyebrow">Community Groups</div>
+        <h2 style="margin:16px 0 20px;">Smaller circles, through the week</h2>
+        <p>Sunday mornings are only part of it — our community groups meet through the week in homes and around the neighbourhood for conversation, prayer, and honestly, just good company.</p>
+        <ul>
+          <li>Groups meet weekly or biweekly, evenings and daytime options</li>
+          <li>Open to newcomers any time of year, no commitment required</li>
+          <li>New groups form each season — ask what's starting up</li>
+        </ul>
+        <a class="btn btn-ghost" style="margin-top:24px;" href="contact.html">Find a Group</a>
+      </div>
+      <div class="arch ministry-photo rv" style="background:linear-gradient(150deg,var(--sage),#546B45);"><span></span></div>
+    </div>
+  </section>
+
+  <section class="ministry-block">
+    <div class="ministry-grid">
+      <div class="arch ministry-photo rv" style="background:linear-gradient(150deg,var(--gold),#A57F2C);"><span></span></div>
+      <div class="ministry-copy rv">
+        <div class="eyebrow">Outreach</div>
+        <h2 style="margin:16px 0 20px;">Showing up for our neighbours</h2>
+        <p>Faith that stays inside these walls isn't much use to anyone. Our outreach efforts are hands-on and practical — the kind of help that actually makes a difference in downtown Newmarket.</p>
+        <ul>
+          <li>Seasonal food drives &amp; community cleanups</li>
+          <li>Partnerships with local shelters &amp; support organizations</li>
+          <li>One-off volunteer opportunities posted through the year</li>
+        </ul>
+        <a class="btn btn-ghost" style="margin-top:24px;" href="events.html">See Upcoming Opportunities</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="cta-section">
+  <div class="wrap">
+    <h2>Not sure where you fit?</h2>
+    <p>That's alright — reach out and we'll help you find the right place to start.</p>
+    <a class="btn btn-primary" href="contact.html">Get in Touch</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Newmarket Church of the Nazarene · Downtown Newmarket, Ontario</div>
+</footer>
+
+<script>
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+</script>
+
+</body>
+</html>
