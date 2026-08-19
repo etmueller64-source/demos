@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact </title>
-<meta name="description" content=" Lisa K Events|Get in touch with Lisa K Events to start planning your wedding or special event in Toronto.">
+<title>Nathan & Irene </title>
+<meta name="description" content=" Portfolio | Lisa K Events|A real wedding planned and designed by Lisa K Events — Nathan & Irene at McLean House.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -164,10 +164,10 @@ footer.site{background:var(--sand-mist);margin-top:0}
 .tiny a{border-bottom:1px solid var(--sand)}
 
 /* ---------- forms (static demo) ---------- */
-.field{margin-bottom:26px;display:flex;flex-direction:column}
+.field{margin-bottom:26px}
 .field label{
   display:block;font-size:11px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--ink-soft);margin-bottom:8px;font-weight:400;line-height:1.5;min-height:2.2em;
+  color:var(--ink-soft);margin-bottom:8px;font-weight:400;
 }
 .field input,.field textarea,.field select{
   width:100%;background:transparent;border:none;border-bottom:1px solid var(--hairline);
@@ -194,11 +194,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 }
 
 /* mosaic band for inner-page heroes */
+.hero-band{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:780px;margin:48px auto 0}
+.hero-band .ph{aspect-ratio:4/3;opacity:.9}
+@media(max-width:640px){.hero-band{grid-template-columns:repeat(2,1fr)}.hero-band .ph:nth-child(n+3){display:none}}
 
-
-/* real photos inside placeholder frames */
 .ph>img.wx{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .ph.has-img::after{display:none}
+
 </style>
 </head>
 <body>
@@ -207,68 +209,49 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="wordmark" href="index.html">Lisa K Events<small>Toronto &middot; Est. Boutique Planning</small></a>
     <nav class="main" id="nav">
     <a href="index.html">Home</a>
-    <a href="portfolio.html">Portfolio</a>
+    <a href="portfolio.html" class="on">Portfolio</a>
     <a href="about.html">About</a>
     <a href="services.html">Services</a>
-    <a href="contact.html" class="on">Contact</a>
+    <a href="contact.html">Contact</a>
     </nav>
     <button class="burger" aria-label="Menu" aria-controls="nav"><span></span><span></span><span></span></button>
   </div>
 </header>
 
-<section style="padding:90px 0 100px;background:linear-gradient(175deg,var(--butter-mist),var(--ivory));text-align:center;">
+<section style="padding:90px 0 70px;background:linear-gradient(175deg,var(--sky-mist),var(--ivory));text-align:center;">
   <div class="wrap">
-    <p class="eyebrow rv">Contact</p>
-    <h1 class="rv" style="margin-top:22px;">Let's plan something <span class="disp-it">special</span></h1>
+    <p class="eyebrow rv">A real wedding</p>
+    <h1 class="rv" style="margin-top:22px;">Nathan <span class="disp-it">&amp;</span> Irene</h1>
+    <p class="tiny rv" style="margin-top:24px;">McLean House</p>
   </div>
 </section>
 
 <div class="ribbon" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
 <section class="blk">
-  <div class="wrap g2 wide-l top">
-    <div>
-      <p class="eyebrow rv" style="margin-bottom:34px;">Tell us about your day</p>
-      <form onsubmit="event.preventDefault();this.style.display='none';document.getElementById('thanks').style.display='block';">
-        <div class="form2">
-          <div class="field rv"><label for="f1">First &amp; last name</label><input id="f1" type="text" required></div>
-          <div class="field rv"><label for="f2">Partner's first &amp; last name</label><input id="f2" type="text"></div>
-          <div class="field rv"><label for="f3">Phone</label><input id="f3" type="tel"></div>
-          <div class="field rv"><label for="f4">Email</label><input id="f4" type="email" required></div>
-          <div class="field rv">
-            <label for="f11">Event type</label>
-            <select id="f11">
-              <option value="">Select one</option>
-              <option>Wedding</option>
-              <option>Engagement / proposal</option>
-              <option>Corporate</option>
-              <option>Social celebration</option>
-              <option>Holiday event</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field rv"><label for="f7">Date of event</label><input id="f7" type="date"></div>
-          <div class="field rv"><label for="f5">Full event budget</label><input id="f5" type="text"></div>
-          <div class="field rv"><label for="f6">Guest count</label><input id="f6" type="text"></div>
-          <div class="field rv"><label for="f9">Ceremony venue &amp; location</label><input id="f9" type="text"></div>
-          <div class="field rv"><label for="f12">Reception venue &amp; location</label><input id="f12" type="text"></div>
-        </div>
-        <div class="field rv"><label for="f8">How did you find us</label><input id="f8" type="text"></div>
-        <div class="field rv"><label for="f10">Any details of your vision for your day</label><textarea id="f10"></textarea></div>
-        <button class="btn rv" type="submit" style="background:none;cursor:pointer;font-family:var(--sans);">Send inquiry</button>
-      </form>
-      <div id="thanks" style="display:none;">
-        <h3 style="margin-bottom:12px;">Thanks for reaching out!</h3>
-        <p style="color:var(--ink-soft);">We'll be in touch shortly to talk about your day.</p>
-      </div>
-      <p class="tiny rv" style="margin-top:44px;">Prefer email? Write to <a href="mailto:lisa@lisakevents.com?subject=Wedding%20services">lisa@lisakevents.com</a></p>
+  <div class="wrap">
+    <div class="gal">
+      <div class="ph ph-c r34 rv has-img" data-label="Room reveal"><img class="wx" src="images/ni-chairs.jpg" alt="Nathan and Irene reception room reveal at McLean House" loading="lazy"></div>
+      <div class="ph ph-b r32 rv has-img" data-label="Tablescape"><img class="wx" src="images/ni-tablescape-wide.jpg" alt="Reception tablescape at McLean House" loading="lazy"></div>
+      <div class="ph ph-a r34 rv has-img" data-label="Place setting"><img class="wx" src="images/ni-placesetting-rachel.jpg" alt="Wedding place setting with blue and white china" loading="lazy"></div>
+      <div class="ph ph-c r34 rv has-img" data-label="Place setting"><img class="wx" src="images/ni-placesetting-groom.jpg" alt="Groom's place setting with candles and florals" loading="lazy"></div>
+      <div class="ph ph-b r34 rv has-img" data-label="Florals &amp; candles"><img class="wx" src="images/ni-floral-candles.jpg" alt="Floral and candle details at McLean House" loading="lazy"></div>
+      <div class="ph ph-a r34 rv has-img" data-label="Taper candles"><img class="wx" src="images/ni-candles-tall.jpg" alt="Taper candles in blue and white" loading="lazy"></div>
+      <div class="ph ph-c r34 rv has-img" data-label="Taper candles"><img class="wx" src="images/ni-candles-close.jpg" alt="Taper candle detail with florals" loading="lazy"></div>
     </div>
-    <div style="position:sticky;top:60px;">
-      <div class="ph ph-a r34 rv has-img" data-label="Contact"><img class="wx" src="images/ni-placesetting-rachel.jpg" alt="Wedding place setting styled by Lisa K Events" loading="lazy"></div>
-      <div class="rv" style="background:var(--sky-mist);border:1px solid var(--hairline);padding:34px 30px;margin-top:30px;">
-        <p style="color:var(--ink-soft);font-size:15.5px;">Toronto, ON<br>lisa@lisakevents.com</p>
-      </div>
-    </div>
+    <style>
+      .gal{columns:3;column-gap:30px}
+      .gal .ph{margin-bottom:30px;break-inside:avoid;width:100%;display:flex}
+      @media(max-width:900px){.gal{columns:2}}
+      @media(max-width:560px){.gal{columns:1}}
+    </style>
+  </div>
+</section>
+
+<section class="blk" style="padding-top:0;">
+  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+    <a class="btn ghost rv" href="portfolio.html">&larr; Back to portfolio</a>
+    <a class="btn rv" href="contact.html">Plan your day</a>
   </div>
 </section>
 

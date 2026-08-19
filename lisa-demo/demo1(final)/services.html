@@ -137,6 +137,8 @@ section.blk{padding:110px 0}
 .ph-a{background:linear-gradient(160deg,var(--sky-mist),var(--sand-mist))}
 .ph-b{background:linear-gradient(160deg,var(--butter-mist),var(--sky-mist))}
 .ph-c{background:linear-gradient(160deg,var(--sand-mist),var(--butter-mist))}
+.ph>img.wx{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ph.has-img::after{display:none}
 .r45{aspect-ratio:4/5}
 .r34{aspect-ratio:3/4}
 .r23{aspect-ratio:2/3}
@@ -249,9 +251,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <h1 class="rv" style="margin-top:22px;">Every detail, <span class="disp-it">handled</span></h1>
   
     <div class="cluster rv" aria-hidden="true">
-      <div class="ph ph-b" data-label="Weddings" style="left:0;top:16px;width:48%;height:390px;transform:rotate(-2deg);"></div>
-      <div class="ph ph-c" data-label="Styling" style="right:6%;top:0;width:32%;height:240px;transform:rotate(2deg);"></div>
-      <div class="ph ph-a" data-label="Corporate &amp; Galas" style="right:0;bottom:0;width:38%;height:230px;transform:rotate(-1deg);"></div>
+      <div class="ph ph-b has-img" data-label="Weddings" style="left:0;top:16px;width:48%;height:390px;transform:rotate(-2deg);"><img class="wx" src="images/svc-outdoor-reception.jpg" alt="Outdoor wedding reception styled by Lisa K Events" loading="lazy"></div>
+      <div class="ph ph-c has-img" data-label="Styling" style="right:6%;top:0;width:32%;height:240px;transform:rotate(2deg);"><img class="wx" src="images/svc-styling-florals-a.jpg" alt="Floral styling detail by Lisa K Events" loading="lazy"></div>
+      <div class="ph ph-a has-img" data-label="Corporate &amp; Galas" style="right:0;bottom:0;width:38%;height:230px;transform:rotate(-1deg);"><img class="wx" src="images/svc-tented-event.jpg" alt="Tented event reception styled by Lisa K Events" loading="lazy"></div>
     </div>
   </div>
 </section>
@@ -276,8 +278,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
         <a class="btn rv" style="margin-top:34px;" href="contact.html">Inquire</a>
       </div>
       <div class="chapter-photos rv">
-        <div class="ph ph-b" data-label="Wedding &mdash; photo to come" style="left:0;top:0;width:64%;height:100%;"></div>
-        <div class="ph ph-c" data-label="Detail &mdash; photo to come" style="right:0;bottom:-30px;width:44%;height:52%;transform:rotate(2deg);"></div>
+        <div class="ph ph-b has-img" data-label="Wedding &mdash; photo to come" style="left:0;top:0;width:64%;height:100%;"><img class="wx" src="images/svc-wedding-tablescape.jpg" alt="Wedding reception tablescape planned by Lisa K Events" loading="lazy"></div>
+        <div class="ph ph-c has-img" data-label="Detail &mdash; photo to come" style="right:0;bottom:-30px;width:44%;height:52%;transform:rotate(2deg);"><img class="wx" src="images/svc-detail-florals-b.jpg" alt="Floral centerpiece detail" loading="lazy"></div>
       </div>
     </div>
   </div>
