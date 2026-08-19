@@ -15,7 +15,7 @@
   --ink-soft:#6E675C;
   --sand:#C3B5A3;
   --sky:#8DB0CF;
-  --butter:#F9E7B6;
+  --butter:#FFFDD0;
   --sand-mist:#F1ECE4;
   --sky-mist:#E9F0F7;
   --butter-mist:#FCF4DC;
@@ -66,20 +66,22 @@ h3{font-size:clamp(24px,2.6vw,30px)}
 
 /* ---------- nav ---------- */
 header.site{
-  position:absolute;top:0;left:0;right:0;z-index:50;
-  padding:34px 5vw 0;
+  position:relative;
+  background:var(--ivory);
+  padding:24px 5vw 20px;
+  border-bottom:1px solid var(--hairline);
 }
-.navbar{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.wordmark{font-family:var(--serif);font-size:26px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.navbar{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.wordmark{font-family:var(--serif);font-size:23px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .wordmark small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.5em;color:var(--ink-soft);margin-top:2px;text-transform:uppercase}
-nav.main{display:flex;gap:38px}
+nav.main{display:flex;gap:34px;justify-content:center;flex-wrap:wrap}
 nav.main a{
   font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:400;
   padding-bottom:4px;border-bottom:1px solid transparent;transition:border-color .3s,color .3s;
 }
 nav.main a:hover{border-color:var(--sky);color:var(--sky)}
 nav.main a.on{border-color:var(--sand)}
-.burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.burger{display:none;background:none;border:none;cursor:pointer;padding:8px;position:absolute;right:0;top:50%;transform:translateY(-50%)}
 .burger span{display:block;width:26px;height:1px;background:var(--ink);margin:7px 0;transition:.3s}
 @media(max-width:900px){
   nav.main{
@@ -241,7 +243,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   </div>
 </header>
 
-<section style="padding:190px 0 70px;background:linear-gradient(175deg,var(--sky-mist),var(--ivory));text-align:center;">
+<section style="padding:90px 0 70px;background:linear-gradient(175deg,var(--sky-mist),var(--ivory));text-align:center;">
   <div class="wrap">
     <p class="eyebrow rv">Services</p>
     <h1 class="rv" style="margin-top:22px;">Every detail, <span class="disp-it">handled</span></h1>
@@ -298,10 +300,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
           <li>Bridal &amp; baby showers</li>
           <li>Holiday &amp; seasonal celebrations</li>
         </ul>
+        <p class="tiny rv" style="margin-top:22px;">Engagement &amp; proposal photography &mdash; Maranda Elysse Photos</p>
         <a class="btn rv" style="margin-top:34px;" href="contact.html">Inquire</a>
       </div>
       <div class="chapter-photos rv">
-        <div class="ph ph-c" data-label="Celebration &mdash; photo to come" style="right:0;top:0;width:64%;height:100%;"></div>
+        <div class="ph ph-c" data-label="Proposal &mdash; photo to come" style="right:0;top:0;width:64%;height:100%;"></div>
         <div class="ph ph-a" data-label="Detail &mdash; photo to come" style="left:0;bottom:-30px;width:44%;height:52%;transform:rotate(-2deg);"></div>
       </div>
     </div>

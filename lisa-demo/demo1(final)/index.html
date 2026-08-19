@@ -15,7 +15,7 @@
   --ink-soft:#6E675C;
   --sand:#C3B5A3;
   --sky:#8DB0CF;
-  --butter:#F9E7B6;
+  --butter:#FFFDD0;
   --sand-mist:#F1ECE4;
   --sky-mist:#E9F0F7;
   --butter-mist:#FEF9EB;
@@ -66,20 +66,22 @@ h3{font-size:clamp(24px,2.6vw,30px)}
 
 /* ---------- nav ---------- */
 header.site{
-  position:absolute;top:0;left:0;right:0;z-index:50;
-  padding:34px 5vw 0;
+  position:relative;
+  background:var(--ivory);
+  padding:24px 5vw 20px;
+  border-bottom:1px solid var(--hairline);
 }
-.navbar{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.wordmark{font-family:var(--serif);font-size:26px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.navbar{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.wordmark{font-family:var(--serif);font-size:23px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .wordmark small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.5em;color:var(--ink-soft);margin-top:2px;text-transform:uppercase}
-nav.main{display:flex;gap:38px}
+nav.main{display:flex;gap:34px;justify-content:center;flex-wrap:wrap}
 nav.main a{
   font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:400;
   padding-bottom:4px;border-bottom:1px solid transparent;transition:border-color .3s,color .3s;
 }
 nav.main a:hover{border-color:var(--sky);color:var(--sky)}
 nav.main a.on{border-color:var(--sand)}
-.burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.burger{display:none;background:none;border:none;cursor:pointer;padding:8px;position:absolute;right:0;top:50%;transform:translateY(-50%)}
 .burger span{display:block;width:26px;height:1px;background:var(--ink);margin:7px 0;transition:.3s}
 @media(max-width:900px){
   nav.main{
@@ -216,12 +218,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <!-- HERO: full-viewport mosaic with centered overlay card -->
 <section class="mosaic-hero">
   <div class="mosaic" aria-hidden="true">
-    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_97a50ff4d18544bd87e8481320512426~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt=""></div>
-    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_074ceb515d0d4e92997bc7eb43799c0d~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
-    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_bcfd00a9fb394552835efab25d583050~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
-    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_b287d0b23d234d8691e55cb46a245c22~mv2_d_3515_5273_s_4_2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
-    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_53f9b217d816415d8645fad0bfe8700a~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
-    <div class="pframe"><img class="photo" src="https://static.wixstatic.com/media/554c58_9568fa9619ef4d32add0406f09e686d2~mv2.jpg/v1/fill/w_700,h_900,al_c,q_85/lke.jpg" alt="" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="images/bouquet-chair.jpg" alt="Bridal bouquet of white orchids and proteas draped over a chair" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="images/bride-window.jpg" alt="Bride by the window in flowing gown" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="images/ballroom-chandelier.jpg" alt="Reception ballroom with crystal chandelier" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="images/couple-veil-garden.jpg" alt="Bride and groom embracing under a flowing veil" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="images/tablescape-candles.jpg" alt="Reception tablescape with taper candles and florals" loading="lazy"></div>
+    <div class="pframe"><img class="photo" src="images/bride-path.jpg" alt="Bride walking a garden path" loading="lazy"></div>
   </div>
   <div class="hero-card rv in">
     <p class="eyebrow">Toronto &middot; Weddings &amp; Events</p>
@@ -245,7 +247,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
         <a class="btn ghost" href="services.html">Social &amp; corporate</a>
       </div>
     </div>
-    <div class="pframe r34 rv"><img class="photo" src="https://static.wixstatic.com/media/554c58_a564ebaaeadf4b129ef89b429bf4cf7a~mv2.jpg/v1/fill/w_800,h_1067,al_c,q_85/lke.jpg" alt="Bridal detail styling by Lisa K Events" loading="lazy"></div>
+    <div class="pframe r34 rv"><img class="photo" style="filter:grayscale(1);" src="images/bride-umbrella.jpg" alt="Bride with umbrella, styled by Lisa K Events" loading="lazy"></div>
   </div>
 </section>
 
@@ -285,12 +287,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <!-- MEET LISA COMPACT -->
 <section class="blk">
   <div class="wrap g2 wide-r">
-    <div class="pframe r45 rv" style="max-width:380px;"><img class="photo" src="https://static.wixstatic.com/media/554c58_5ed52d5c5c18412b8563b82ad40851e2~mv2.jpg/v1/fill/w_760,h_950,al_c,q_85/lke.jpg" alt="Lisa, founder of Lisa K Events. Photo by Allison Leigh Photography" loading="lazy"></div>
+    <div class="pframe r45 rv" style="max-width:380px;"><img class="photo" src="https://static.wixstatic.com/media/554c58_5ed52d5c5c18412b8563b82ad40851e2~mv2.jpg/v1/fill/w_760,h_950,al_c,q_85/lke.jpg" alt="Lisa, founder of Lisa K Events. Photo by Magna Arnott Photography" loading="lazy"></div>
     <div>
       <p class="eyebrow rv">Meet Lisa</p>
       <h2 class="rv" style="margin:20px 0 22px;">Energy, passion <span class="disp-it">&amp; heart</span></h2>
       <p class="lede rv">From weddings to corporate functions and fundraising galas &mdash; several years of crafting events people never forget.</p>
-      <p class="tiny rv" style="margin-top:14px;">Photo &mdash; Allison Leigh Photography</p>
+      <p class="tiny rv" style="margin-top:14px;">Photo &mdash; Magna Arnott Photography</p>
       <a class="btn rv" style="margin-top:30px;" href="about.html">About the studio</a>
     </div>
   </div>
@@ -309,7 +311,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .photo{width:100%;height:100%;object-fit:cover;display:block}
 .pframe.r34{aspect-ratio:3/4}
 .pframe.r45{aspect-ratio:4/5}
-.mosaic-hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:140px 4vw 60px}
+.mosaic-hero{position:relative;min-height:calc(100vh - 110px);display:flex;align-items:center;justify-content:center;padding:60px 4vw 60px}
 .mosaic{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:14px;padding:14px;z-index:0}
 .mosaic .pframe{width:100%;height:100%}
 .mosaic::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(253,251,246,.32),rgba(253,251,246,.12) 40%,rgba(253,251,246,.32))}

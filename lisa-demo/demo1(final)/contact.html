@@ -15,7 +15,7 @@
   --ink-soft:#6E675C;
   --sand:#C3B5A3;
   --sky:#8DB0CF;
-  --butter:#F9E7B6;
+  --butter:#FFFDD0;
   --sand-mist:#F1ECE4;
   --sky-mist:#E9F0F7;
   --butter-mist:#FCF4DC;
@@ -66,20 +66,22 @@ h3{font-size:clamp(24px,2.6vw,30px)}
 
 /* ---------- nav ---------- */
 header.site{
-  position:absolute;top:0;left:0;right:0;z-index:50;
-  padding:34px 5vw 0;
+  position:relative;
+  background:var(--ivory);
+  padding:24px 5vw 20px;
+  border-bottom:1px solid var(--hairline);
 }
-.navbar{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.wordmark{font-family:var(--serif);font-size:26px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.navbar{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.wordmark{font-family:var(--serif);font-size:23px;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .wordmark small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.5em;color:var(--ink-soft);margin-top:2px;text-transform:uppercase}
-nav.main{display:flex;gap:38px}
+nav.main{display:flex;gap:34px;justify-content:center;flex-wrap:wrap}
 nav.main a{
   font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:400;
   padding-bottom:4px;border-bottom:1px solid transparent;transition:border-color .3s,color .3s;
 }
 nav.main a:hover{border-color:var(--sky);color:var(--sky)}
 nav.main a.on{border-color:var(--sand)}
-.burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.burger{display:none;background:none;border:none;cursor:pointer;padding:8px;position:absolute;right:0;top:50%;transform:translateY(-50%)}
 .burger span{display:block;width:26px;height:1px;background:var(--ink);margin:7px 0;transition:.3s}
 @media(max-width:900px){
   nav.main{
@@ -162,10 +164,10 @@ footer.site{background:var(--sand-mist);margin-top:0}
 .tiny a{border-bottom:1px solid var(--sand)}
 
 /* ---------- forms (static demo) ---------- */
-.field{margin-bottom:26px}
+.field{margin-bottom:26px;display:flex;flex-direction:column}
 .field label{
   display:block;font-size:11px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--ink-soft);margin-bottom:8px;font-weight:400;
+  color:var(--ink-soft);margin-bottom:8px;font-weight:400;line-height:1.5;min-height:2.2em;
 }
 .field input,.field textarea,.field select{
   width:100%;background:transparent;border:none;border-bottom:1px solid var(--hairline);
@@ -214,7 +216,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   </div>
 </header>
 
-<section style="padding:190px 0 100px;background:linear-gradient(175deg,var(--butter-mist),var(--ivory));text-align:center;">
+<section style="padding:90px 0 100px;background:linear-gradient(175deg,var(--butter-mist),var(--ivory));text-align:center;">
   <div class="wrap">
     <p class="eyebrow rv">Contact</p>
     <h1 class="rv" style="margin-top:22px;">Let's plan something <span class="disp-it">special</span></h1>
@@ -230,15 +232,28 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
       <form onsubmit="event.preventDefault();this.style.display='none';document.getElementById('thanks').style.display='block';">
         <div class="form2">
           <div class="field rv"><label for="f1">First &amp; last name</label><input id="f1" type="text" required></div>
-          <div class="field rv"><label for="f2">Your fianc&eacute;'s first &amp; last name</label><input id="f2" type="text"></div>
+          <div class="field rv"><label for="f2">Partner's first &amp; last name</label><input id="f2" type="text"></div>
           <div class="field rv"><label for="f3">Phone</label><input id="f3" type="tel"></div>
           <div class="field rv"><label for="f4">Email</label><input id="f4" type="email" required></div>
+          <div class="field rv">
+            <label for="f11">Event type</label>
+            <select id="f11">
+              <option value="">Select one</option>
+              <option>Wedding</option>
+              <option>Engagement / proposal</option>
+              <option>Corporate</option>
+              <option>Social celebration</option>
+              <option>Holiday event</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field rv"><label for="f7">Date of event</label><input id="f7" type="date"></div>
           <div class="field rv"><label for="f5">Full event budget</label><input id="f5" type="text"></div>
           <div class="field rv"><label for="f6">Guest count</label><input id="f6" type="text"></div>
-          <div class="field rv"><label for="f7">Date of event</label><input id="f7" type="date"></div>
-          <div class="field rv"><label for="f8">How did you find us</label><input id="f8" type="text"></div>
+          <div class="field rv"><label for="f9">Ceremony venue &amp; location</label><input id="f9" type="text"></div>
+          <div class="field rv"><label for="f12">Reception venue &amp; location</label><input id="f12" type="text"></div>
         </div>
-        <div class="field rv"><label for="f9">Ceremony &amp; reception venue</label><input id="f9" type="text"></div>
+        <div class="field rv"><label for="f8">How did you find us</label><input id="f8" type="text"></div>
         <div class="field rv"><label for="f10">Any details of your vision for your day</label><textarea id="f10"></textarea></div>
         <button class="btn rv" type="submit" style="background:none;cursor:pointer;font-family:var(--sans);">Send inquiry</button>
       </form>
@@ -251,8 +266,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div style="position:sticky;top:60px;">
       <div class="ph ph-a r34 rv has-img" data-label="Contact"><img class="wx" src="https://static.wixstatic.com/media/554c58_d9939ad1c745449bb69c68bc91ed4cd2~mv2.jpg/v1/fill/w_800,h_1067,al_c,q_85/lke.jpg" alt="Wedding reception styled by Lisa K Events" loading="lazy"></div>
       <div class="rv" style="background:var(--sky-mist);border:1px solid var(--hairline);padding:34px 30px;margin-top:30px;">
-        <p class="eyebrow" style="margin-bottom:14px;">Studio</p>
-        <p style="color:var(--ink-soft);font-size:15.5px;">Toronto, Ontario<br>lisa@lisakevents.com<br><a href="https://www.instagram.com/lisakevents" rel="noopener" style="border-bottom:1px solid var(--sand);">@lisakevents</a></p>
+        <p style="color:var(--ink-soft);font-size:15.5px;">Toronto, ON<br>lisa@lisakevents.com</p>
       </div>
     </div>
   </div>

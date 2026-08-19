@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://aedesigned.com/sitemap.xml
