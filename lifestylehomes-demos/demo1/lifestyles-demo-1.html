@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lifestyles Home Creations — Demo 1 (Classic Refined)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1E1C1B;
+    --surface:#2A2725;
+    --ink:#F3EFE6;
+    --ink-soft:#C9C2B4;
+    --red:#8B1F1F;
+    --red-deep:#6B1616;
+    --gold:#C9A227;
+    --gold-soft:#E4C866;
+    --line:rgba(243,239,230,0.12);
+    --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Jost',sans-serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Playfair Display',serif;font-weight:700;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
+  .eyebrow{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 32px;border-radius:2px;font-size:13.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;transition:all .22s ease;}
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:var(--red-deep);}
+  .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);}
+  .btn-gold:hover{background:var(--gold);color:var(--bg);}
+
+  /* -------- top utility bar -------- */
+  .util-bar{background:var(--red);padding:9px 0;}
+  .util-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,0.92);}
+  .util-row a{display:inline-flex;align-items:center;gap:6px;}
+  .util-links{display:flex;gap:26px;}
+  @media(max-width:760px){ .util-row{flex-direction:column;gap:6px;text-align:center;} }
+
+  /* -------- header -------- */
+  header{background:var(--bg);border-bottom:1px solid var(--line);}
+  .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;}
+  .brand{display:flex;flex-direction:column;}
+  .brand .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:30px;color:var(--gold-soft);}
+  .brand .sub{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;}
+  .brand .tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--gold);margin-top:4px;}
+
+  nav.main{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  nav.main .wrap{display:flex;gap:2px;}
+  nav.main a{padding:16px 22px;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;color:var(--ink-soft);border-bottom:2px solid transparent;transition:all .2s;}
+  nav.main a:hover,nav.main a.on{color:var(--gold-soft);border-bottom-color:var(--gold);}
+  @media(max-width:900px){ nav.main .wrap{overflow-x:auto;} nav.main a{padding:14px 16px;white-space:nowrap;} }
+
+  /* -------- hero slider -------- */
+  .hero-slider{position:relative;height:78vh;min-height:520px;max-height:720px;overflow:hidden;}
+  .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;background-size:cover;background-position:center;}
+  .hero-slide.active{opacity:1;}
+  .hero-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0.15),rgba(20,17,15,0.82) 88%);}
+  .hero-copy{position:absolute;left:6vw;bottom:12%;z-index:2;max-width:560px;}
+  .hero-copy .cat{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:clamp(38px,6vw,68px);color:var(--gold-soft);line-height:1.05;}
+  .hero-copy p{font-size:17.5px;color:rgba(255,255,255,0.88);margin-top:12px;}
+  .hero-copy .btn{margin-top:26px;}
+  .hero-dots{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:3;}
+  .hero-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all .2s;border:none;padding:0;}
+  .hero-dot.active{background:var(--gold-soft);transform:scale(1.35);}
+  .hero-arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:rgba(20,17,15,0.4);border:1px solid rgba(255,255,255,0.28);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;backdrop-filter:blur(4px);font-size:16px;}
+  .hero-arrow:hover{background:rgba(20,17,15,0.65);}
+  .hero-arrow.prev{left:24px;} .hero-arrow.next{right:24px;}
+  @media(max-width:700px){ .hero-arrow{width:38px;height:38px;} .hero-copy{left:5vw;right:5vw;} }
+
+  /* -------- estimate strip -------- */
+  .estimate-strip{background:var(--surface);border-bottom:1px solid var(--line);padding:22px 0;}
+  .estimate-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .estimate-row h3{font-size:19px;font-style:italic;color:var(--ink);}
+
+  section{padding:88px 0;}
+  .section-head{max-width:600px;margin:0 auto 48px;text-align:center;}
+  .section-head h2{font-size:clamp(28px,3.6vw,38px);}
+  .section-head p{color:var(--ink-soft);margin-top:12px;}
+
+  /* -------- feature teaser -------- */
+  .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
+  .feature-card{text-align:center;}
+  .feature-photo{aspect-ratio:4/3;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+  .feature-photo span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);padding:0 20px;text-align:center;}
+  .feature-card h3{font-style:italic;font-size:22px;color:var(--gold-soft);margin-bottom:10px;}
+  .feature-card p{color:var(--ink-soft);font-size:15px;}
+  @media(max-width:860px){ .feature-grid{grid-template-columns:1fr;} }
+
+  /* -------- trust strip -------- */
+  .trust-strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .trust-row{display:flex;justify-content:center;gap:60px;flex-wrap:wrap;padding:30px 0;text-align:center;}
+  .trust-item b{display:block;font-family:'Playfair Display',serif;color:var(--gold-soft);font-size:15px;margin-bottom:4px;}
+  .trust-item span{font-size:12.5px;color:var(--ink-soft);letter-spacing:0.04em;}
+
+  /* -------- portfolio preview -------- */
+  .portfolio-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .portfolio-grid .ph{aspect-ratio:16/10;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
+  .portfolio-grid .ph span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);}
+  @media(max-width:760px){ .portfolio-grid{grid-template-columns:1fr;} }
+
+  /* -------- CTA band -------- */
+  .cta-band{background:linear-gradient(160deg,var(--red),var(--red-deep));text-align:center;}
+  .cta-band h2{color:#fff;}
+  .cta-band p{color:rgba(255,255,255,0.82);max-width:480px;margin:14px auto 28px;}
+
+  footer{background:var(--bg);border-top:1px solid var(--line);padding:56px 0 0;}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px;padding-bottom:40px;}
+  .foot-grid h4{font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+  .foot-grid a{display:block;color:var(--ink-soft);font-size:14px;margin-bottom:10px;}
+  .foot-grid a:hover{color:var(--gold-soft);}
+  .foot-bottom{border-top:1px solid var(--line);padding:20px 0;text-align:center;font-size:12.5px;color:var(--ink-soft);}
+  @media(max-width:760px){ .foot-grid{grid-template-columns:1fr;} }
+
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .rv.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<div class="util-bar">
+  <div class="wrap util-row">
+    <div class="util-links">
+      <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
+      <a href="tel:4168172929">416-817-2929</a>
+    </div>
+    <div>We Are Fully Licensed &amp; Insured</div>
+  </div>
+</div>
+
+<header>
+  <div class="wrap header-row">
+    <div class="brand">
+      <span class="name">Lifestyles</span>
+      <span class="sub">Home Creations</span>
+      <span class="tagline">Your Comfort is Our Happiness!</span>
+    </div>
+    <a class="btn btn-primary" href="#estimate">Get a Free Estimate</a>
+  </div>
+</header>
+
+<nav class="main">
+  <div class="wrap">
+    <a href="#" class="on">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Community</a>
+    <a href="#">Testimonials</a>
+    <a href="#">Contact Us</a>
+  </div>
+</nav>
+
+<div class="hero-slider" data-slider>
+  <div class="hero-slide active" style="background:linear-gradient(150deg,#4A3B2E,#241B14);"></div>
+  <div class="hero-slide" style="background:linear-gradient(150deg,#3B4A4A,#1A2222);"></div>
+  <div class="hero-slide" style="background:linear-gradient(150deg,#4A3838,#221818);"></div>
+  <div class="hero-slide" style="background:linear-gradient(150deg,#3E4A38,#1C221A);"></div>
+  <div class="hero-copy">
+    <div class="eyebrow">Basements &middot; Bathrooms &middot; Kitchens &middot; Living Spaces</div>
+    <h1 class="cat" style="margin-top:14px;">We create beautiful living spaces</h1>
+    <p>Full-service home renovations, built with the human touch you won't find anywhere else.</p>
+    <a class="btn btn-gold" href="#estimate">Get Your Free Estimate</a>
+  </div>
+  <button class="hero-arrow prev" aria-label="Previous">&#8592;</button>
+  <button class="hero-arrow next" aria-label="Next">&#8594;</button>
+  <div class="hero-dots">
+    <button class="hero-dot active" aria-label="Slide 1"></button>
+    <button class="hero-dot" aria-label="Slide 2"></button>
+    <button class="hero-dot" aria-label="Slide 3"></button>
+    <button class="hero-dot" aria-label="Slide 4"></button>
+  </div>
+</div>
+
+<div class="estimate-strip" id="estimate">
+  <div class="wrap estimate-row">
+    <h3>We Would Like To Get An Estimate</h3>
+    <a class="btn btn-primary" href="#">Please Click Here</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap feature-grid rv">
+    <div class="feature-card">
+      <div class="feature-photo"><span>Photo slot — planning &amp; blueprints</span></div>
+      <h3>About Us</h3>
+      <p>We are a different kind of home improvement company.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-photo"><span>Photo slot — working with clients</span></div>
+      <h3>Services</h3>
+      <p>We listen. We care. We deliver.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-photo"><span>Photo slot — finished basement</span></div>
+      <h3>Portfolio</h3>
+      <p>We create beautiful living spaces.</p>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip">
+  <div class="wrap trust-row rv">
+    <div class="trust-item"><b>Fully Licensed</b><span>&amp; Insured</span></div>
+    <div class="trust-item"><b>Free Estimates</b><span>No obligation</span></div>
+    <div class="trust-item"><b>Since 2006</b><span>Serving the community</span></div>
+    <div class="trust-item"><b>The Human Touch</b><span>Back in renovations</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="section-head rv">
+    <div class="eyebrow" style="justify-content:center;">Recent Work</div>
+    <h2 style="margin-top:14px;">A few of our favourite projects</h2>
+  </div>
+  <div class="wrap portfolio-grid rv">
+    <div class="ph"><span>Photo slot — custom bar &amp; entertainment</span></div>
+    <div class="ph"><span>Photo slot — kids' themed bedroom</span></div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap rv">
+    <h2>Ready to start your project?</h2>
+    <p>Tell us about your space, and let's bring your home improvement dreams to life.</p>
+    <a class="btn btn-gold" style="border-color:#fff;color:#fff;" href="#estimate">Get Your Free Estimate</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <span class="name" style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:24px;color:var(--gold-soft);">Lifestyles Home Creations</span>
+      <p style="color:var(--ink-soft);font-size:14px;margin-top:14px;">Your Comfort is Our Happiness! Fully licensed and insured home renovations.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="#">About Us</a>
+      <a href="#">Services</a>
+      <a href="#">Portfolio</a>
+      <a href="#">Testimonials</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="tel:4168172929">416-817-2929</a>
+      <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+  <div class="foot-bottom">Copyright &copy; 2026 Lifestyles Home Creations Inc. All Rights Reserved. &middot; Demo homepage, Direction 1 — Classic Refined</div>
+</footer>
+
+<script>
+  function initSlider(root){
+    const slides = [...root.querySelectorAll('.hero-slide')];
+    const dots = [...root.querySelectorAll('.hero-dot')];
+    let idx = 0, timer;
+    function show(i){
+      idx = (i + slides.length) % slides.length;
+      slides.forEach((s,k)=> s.classList.toggle('active', k===idx));
+      dots.forEach((d,k)=> d.classList.toggle('active', k===idx));
+    }
+    function next(){ show(idx+1); }
+    function prev(){ show(idx-1); }
+    function restart(){ clearInterval(timer); timer = setInterval(next, 5500); }
+    root.querySelector('.hero-arrow.next')?.addEventListener('click', ()=>{ next(); restart(); });
+    root.querySelector('.hero-arrow.prev')?.addEventListener('click', ()=>{ prev(); restart(); });
+    dots.forEach((d,k)=> d.addEventListener('click', ()=>{ show(k); restart(); }));
+    root.addEventListener('mouseenter', ()=> clearInterval(timer));
+    root.addEventListener('mouseleave', restart);
+    show(0); restart();
+  }
+  document.querySelectorAll('[data-slider]').forEach(initSlider);
+
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+</script>
+
+</body>
+</html>
