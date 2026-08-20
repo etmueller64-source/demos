@@ -76,8 +76,10 @@
     border-radius:4px;
     padding:34px 38px;
     box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    transform:scale(0.8);
+    transform-origin:left bottom;
   }
-  .hero-copy .cat{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:clamp(38px,6vw,68px);color:var(--gold-soft);line-height:1.05;}
+  .hero-copy .cat{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(38px,6vw,68px);color:var(--gold-soft);line-height:1.05;}
   .hero-copy p{font-size:17.5px;color:rgba(255,255,255,0.88);margin-top:12px;}
   .hero-copy .btn{margin-top:26px;}
   .hero-dots{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:3;}
@@ -86,12 +88,12 @@
   .hero-arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:rgba(20,17,15,0.4);border:1px solid rgba(255,255,255,0.28);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;backdrop-filter:blur(4px);font-size:16px;}
   .hero-arrow:hover{background:rgba(20,17,15,0.65);}
   .hero-arrow.prev{left:24px;} .hero-arrow.next{right:24px;}
-  @media(max-width:700px){ .hero-arrow{width:38px;height:38px;} .hero-copy{left:5vw;right:5vw;padding:24px 24px;} }
+  @media(max-width:700px){ .hero-arrow{width:38px;height:38px;} .hero-copy{left:5vw;right:5vw;padding:24px 24px;transform:none;} }
 
   /* -------- estimate strip -------- */
   .estimate-strip{background:var(--surface);border-bottom:1px solid var(--line);padding:22px 0;}
   .estimate-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-  .estimate-row h3{font-size:19px;font-style:italic;color:var(--ink);}
+  .estimate-row h3{font-size:19px;color:var(--ink);}
 
   section{padding:88px 0;}
   .section-head{max-width:600px;margin:0 auto 48px;text-align:center;}
@@ -103,46 +105,36 @@
   .feature-card{text-align:center;}
   .feature-photo{aspect-ratio:4/3;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
   .feature-photo span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);padding:0 20px;text-align:center;}
-  .feature-card h3{font-style:italic;font-size:22px;color:var(--gold-soft);margin-bottom:10px;}
+  .feature-card h3{font-size:22px;color:var(--gold-soft);margin-bottom:10px;}
   .feature-card p{color:var(--ink-soft);font-size:15px;}
   @media(max-width:860px){ .feature-grid{grid-template-columns:1fr;} }
 
   /* -------- trust strip -------- */
   .trust-strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .trust-row{display:flex;justify-content:center;gap:60px;flex-wrap:wrap;padding:30px 0;text-align:center;}
-  .trust-item b{display:block;font-family:'Playfair Display',serif;color:var(--gold-soft);font-size:15px;margin-bottom:4px;}
+  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding:46px 0;text-align:center;}
+  .trust-item{display:flex;flex-direction:column;align-items:center;}
+  .trust-icon{position:relative;width:52px;height:52px;margin-bottom:16px;}
+  .trust-icon svg{width:100%;height:100%;stroke:var(--gold-soft);fill:none;stroke-width:1.5;}
+  .trust-badge{position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;border:2px solid var(--surface);}
+  .trust-badge svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none;}
+  .trust-item b{display:block;font-family:'Playfair Display',serif;color:var(--gold-soft);font-size:15px;margin-bottom:4px;letter-spacing:0.02em;}
   .trust-item span{font-size:12.5px;color:var(--ink-soft);letter-spacing:0.04em;}
+  @media(max-width:760px){ .trust-row{grid-template-columns:repeat(2,1fr);row-gap:36px;} }
 
-  /* -------- portfolio preview -------- */
-  .portfolio-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  .portfolio-grid .ph{aspect-ratio:16/10;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
-  .portfolio-grid .ph span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);}
-  @media(max-width:760px){ .portfolio-grid{grid-template-columns:1fr;} }
-
-  /* -------- Step Inside: filterable, categorized portfolio teaser -------- */
-  /* Editorial text-tab treatment (deliberately not a pill/chip filter, to feel distinct from our other builds) */
-  .filter-tabs{display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:44px;}
-  .f-tab{
-    position:relative;background:none;border:none;cursor:pointer;
-    font-family:'Playfair Display',serif;font-style:italic;font-weight:600;
-    font-size:16.5px;color:var(--ink-soft);padding:8px 20px;
-    transition:color .25s ease;
-  }
-  .f-tab:not(:first-child){border-left:1px solid var(--line);}
-  .f-tab::after{
-    content:"";position:absolute;left:20px;right:20px;bottom:2px;height:2px;
-    background:var(--gold);transform:scaleX(0);transform-origin:center;
-    transition:transform .3s cubic-bezier(.2,.65,.25,1);
-  }
-  .f-tab:hover{color:var(--gold-soft);}
-  .f-tab:hover::after,.f-tab.active::after{transform:scaleX(1);}
-  .f-tab.active{color:var(--gold-soft);}
-  .portfolio-masonry{column-count:3;column-gap:18px;}
-  .portfolio-masonry .ph{break-inside:avoid;margin:0 0 18px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:34px 16px;}
-  .portfolio-masonry .ph span{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);text-align:center;}
-  .portfolio-masonry .ph.hidden-item{display:none;}
-  @media(max-width:860px){ .portfolio-masonry{column-count:2;} }
-  @media(max-width:560px){ .portfolio-masonry{column-count:1;} }
+  /* -------- Selected Work: home page portfolio teaser -------- */
+  .section-badge{display:inline-block;background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:7px 18px;border-radius:999px;}
+  .section-rule{width:56px;height:3px;background:var(--gold);margin:22px auto 0;border-radius:2px;}
+  .portfolio-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .portfolio-cards .pcard{position:relative;display:block;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:var(--surface);border:1px solid var(--line);box-shadow:0 14px 30px rgba(0,0,0,0.28);transition:transform .25s ease,box-shadow .25s ease;}
+  .portfolio-cards .pcard:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+  .portfolio-cards .pcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 45%,rgba(20,17,15,0.82) 100%);}
+  .portfolio-cards .pcard .pc-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 16px;text-align:center;}
+  .portfolio-cards .pcard .pc-placeholder span{font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);}
+  .portfolio-cards .pcard .pc-label{position:absolute;left:16px;right:56px;bottom:14px;z-index:2;font-size:13.5px;font-weight:600;color:#fff;}
+  .portfolio-cards .pcard .pc-zoom{position:absolute;right:14px;bottom:14px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(243,239,230,0.94);display:flex;align-items:center;justify-content:center;}
+  .portfolio-cards .pcard .pc-zoom svg{width:16px;height:16px;stroke:var(--bg);stroke-width:2;fill:none;}
+  @media(max-width:860px){ .portfolio-cards{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:480px){ .portfolio-cards{grid-template-columns:1fr;} }
 
   /* -------- CTA band -------- */
   .cta-band{background:linear-gradient(160deg,var(--red),var(--red-deep));text-align:center;padding:90px 0;}
@@ -242,37 +234,52 @@
 
 <div class="trust-strip">
   <div class="wrap trust-row rv">
-    <div class="trust-item"><b>Fully Licensed</b><span>&amp; Insured</span></div>
-    <div class="trust-item"><b>Free Estimates</b><span>No obligation</span></div>
-    <div class="trust-item"><b>Since 2006</b><span>Serving the community</span></div>
-    <div class="trust-item"><b>The Human Touch</b><span>Back in renovations</span></div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/></svg>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></svg></span>
+      </div>
+      <b>Fully Licensed</b><span>&amp; Insured</span>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><line x1="9" y1="12" x2="16" y2="12"/><line x1="9" y1="15" x2="16" y2="15"/><line x1="9" y1="18" x2="13" y2="18"/></svg>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></svg></span>
+      </div>
+      <b>Free Estimates</b><span>No obligation</span>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="7" y1="2" x2="7" y2="6"/><line x1="17" y1="2" x2="17" y2="6"/></svg>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></svg></span>
+      </div>
+      <b>Since 2006</b><span>Serving the community</span>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C.7 7.7 2 4 5.5 4c2 0 3.5 1.2 4.5 2.7C11 5.2 12.5 4 14.5 4 18 4 19.3 7.7 21.5 11 19 15.6 12 20 12 20z"/></svg>
+        <span class="trust-badge"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 13 10 18 19 7"/></svg></span>
+      </div>
+      <b>The Human Touch</b><span>Back in renovations</span>
+    </div>
   </div>
 </div>
 
 <section>
   <div class="section-head rv">
-    <div class="eyebrow" style="justify-content:center;">Step Inside</div>
-    <h2 style="margin-top:14px;">See our work, room by room</h2>
-    <p>Every space tells a different story. Browse by room to find the one that matches yours.</p>
+    <span class="section-badge">Selected Work</span>
+    <h2 style="margin-top:18px;">Our recent portfolio</h2>
+    <p>Explore recent Lifestyles Home Creations projects and see the quality, detail, and craftsmanship behind our work.</p>
+    <div class="section-rule"></div>
   </div>
-  <div class="wrap rv">
-    <div class="filter-tabs">
-      <button class="f-tab active" data-filter="all">All</button>
-      <button class="f-tab" data-filter="basements">Basements</button>
-      <button class="f-tab" data-filter="bathrooms">Bathrooms</button>
-      <button class="f-tab" data-filter="kitchens">Kitchens</button>
-      <button class="f-tab" data-filter="living">Living Spaces</button>
-    </div>
-    <div class="portfolio-masonry" id="portfolioGrid">
-      <div class="ph" data-cat="basements" style="aspect-ratio:4/3;"><span>Photo slot — finished basement</span></div>
-      <div class="ph" data-cat="basements" style="aspect-ratio:3/4;"><span>Photo slot — custom home bar</span></div>
-      <div class="ph" data-cat="bathrooms" style="aspect-ratio:1/1;"><span>Photo slot — bathroom renovation</span></div>
-      <div class="ph" data-cat="bathrooms" style="aspect-ratio:4/3;"><span>Photo slot — walk-in shower</span></div>
-      <div class="ph" data-cat="kitchens" style="aspect-ratio:3/4;"><span>Photo slot — kitchen island</span></div>
-      <div class="ph" data-cat="kitchens" style="aspect-ratio:4/3;"><span>Photo slot — custom cabinetry</span></div>
-      <div class="ph" data-cat="living" style="aspect-ratio:1/1;"><span>Photo slot — living room built-ins</span></div>
-      <div class="ph" data-cat="living" style="aspect-ratio:3/4;"><span>Photo slot — kids' themed bedroom</span></div>
-    </div>
+  <div class="wrap portfolio-cards rv">
+    <a class="pcard" href="portfolio.html#kitchens"><div class="pc-placeholder"><span>Photo slot — kitchens</span></div><div class="pc-label">Kitchens</div><div class="pc-zoom"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="16" y2="16"/></svg></div></a>
+    <a class="pcard" href="portfolio.html#bathrooms"><div class="pc-placeholder"><span>Photo slot — bathrooms</span></div><div class="pc-label">Bathrooms</div><div class="pc-zoom"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="16" y2="16"/></svg></div></a>
+    <a class="pcard" href="portfolio.html#basements"><div class="pc-placeholder"><span>Photo slot — basements</span></div><div class="pc-label">Basements</div><div class="pc-zoom"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="16" y2="16"/></svg></div></a>
+    <a class="pcard" href="portfolio.html#other"><div class="pc-placeholder"><span>Photo slot — other projects</span></div><div class="pc-label">Other Projects</div><div class="pc-zoom"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="16" y2="16"/></svg></div></a>
+  </div>
+  <div class="wrap rv" style="text-align:center;margin-top:46px;">
+    <a class="btn btn-gold" href="#">View Full Portfolio</a>
   </div>
 </section>
 
@@ -328,18 +335,6 @@
     show(0); restart();
   }
   document.querySelectorAll('[data-slider]').forEach(initSlider);
-
-  document.querySelectorAll('.filter-tabs .f-tab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      document.querySelectorAll('.filter-tabs .f-tab').forEach(t=> t.classList.remove('active'));
-      tab.classList.add('active');
-      const filter = tab.dataset.filter;
-      document.querySelectorAll('#portfolioGrid .ph').forEach(item=>{
-        const match = filter==='all' || item.dataset.cat===filter;
-        item.classList.toggle('hidden-item', !match);
-      });
-    });
-  });
 
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
