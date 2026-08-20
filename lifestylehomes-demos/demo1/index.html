@@ -103,7 +103,8 @@
   /* -------- feature teaser -------- */
   .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
   .feature-card{text-align:center;}
-  .feature-photo{aspect-ratio:4/3;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+  .feature-photo{aspect-ratio:4/3;background:var(--surface);border:1px solid var(--line);overflow:hidden;margin-bottom:20px;}
+  .feature-photo img{width:100%;height:100%;object-fit:cover;display:block;}
   .feature-photo span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);padding:0 20px;text-align:center;}
   .feature-card h3{font-size:22px;color:var(--gold-soft);margin-bottom:10px;}
   .feature-card p{color:var(--ink-soft);font-size:15px;}
@@ -215,17 +216,17 @@
 <section>
   <div class="wrap feature-grid rv">
     <div class="feature-card">
-      <div class="feature-photo"><span>Photo slot — planning &amp; blueprints</span></div>
+      <div class="feature-photo"><img src="images/about-us.jpg" alt="Planning and blueprints"></div>
       <h3>About Us</h3>
       <p>We are a different kind of home improvement company.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-photo"><span>Photo slot — working with clients</span></div>
+      <div class="feature-photo"><img src="images/services.jpg" alt="Working with clients"></div>
       <h3>Services</h3>
       <p>We listen. We care. We deliver.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-photo"><span>Photo slot — finished basement</span></div>
+      <div class="feature-photo"><img src="images/portfolio-preview.jpg" alt="Finished basement bar"></div>
       <h3>Portfolio</h3>
       <p>We create beautiful living spaces.</p>
     </div>
