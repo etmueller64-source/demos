@@ -61,7 +61,7 @@
   .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:16px;}
   .site-logo{height:84px;width:auto;display:block;}
   @media(max-width:560px){
-    .header-row{padding:16px 0;flex-wrap:wrap;row-gap:14px;}
+    .header-row{padding:16px 0;}
     .site-logo{height:56px;}
     .header-row .btn-primary{padding:10px 16px;font-size:11px;}
   }
@@ -128,26 +128,6 @@
     .hero-copy .cat{font-size:clamp(28px,8vw,40px);}
     .hero-copy p{font-size:15px;margin-top:10px;}
     .hero-copy .btn{margin-top:18px;}
-  }
-
-  /* -------- mobile nav: current-page dropdown -------- */
-  /* Hidden on desktop/tablet; replaces the horizontal tab row entirely
-     under 700px with a single button showing the current page, which
-     expands into a full-width list of the other pages. */
-  .nav-toggle{display:none;}
-  @media(max-width:700px){
-    nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
-    nav.main.open .wrap{display:flex;}
-    nav.main a{width:100%;box-sizing:border-box;padding:15px 6vw;border-bottom:1px solid var(--line);border-left:3px solid transparent;white-space:normal;}
-    nav.main a:hover,nav.main a.on{border-bottom-color:var(--line);border-left-color:var(--gold);background:rgba(255,255,255,0.03);}
-    .nav-toggle{
-      display:flex;align-items:center;justify-content:space-between;
-      width:100%;padding:16px 6vw;background:none;border:none;
-      color:var(--ink);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
-      font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;
-    }
-    .nav-toggle svg{width:16px;height:16px;stroke:var(--gold-soft);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease;}
-    .nav-toggle[aria-expanded="true"] svg{transform:rotate(180deg);}
   }
 
   /* -------- estimate strip -------- */
@@ -235,11 +215,7 @@
 </header>
 
 <nav class="main" id="mainNav">
-  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false">
-    <span id="navToggleLabel">Home</span>
-    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-  </button>
-  <div class="wrap" id="navLinks">
+  <div class="wrap">
     <a href="#" class="on">Home</a>
     <a href="#">About Us</a>
     <a href="#">Services</a>
@@ -406,29 +382,6 @@
 
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
-
-  // Mobile nav dropdown: shows the current page, expands to list the rest.
-  (function(){
-    const toggle = document.getElementById('navToggle');
-    const nav = document.getElementById('mainNav');
-    const label = document.getElementById('navToggleLabel');
-    if (!toggle || !nav) return;
-
-    const current = nav.querySelector('#navLinks a.on');
-    if (current && label) label.textContent = current.textContent;
-
-    toggle.addEventListener('click', ()=>{
-      const isOpen = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
-
-    nav.querySelectorAll('#navLinks a').forEach(a=>{
-      a.addEventListener('click', ()=>{
-        nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  })();
 
   // Roll-up nav: hides on scroll down, reveals on scroll up.
   // Small threshold near the top keeps it visible until the user has
