@@ -33,12 +33,9 @@
   .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);}
   .btn-gold:hover{background:var(--gold);color:var(--bg);}
 
-  /* -------- sticky roll-up nav -------- */
-  /* Only the nav bar sticks and hides/reveals on scroll — the utility bar
-     and logo header scroll away normally with the page and don't return
-     until the user scrolls back to the very top. */
-  nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
-  nav.main.hide{transform:translateY(-100%);}
+  /* -------- sticky roll-up header -------- */
+  .site-header{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
+  .site-header.hide{transform:translateY(-100%);}
 
   /* -------- top utility bar -------- */
   .util-bar{background:var(--red);padding:9px 0;}
@@ -59,10 +56,10 @@
     border-bottom:1px solid var(--line);
   }
   .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:16px;}
-  .site-logo{height:84px;width:auto;display:block;}
+  .site-logo{height:64px;width:auto;display:block;}
   @media(max-width:560px){
     .header-row{padding:16px 0;}
-    .site-logo{height:56px;}
+    .site-logo{height:42px;}
     .header-row .btn-primary{padding:10px 16px;font-size:11px;}
   }
   .brand{display:flex;flex-direction:column;}
@@ -197,6 +194,7 @@
 </head>
 <body>
 
+<div class="site-header" id="siteHeader">
 <div class="util-bar">
   <div class="wrap util-row">
     <div class="util-links">
@@ -214,7 +212,7 @@
   </div>
 </header>
 
-<nav class="main" id="mainNav">
+<nav class="main">
   <div class="wrap">
     <a href="#" class="on">Home</a>
     <a href="#">About Us</a>
@@ -225,6 +223,7 @@
     <a href="#">Contact Us</a>
   </div>
 </nav>
+</div>
 
 <div class="hero-wrap">
 <div class="hero-slider" data-slider>
@@ -383,22 +382,22 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Roll-up nav: hides on scroll down, reveals on scroll up.
+  // Roll-up header: hides on scroll down, reveals on scroll up.
   // Small threshold near the top keeps it visible until the user has
   // actually committed to scrolling, so it doesn't flicker on tiny nudges.
   (function(){
-    const nav = document.getElementById('mainNav');
-    if (!nav) return;
+    const header = document.getElementById('siteHeader');
+    if (!header) return;
     let lastY = window.scrollY;
     let ticking = false;
     function onScroll(){
       const y = window.scrollY;
       if (y < 80) {
-        nav.classList.remove('hide');
+        header.classList.remove('hide');
       } else if (y > lastY + 4) {
-        nav.classList.add('hide');       // scrolling down
+        header.classList.add('hide');       // scrolling down
       } else if (y < lastY - 4) {
-        nav.classList.remove('hide');    // scrolling up
+        header.classList.remove('hide');    // scrolling up
       }
       lastY = y;
       ticking = false;
