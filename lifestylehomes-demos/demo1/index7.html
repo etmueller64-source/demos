@@ -64,6 +64,11 @@
   .site-logo{height:84px;width:auto;display:block;}
   .header-row .btn-primary{margin-left:auto;}
   .nav-toggle{display:none;}
+  @media(max-width:560px){
+    .header-row{padding:16px 0;flex-wrap:wrap;row-gap:14px;}
+    .site-logo{height:56px;}
+    .header-row .btn-primary{padding:10px 16px;font-size:11px;}
+  }
   .brand{display:flex;flex-direction:column;}
   .brand .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:30px;color:var(--gold-soft);}
   .brand .sub{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;}
@@ -129,27 +134,26 @@
     .hero-copy .btn{margin-top:18px;}
   }
 
-  /* -------- mobile header: everything on one thin row -------- */
-  /* Under 700px, header is the sticky unit: logo, the shortened CTA, and
-     a small static hamburger all share one compact row. The hamburger
-     doesn't change appearance when open — closing is just tap-again or
-     tap-outside (see the JS), so there's no icon-state to keep in sync. */
+  /* -------- mobile header: logo+CTA row, with a centered hamburger below -------- */
+  /* Under 700px, header becomes the sticky unit: logo and "Get a Free
+     Guessimate" share a row like desktop, and a hamburger sits centered
+     beneath both, opening the page list as a dropdown attached right
+     below it — all within the same hardwood-background header block. */
   @media(max-width:700px){
     header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
     header.hide{transform:translateY(-100%);}
     nav.main{position:static;transition:none;}
     nav.main.hide{transform:none;}
 
-    .header-row{padding:12px 0;gap:10px;flex-wrap:wrap;row-gap:10px;}
-    .site-logo{height:44px;}
-    .header-row .btn-primary{padding:9px 13px;font-size:10.5px;}
-
     .nav-toggle{
-      display:flex;flex-direction:column;justify-content:center;
-      gap:4px;flex:none;padding:4px 2px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:5px;width:100%;padding:2px 0 16px;
       background:none;border:none;cursor:pointer;
     }
-    .nav-toggle span{display:block;height:1px;width:20px;background:var(--gold-soft);}
+    .nav-toggle span{display:block;height:1px;width:52px;background:var(--gold-soft);transition:transform .25s ease,opacity .25s ease;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 
     nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
     nav.main.open .wrap{display:flex;}
@@ -237,11 +241,11 @@
 <header id="siteHeader">
   <div class="wrap header-row">
     <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
-    <a class="btn btn-primary" href="#estimate">Free Guessimate</a>
-    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
   </div>
+  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   <nav class="main" id="mainNav">
     <div class="wrap" id="navLinks">
       <a href="#" class="on">Home</a>
@@ -413,15 +417,12 @@
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
   // Mobile nav dropdown: hamburger toggle expands/collapses the page list.
-  // Icon doesn't change state on open — closing is tap-the-hamburger-again
-  // or tap-anywhere-outside, so there's no icon-swap to keep in sync.
   (function(){
     const toggle = document.getElementById('navToggle');
     const nav = document.getElementById('mainNav');
     if (!toggle || !nav) return;
 
-    toggle.addEventListener('click', (e)=>{
-      e.stopPropagation();
+    toggle.addEventListener('click', ()=>{
       const isOpen = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
@@ -431,13 +432,6 @@
         nav.classList.remove('open');
         toggle.setAttribute('aria-expanded', 'false');
       });
-    });
-
-    document.addEventListener('click', (e)=>{
-      if (nav.classList.contains('open') && !nav.contains(e.target)) {
-        nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
     });
   })();
 
