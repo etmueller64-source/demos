@@ -34,12 +34,9 @@
   .btn-gold:hover{background:var(--gold);color:var(--bg);}
 
   /* -------- sticky roll-up nav -------- */
-  /* Desktop/tablet: only the nav tab row sticks and hides/reveals on scroll
-     — the utility bar and logo header scroll away normally and don't
-     return until the user scrolls back to the very top.
-     Mobile (below): the whole header (logo + button + hamburger + the
-     dropdown it opens) becomes the sticky unit instead — see the
-     max-width:700px override further down, which flips these roles. */
+  /* Only the nav bar sticks and hides/reveals on scroll — the utility bar
+     and logo header scroll away normally with the page and don't return
+     until the user scrolls back to the very top. */
   nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
   nav.main.hide{transform:translateY(-100%);}
 
@@ -59,11 +56,10 @@
     background-repeat:no-repeat, repeat-x;
     background-position:center, left center;
     background-size:cover, auto 100%;
+    border-bottom:1px solid var(--line);
   }
   .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:16px;}
   .site-logo{height:84px;width:auto;display:block;}
-  .header-actions{display:flex;align-items:center;gap:14px;}
-  .nav-toggle{display:none;}
   @media(max-width:560px){
     .header-row{padding:16px 0;flex-wrap:wrap;row-gap:14px;}
     .site-logo{height:56px;}
@@ -134,31 +130,24 @@
     .hero-copy .btn{margin-top:18px;}
   }
 
-  /* -------- mobile header: merged logo/CTA/hamburger bar -------- */
-  /* Under 700px, header and nav become one combined sticky unit: logo,
-     "Get a Free Guessimate", and a hamburger icon all in a single row
-     (matching the AKBA-style pattern), with the page list appearing as a
-     dropdown panel directly beneath that same bar when opened. */
+  /* -------- mobile nav: current-page dropdown -------- */
+  /* Hidden on desktop/tablet; replaces the horizontal tab row entirely
+     under 700px with a single button showing the current page, which
+     expands into a full-width list of the other pages. */
+  .nav-toggle{display:none;}
   @media(max-width:700px){
-    header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
-    header.hide{transform:translateY(-100%);}
-    nav.main{position:static;transition:none;}
-    nav.main.hide{transform:none;}
-
-    .nav-toggle{
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:5px;width:36px;height:36px;flex:none;
-      background:none;border:none;cursor:pointer;padding:0;
-    }
-    .nav-toggle span{display:block;height:2px;width:22px;background:var(--gold-soft);border-radius:2px;transition:transform .25s ease,opacity .25s ease;}
-    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
-    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-
     nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
     nav.main.open .wrap{display:flex;}
     nav.main a{width:100%;box-sizing:border-box;padding:15px 6vw;border-bottom:1px solid var(--line);border-left:3px solid transparent;white-space:normal;}
     nav.main a:hover,nav.main a.on{border-bottom-color:var(--line);border-left-color:var(--gold);background:rgba(255,255,255,0.03);}
+    .nav-toggle{
+      display:flex;align-items:center;justify-content:space-between;
+      width:100%;padding:16px 6vw;background:none;border:none;
+      color:var(--ink);font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+      font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;
+    }
+    .nav-toggle svg{width:16px;height:16px;stroke:var(--gold-soft);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease;}
+    .nav-toggle[aria-expanded="true"] svg{transform:rotate(180deg);}
   }
 
   /* -------- estimate strip -------- */
@@ -238,28 +227,28 @@
   </div>
 </div>
 
-<header id="siteHeader">
+<header>
   <div class="wrap header-row">
     <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
-    <div class="header-actions">
-      <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+    <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
   </div>
-  <nav class="main" id="mainNav">
-    <div class="wrap" id="navLinks">
-      <a href="#" class="on">Home</a>
-      <a href="#">About Us</a>
-      <a href="#">Services</a>
-      <a href="#">Portfolio</a>
-      <a href="#">Community</a>
-      <a href="#">Testimonials</a>
-      <a href="#">Contact Us</a>
-    </div>
-  </nav>
 </header>
+
+<nav class="main" id="mainNav">
+  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false">
+    <span id="navToggleLabel">Home</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <div class="wrap" id="navLinks">
+    <a href="#" class="on">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Community</a>
+    <a href="#">Testimonials</a>
+    <a href="#">Contact Us</a>
+  </div>
+</nav>
 
 <div class="hero-wrap">
 <div class="hero-slider" data-slider>
@@ -418,11 +407,15 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Mobile nav dropdown: hamburger toggle expands/collapses the page list.
+  // Mobile nav dropdown: shows the current page, expands to list the rest.
   (function(){
     const toggle = document.getElementById('navToggle');
     const nav = document.getElementById('mainNav');
+    const label = document.getElementById('navToggleLabel');
     if (!toggle || !nav) return;
+
+    const current = nav.querySelector('#navLinks a.on');
+    if (current && label) label.textContent = current.textContent;
 
     toggle.addEventListener('click', ()=>{
       const isOpen = nav.classList.toggle('open');
@@ -437,26 +430,22 @@
     });
   })();
 
-  // Roll-up: hides on scroll down, reveals on scroll up.
-  // Desktop/tablet acts on the nav tab row; mobile acts on the whole
-  // merged header instead (see the max-width:700px CSS, which decides
-  // which of the two actually has position:sticky at any given width —
-  // toggling 'hide' on both here is harmless for whichever one doesn't).
+  // Roll-up nav: hides on scroll down, reveals on scroll up.
   // Small threshold near the top keeps it visible until the user has
   // actually committed to scrolling, so it doesn't flicker on tiny nudges.
   (function(){
-    const targets = [document.getElementById('siteHeader'), document.getElementById('mainNav')].filter(Boolean);
-    if (!targets.length) return;
+    const nav = document.getElementById('mainNav');
+    if (!nav) return;
     let lastY = window.scrollY;
     let ticking = false;
     function onScroll(){
       const y = window.scrollY;
       if (y < 80) {
-        targets.forEach(t=>t.classList.remove('hide'));
+        nav.classList.remove('hide');
       } else if (y > lastY + 4) {
-        targets.forEach(t=>t.classList.add('hide'));       // scrolling down
+        nav.classList.add('hide');       // scrolling down
       } else if (y < lastY - 4) {
-        targets.forEach(t=>t.classList.remove('hide'));    // scrolling up
+        nav.classList.remove('hide');    // scrolling up
       }
       lastY = y;
       ticking = false;
