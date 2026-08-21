@@ -62,7 +62,7 @@
   }
   .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:16px;}
   .site-logo{height:84px;width:auto;display:block;}
-  .header-row .btn-primary{margin-left:auto;}
+  .header-actions{display:flex;align-items:center;gap:14px;}
   .nav-toggle{display:none;}
   @media(max-width:560px){
     .header-row{padding:16px 0;flex-wrap:wrap;row-gap:14px;}
@@ -134,11 +134,11 @@
     .hero-copy .btn{margin-top:18px;}
   }
 
-  /* -------- mobile header: logo+CTA row, with a centered hamburger below -------- */
-  /* Under 700px, header becomes the sticky unit: logo and "Get a Free
-     Guessimate" share a row like desktop, and a hamburger sits centered
-     beneath both, opening the page list as a dropdown attached right
-     below it — all within the same hardwood-background header block. */
+  /* -------- mobile header: merged logo/CTA/hamburger bar -------- */
+  /* Under 700px, header and nav become one combined sticky unit: logo,
+     "Get a Free Guessimate", and a hamburger icon all in a single row
+     (matching the AKBA-style pattern), with the page list appearing as a
+     dropdown panel directly beneath that same bar when opened. */
   @media(max-width:700px){
     header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
     header.hide{transform:translateY(-100%);}
@@ -147,13 +147,13 @@
 
     .nav-toggle{
       display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:5px;width:100%;padding:2px 0 16px;
-      background:none;border:none;cursor:pointer;
+      gap:5px;width:36px;height:36px;flex:none;
+      background:none;border:none;cursor:pointer;padding:0;
     }
-    .nav-toggle span{display:block;height:1px;width:52px;background:var(--gold-soft);transition:transform .25s ease,opacity .25s ease;}
-    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .nav-toggle span{display:block;height:2px;width:22px;background:var(--gold-soft);border-radius:2px;transition:transform .25s ease,opacity .25s ease;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
     .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
-    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
     nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
     nav.main.open .wrap{display:flex;}
@@ -241,11 +241,13 @@
 <header id="siteHeader">
   <div class="wrap header-row">
     <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
-    <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
+    <div class="header-actions">
+      <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
-  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
   <nav class="main" id="mainNav">
     <div class="wrap" id="navLinks">
       <a href="#" class="on">Home</a>
