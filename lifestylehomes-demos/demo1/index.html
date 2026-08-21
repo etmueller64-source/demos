@@ -137,8 +137,14 @@
   @media(max-width:700px){
     header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
     header.hide{transform:translateY(-100%);}
-    nav.main{position:static;transition:none;}
-    nav.main.hide{transform:none;}
+    /* nav stays sticky (from the default rule above) but tucks in directly
+       under header instead of at the very top — --header-h is measured
+       and kept in sync by JS, since header's exact height can shift
+       slightly (e.g. if the row ever wraps). When header hides, nav
+       slides up by its own height plus header's, so the two disappear
+       together as one unit instead of leaving nav stranded mid-air. */
+    nav.main{top:var(--header-h, 80px);}
+    nav.main.hide{transform:translateY(calc(-100% - var(--header-h, 80px)));}
 
     .header-row{padding-top:12px;padding-bottom:12px;gap:10px;flex-wrap:wrap;row-gap:10px;}
     .site-logo{height:44px;}
@@ -242,18 +248,18 @@
       <span></span><span></span><span></span>
     </button>
   </div>
-  <nav class="main" id="mainNav">
-    <div class="wrap" id="navLinks">
-      <a href="#" class="on">Home</a>
-      <a href="#">About Us</a>
-      <a href="#">Services</a>
-      <a href="#">Portfolio</a>
-      <a href="#">Community</a>
-      <a href="#">Testimonials</a>
-      <a href="#">Contact Us</a>
-    </div>
-  </nav>
 </header>
+<nav class="main" id="mainNav">
+  <div class="wrap" id="navLinks">
+    <a href="#" class="on">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Community</a>
+    <a href="#">Testimonials</a>
+    <a href="#">Contact Us</a>
+  </div>
+</nav>
 
 <div class="hero-wrap">
 <div class="hero-slider" data-slider>
@@ -411,6 +417,20 @@
 
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+
+  // Keeps --header-h in sync with the header's real rendered height, so
+  // the mobile nav bar (a separate sticky element, not nested inside
+  // header) tucks in directly beneath it rather than at a guessed offset.
+  (function(){
+    const header = document.getElementById('siteHeader');
+    if (!header) return;
+    function update(){
+      document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+    }
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+  })();
 
   // Mobile nav dropdown: hamburger toggle expands/collapses the page list.
   // Icon doesn't change state on open — closing is tap-the-hamburger-again
