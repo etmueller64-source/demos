@@ -753,7 +753,17 @@
       return;
     }
 
-    wrap.innerHTML = Array.from(teams.entries()).map(([team, info]) => {
+    // Youngest first, oldest last — sorted by the numeric age parsed from
+    // each team name (e.g. "9U" -> 9). Same-age teams are ordered by their
+    // full label (so "10U A" sits before "10U AA").
+    const sortedTeams = Array.from(teams.entries()).sort((a, b) => {
+      const ageA = parseInt(parseTeamLabel(a[0]).age) || 0;
+      const ageB = parseInt(parseTeamLabel(b[0]).age) || 0;
+      if (ageA !== ageB) return ageA - ageB;
+      return a[0].localeCompare(b[0]);
+    });
+
+    wrap.innerHTML = sortedTeams.map(([team, info]) => {
       const coachLine = info.coach
         ? `<div class="team-detail-row"><b>Head coach</b><span>${info.coach}${info.coachEmail ? ` — <a href="mailto:${info.coachEmail}">${info.coachEmail}</a>` : ''}${info.coachPhone ? ` — <a href="tel:${info.coachPhone.replace(/[^\d+]/g,'')}">${info.coachPhone}</a>` : ''}</span></div>`
         : `<div class="team-detail-row"><b>Head coach</b><span>To be announced</span></div>`;

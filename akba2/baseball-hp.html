@@ -609,7 +609,15 @@
         <h2>HP teams &amp; tryouts</h2>
         <p>Click a team to see its head coach and tryout details.</p>
       </div>
-      <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
+        <select id="age-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All ages</option>
+        </select>
+        <select id="division-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All divisions</option>
+        </select>
+      </div>
     </div>
     <div id="teams-accordion">
       <div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Loading teams…</div></div>
@@ -801,6 +809,49 @@
     return isNaN(d.getTime()) ? null : d;
   }
 
+  // Splits a team label like "10U AA" into { age: "10U", division: "AA" }.
+  // Falls back to division "Select" for labels with no division suffix (e.g. "22U").
+  function parseTeamLabel(team) {
+    const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
+    if (!m) return { age: '', division: '' };
+    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Select' };
+  }
+
+  function populateFilters(teamNames) {
+    const ages = new Set(), divisions = new Set();
+    teamNames.forEach(team => {
+      const { age, division } = parseTeamLabel(team);
+      if (age) ages.add(age);
+      if (division) divisions.add(division);
+    });
+    const ageSelect = document.getElementById('age-filter');
+    const divisionSelect = document.getElementById('division-filter');
+    if (ageSelect) {
+      const prev = ageSelect.value;
+      const sorted = Array.from(ages).sort((a, b) => parseInt(a) - parseInt(b));
+      ageSelect.innerHTML = '<option value="">All ages</option>' + sorted.map(a => `<option value="${a}">${a}</option>`).join('');
+      if (sorted.includes(prev)) ageSelect.value = prev;
+    }
+    if (divisionSelect) {
+      const prev = divisionSelect.value;
+      const sorted = Array.from(divisions).sort();
+      divisionSelect.innerHTML = '<option value="">All divisions</option>' + sorted.map(d => `<option value="${d}">${d}</option>`).join('');
+      if (sorted.includes(prev)) divisionSelect.value = prev;
+    }
+  }
+
+  function applyTeamFilters() {
+    const q = (document.getElementById('team-search')?.value || '').toLowerCase();
+    const ageVal = document.getElementById('age-filter')?.value || '';
+    const divisionVal = document.getElementById('division-filter')?.value || '';
+    document.querySelectorAll('#teams-accordion .accordion-item').forEach(item => {
+      const matchesText = !q || item.textContent.toLowerCase().includes(q);
+      const matchesAge = !ageVal || item.dataset.age === ageVal;
+      const matchesDivision = !divisionVal || item.dataset.division === divisionVal;
+      item.style.display = (matchesText && matchesAge && matchesDivision) ? '' : 'none';
+    });
+  }
+
   function buildAccordion(coachRows, tryoutRows) {
     const wrap = document.getElementById('teams-accordion');
 
@@ -829,7 +880,17 @@
       return;
     }
 
-    wrap.innerHTML = Array.from(teams.entries()).map(([team, info]) => {
+    // Youngest first, oldest last — sorted by the numeric age parsed from
+    // each team name (e.g. "9U" -> 9). Same-age teams are ordered by their
+    // full label (so "10U A" sits before "10U AA").
+    const sortedTeams = Array.from(teams.entries()).sort((a, b) => {
+      const ageA = parseInt(parseTeamLabel(a[0]).age) || 0;
+      const ageB = parseInt(parseTeamLabel(b[0]).age) || 0;
+      if (ageA !== ageB) return ageA - ageB;
+      return a[0].localeCompare(b[0]);
+    });
+
+    wrap.innerHTML = sortedTeams.map(([team, info]) => {
       const coachLine = info.coach
         ? `<div class="team-detail-row"><b>Head coach</b><span>${info.coach}${info.coachEmail ? ` — <a href="mailto:${info.coachEmail}">${info.coachEmail}</a>` : ''}${info.coachPhone ? ` — <a href="tel:${info.coachPhone.replace(/[^\d+]/g,'')}">${info.coachPhone}</a>` : ''}</span></div>`
         : `<div class="team-detail-row"><b>Head coach</b><span>To be announced</span></div>`;
@@ -853,8 +914,10 @@
           </div>`
         : `<div class="team-detail-row"><b>Tryout</b><span>Date to be announced</span></div>`;
 
+      const { age, division } = parseTeamLabel(team);
+
       return `
-        <div class="accordion-item">
+        <div class="accordion-item" data-age="${age}" data-division="${division}">
           <button class="accordion-header" type="button">
             <span>${team}</span>
             <span class="plus">+</span>
@@ -867,6 +930,8 @@
           </div>
         </div>`;
     }).join('');
+
+    populateFilters(Array.from(teams.keys()));
 
     wrap.querySelectorAll('.accordion-header').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -927,15 +992,10 @@
       buildFutureCoachDirectory(futureCoachRows);
     });
 
-  const teamSearch = document.getElementById('team-search');
-  if (teamSearch) {
-    teamSearch.addEventListener('input', () => {
-      const q = teamSearch.value.toLowerCase();
-      document.querySelectorAll('#teams-accordion .accordion-item').forEach(item => {
-        item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
-      });
-    });
-  }
+  ['team-search', 'age-filter', 'division-filter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(id === 'team-search' ? 'input' : 'change', applyTeamFilters);
+  });
 
   function wireDirectory(toggleId, itemId, bodyId, searchId, tbodySelector) {
     const toggle = document.getElementById(toggleId);
