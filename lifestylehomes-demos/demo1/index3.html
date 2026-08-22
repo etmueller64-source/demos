@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lifestyles Home Creations — Demo 1</title>
+<title>Lifestyles Home Creations — Demo 1 (Classic Refined)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -33,23 +33,12 @@
   .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);}
   .btn-gold:hover{background:var(--gold);color:var(--bg);}
 
-  /* -------- sticky roll-up nav -------- */
-  /* Desktop/tablet: only the nav tab row sticks and hides/reveals on scroll
-     — the utility bar and logo header scroll away normally and don't
-     return until the user scrolls back to the very top.
-     Mobile (below): the whole header (logo + button + hamburger + the
-     dropdown it opens) becomes the sticky unit instead — see the
-     max-width:700px override further down, which flips these roles. */
-  nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
-  nav.main.hide{transform:translateY(-100%);}
-
   /* -------- top utility bar -------- */
   .util-bar{background:var(--red);padding:9px 0;}
   .util-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,0.92);}
   .util-row a{display:inline-flex;align-items:center;gap:6px;}
   .util-links{display:flex;gap:26px;}
   @media(max-width:760px){ .util-row{flex-direction:column;gap:6px;text-align:center;} }
-  @media(max-width:700px){ .util-links{display:none;} .util-bar{padding:7px 0;} }
 
   /* -------- header -------- */
   header{
@@ -60,11 +49,9 @@
     background-repeat:no-repeat, repeat-x;
     background-position:center, left center;
     background-size:cover, auto 100%;
+    border-bottom:1px solid var(--line);
   }
-  .header-row{display:flex;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px;gap:16px;}
-  .site-logo{height:84px;width:auto;display:block;}
-  .header-row .btn-primary{margin-left:auto;}
-  .nav-toggle{display:none;}
+  .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;}
   .brand{display:flex;flex-direction:column;}
   .brand .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:30px;color:var(--gold-soft);}
   .brand .sub{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;}
@@ -77,7 +64,6 @@
   @media(max-width:900px){ nav.main .wrap{overflow-x:auto;} nav.main a{padding:14px 16px;white-space:nowrap;} }
 
   /* -------- hero slider -------- */
-  .hero-wrap{position:relative;}
   .hero-slider{position:relative;width:100%;aspect-ratio:2/1;min-height:420px;max-height:700px;overflow:hidden;}
   .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;background-size:cover;background-position:center;}
   .hero-slide.active{opacity:1;}
@@ -103,65 +89,18 @@
   .hero-arrow svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
   .hero-arrow:hover{background:rgba(20,17,15,0.65);}
   .hero-arrow.prev{left:24px;} .hero-arrow.next{right:24px;}
-
-  /* Mobile: the photo is the first thing people see — stop overlaying text
-     on top of it (it was dimming/obscuring the work) and instead let the
-     photo show in full, with the text flowing in as its own block right
-     below. Same content, same order, just no longer competing for the
-     same space. */
   @media(max-width:700px){
-    .hero-slider{aspect-ratio:4/3;min-height:0;max-height:420px;}
-    .hero-arrow{width:32px;height:32px;} .hero-arrow.prev{left:10px;} .hero-arrow.next{right:10px;}
-    .hero-arrow svg{width:15px;height:15px;}
+    .hero-slider{min-height:640px;}
+    .hero-arrow{width:28px;height:28px;} .hero-arrow.prev{left:8px;} .hero-arrow.next{right:8px;}
+    .hero-arrow svg{width:13px;height:13px;}
     .hero-copy{
-      position:static;
-      left:auto;right:auto;top:auto;
-      max-width:none;width:100%;
-      background:var(--surface);
-      backdrop-filter:none;-webkit-backdrop-filter:none;
-      border:none;border-top:1px solid var(--line);
-      border-radius:0;
-      box-shadow:none;
-      padding:28px 6vw 34px;
-      transform:none;
+      left:5vw;right:5vw;padding:20px 22px;
+      transform:translateY(-50%);
     }
-    .hero-copy .cat{font-size:clamp(28px,8vw,40px);}
-    .hero-copy p{font-size:15px;margin-top:10px;}
-    .hero-copy .btn{margin-top:18px;}
-  }
-
-  /* -------- mobile header: everything on one thin row -------- */
-  /* Under 700px, header is the sticky unit: logo, the shortened CTA, and
-     a small static hamburger all share one compact row. The hamburger
-     doesn't change appearance when open — closing is just tap-again or
-     tap-outside (see the JS), so there's no icon-state to keep in sync. */
-  @media(max-width:700px){
-    header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
-    header.hide{transform:translateY(-100%);}
-    /* nav stays sticky (from the default rule above) but tucks in directly
-       under header instead of at the very top — --header-h is measured
-       and kept in sync by JS, since header's exact height can shift
-       slightly (e.g. if the row ever wraps). When header hides, nav
-       slides up by its own height plus header's, so the two disappear
-       together as one unit instead of leaving nav stranded mid-air. */
-    nav.main{top:var(--header-h, 80px);}
-    nav.main.hide{transform:translateY(calc(-100% - var(--header-h, 80px)));}
-
-    .header-row{padding-top:12px;padding-bottom:12px;gap:10px;flex-wrap:wrap;row-gap:10px;}
-    .site-logo{height:44px;}
-    .header-row .btn-primary{padding:9px 13px;font-size:10.5px;}
-
-    .nav-toggle{
-      display:flex;flex-direction:column;justify-content:center;
-      gap:4px;flex:none;padding:4px 2px;
-      background:none;border:none;cursor:pointer;
-    }
-    .nav-toggle span{display:block;height:1px;width:20px;background:var(--gold-soft);}
-
-    nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
-    nav.main.open .wrap{display:flex;}
-    nav.main a{width:100%;box-sizing:border-box;padding:15px 6vw;border-bottom:1px solid var(--line);border-left:3px solid transparent;white-space:normal;}
-    nav.main a:hover,nav.main a.on{border-bottom-color:var(--line);border-left-color:var(--gold);background:rgba(255,255,255,0.03);}
+    .hero-copy .eyebrow{display:none;}
+    .hero-copy .cat{font-size:clamp(26px,8vw,38px);}
+    .hero-copy p{font-size:14px;margin-top:8px;}
+    .hero-copy .btn{margin-top:16px;padding:11px 22px;font-size:12px;}
   }
 
   /* -------- estimate strip -------- */
@@ -186,7 +125,7 @@
 
   /* -------- trust strip -------- */
   .trust-strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding-top:46px;padding-bottom:46px;text-align:center;}
+  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding:46px 0;text-align:center;}
   .trust-item{display:flex;flex-direction:column;align-items:center;}
   .trust-icon{position:relative;width:52px;height:52px;margin-bottom:16px;}
   .trust-icon svg{width:100%;height:100%;stroke:var(--gold-soft);fill:none;stroke-width:1.5;}
@@ -241,17 +180,15 @@
   </div>
 </div>
 
-<header id="siteHeader">
+<header>
   <div class="wrap header-row">
-    <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
-    <a class="btn btn-primary" href="#estimate">Free Estimate</a>
-    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+    <img src="images/logo.png" alt="Lifestyles Home Creations" style="height:64px;width:auto;display:block;">
+    <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
   </div>
 </header>
-<nav class="main" id="mainNav">
-  <div class="wrap" id="navLinks">
+
+<nav class="main">
+  <div class="wrap">
     <a href="#" class="on">Home</a>
     <a href="#">About Us</a>
     <a href="#">Services</a>
@@ -262,12 +199,17 @@
   </div>
 </nav>
 
-<div class="hero-wrap">
 <div class="hero-slider" data-slider>
   <div class="hero-slide active" style="background-image:url('images/hero-basement.jpg');"></div>
   <div class="hero-slide" style="background-image:url('images/hero-bathroom.jpg');"></div>
   <div class="hero-slide" style="background-image:url('images/hero-kitchen.jpg');"></div>
   <div class="hero-slide" style="background-image:url('images/hero-misc.jpg');"></div>
+  <div class="hero-copy">
+    <div class="eyebrow">Basements &middot; Bathrooms &middot; Kitchens &middot; Living Spaces</div>
+    <h1 class="cat" style="margin-top:14px;">We create beautiful living spaces</h1>
+    <p>Full-service home renovations, built with the human touch you won't find anywhere else.</p>
+    <a class="btn btn-gold" href="#estimate">Get Your Free Estimate</a>
+  </div>
   <button class="hero-arrow prev" aria-label="Previous"><svg viewBox="0 0 24 24"><line x1="20" y1="12" x2="4" y2="12"/><polyline points="11 5 4 12 11 19"/></svg></button>
   <button class="hero-arrow next" aria-label="Next"><svg viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="13 5 20 12 13 19"/></svg></button>
   <div class="hero-dots">
@@ -276,13 +218,6 @@
     <button class="hero-dot" aria-label="Slide 3"></button>
     <button class="hero-dot" aria-label="Slide 4"></button>
   </div>
-</div>
-<div class="hero-copy">
-  <div class="eyebrow">Basements &middot; Bathrooms &middot; Kitchens &middot; Living Spaces</div>
-  <h1 class="cat" style="margin-top:14px;">We create beautiful living spaces</h1>
-  <p>Full-service home renovations, built with the human touch you won't find anywhere else.</p>
-  <a class="btn btn-gold" href="#estimate">Get Your Free Estimate</a>
-</div>
 </div>
 
 <div class="estimate-strip" id="estimate">
@@ -346,7 +281,7 @@
 </div>
 
 <section>
-  <div class="wrap section-head rv">
+  <div class="section-head rv">
     <span class="section-badge">Selected Work</span>
     <h2 style="margin-top:18px;">Our recent portfolio</h2>
     <p>Explore recent Lifestyles Home Creations projects and see the quality, detail, and craftsmanship behind our work.</p>
@@ -418,81 +353,6 @@
 
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
-
-  // Keeps --header-h in sync with the header's real rendered height, so
-  // the mobile nav bar (a separate sticky element, not nested inside
-  // header) tucks in directly beneath it rather than at a guessed offset.
-  (function(){
-    const header = document.getElementById('siteHeader');
-    if (!header) return;
-    function update(){
-      document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
-    }
-    update();
-    window.addEventListener('resize', update);
-    window.addEventListener('load', update);
-  })();
-
-  // Mobile nav dropdown: hamburger toggle expands/collapses the page list.
-  // Icon doesn't change state on open — closing is tap-the-hamburger-again
-  // or tap-anywhere-outside, so there's no icon-swap to keep in sync.
-  (function(){
-    const toggle = document.getElementById('navToggle');
-    const nav = document.getElementById('mainNav');
-    if (!toggle || !nav) return;
-
-    toggle.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      const isOpen = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
-
-    nav.querySelectorAll('#navLinks a').forEach(a=>{
-      a.addEventListener('click', ()=>{
-        nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-
-    document.addEventListener('click', (e)=>{
-      if (nav.classList.contains('open') && !nav.contains(e.target)) {
-        nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  })();
-
-  // Roll-up: hides on scroll down, reveals on scroll up.
-  // Desktop/tablet acts on the nav tab row; mobile acts on the whole
-  // merged header instead (see the max-width:700px CSS, which decides
-  // which of the two actually has position:sticky at any given width —
-  // toggling 'hide' on both here is harmless for whichever one doesn't).
-  // Small threshold near the top keeps it visible until the user has
-  // actually committed to scrolling, so it doesn't flicker on tiny nudges.
-  (function(){
-    const targets = [document.getElementById('siteHeader'), document.getElementById('mainNav')].filter(Boolean);
-    if (!targets.length) return;
-    let lastY = window.scrollY;
-    let ticking = false;
-    function onScroll(){
-      const y = window.scrollY;
-      if (y < 80) {
-        targets.forEach(t=>t.classList.remove('hide'));
-      } else if (y > lastY + 4) {
-        targets.forEach(t=>t.classList.add('hide'));       // scrolling down
-      } else if (y < lastY - 4) {
-        targets.forEach(t=>t.classList.remove('hide'));    // scrolling up
-      }
-      lastY = y;
-      ticking = false;
-    }
-    window.addEventListener('scroll', ()=>{
-      if (!ticking) {
-        requestAnimationFrame(onScroll);
-        ticking = true;
-      }
-    });
-  })();
 </script>
 
 </body>

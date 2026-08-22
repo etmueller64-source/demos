@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lifestyles Home Creations — Demo 1</title>
+<title>Lifestyles Home Creations — Demo 1 (Classic Refined)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -49,7 +49,6 @@
   .util-row a{display:inline-flex;align-items:center;gap:6px;}
   .util-links{display:flex;gap:26px;}
   @media(max-width:760px){ .util-row{flex-direction:column;gap:6px;text-align:center;} }
-  @media(max-width:700px){ .util-links{display:none;} .util-bar{padding:7px 0;} }
 
   /* -------- header -------- */
   header{
@@ -61,10 +60,15 @@
     background-position:center, left center;
     background-size:cover, auto 100%;
   }
-  .header-row{display:flex;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px;gap:16px;}
+  .header-row{display:flex;align-items:center;justify-content:space-between;padding:22px 0;gap:16px;}
   .site-logo{height:84px;width:auto;display:block;}
   .header-row .btn-primary{margin-left:auto;}
   .nav-toggle{display:none;}
+  @media(max-width:560px){
+    .header-row{padding:16px 0;flex-wrap:wrap;row-gap:14px;}
+    .site-logo{height:56px;}
+    .header-row .btn-primary{padding:10px 16px;font-size:11px;}
+  }
   .brand{display:flex;flex-direction:column;}
   .brand .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:30px;color:var(--gold-soft);}
   .brand .sub{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;}
@@ -130,33 +134,26 @@
     .hero-copy .btn{margin-top:18px;}
   }
 
-  /* -------- mobile header: everything on one thin row -------- */
-  /* Under 700px, header is the sticky unit: logo, the shortened CTA, and
-     a small static hamburger all share one compact row. The hamburger
-     doesn't change appearance when open — closing is just tap-again or
-     tap-outside (see the JS), so there's no icon-state to keep in sync. */
+  /* -------- mobile header: logo+CTA row, with a centered hamburger below -------- */
+  /* Under 700px, header becomes the sticky unit: logo and "Get a Free
+     Guessimate" share a row like desktop, and a hamburger sits centered
+     beneath both, opening the page list as a dropdown attached right
+     below it — all within the same hardwood-background header block. */
   @media(max-width:700px){
     header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
     header.hide{transform:translateY(-100%);}
-    /* nav stays sticky (from the default rule above) but tucks in directly
-       under header instead of at the very top — --header-h is measured
-       and kept in sync by JS, since header's exact height can shift
-       slightly (e.g. if the row ever wraps). When header hides, nav
-       slides up by its own height plus header's, so the two disappear
-       together as one unit instead of leaving nav stranded mid-air. */
-    nav.main{top:var(--header-h, 80px);}
-    nav.main.hide{transform:translateY(calc(-100% - var(--header-h, 80px)));}
-
-    .header-row{padding-top:12px;padding-bottom:12px;gap:10px;flex-wrap:wrap;row-gap:10px;}
-    .site-logo{height:44px;}
-    .header-row .btn-primary{padding:9px 13px;font-size:10.5px;}
+    nav.main{position:static;transition:none;}
+    nav.main.hide{transform:none;}
 
     .nav-toggle{
-      display:flex;flex-direction:column;justify-content:center;
-      gap:4px;flex:none;padding:4px 2px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:5px;width:100%;padding:2px 0 16px;
       background:none;border:none;cursor:pointer;
     }
-    .nav-toggle span{display:block;height:1px;width:20px;background:var(--gold-soft);}
+    .nav-toggle span{display:block;height:1px;width:52px;background:var(--gold-soft);transition:transform .25s ease,opacity .25s ease;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 
     nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
     nav.main.open .wrap{display:flex;}
@@ -186,7 +183,7 @@
 
   /* -------- trust strip -------- */
   .trust-strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding-top:46px;padding-bottom:46px;text-align:center;}
+  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding:46px 0;text-align:center;}
   .trust-item{display:flex;flex-direction:column;align-items:center;}
   .trust-icon{position:relative;width:52px;height:52px;margin-bottom:16px;}
   .trust-icon svg{width:100%;height:100%;stroke:var(--gold-soft);fill:none;stroke-width:1.5;}
@@ -244,23 +241,23 @@
 <header id="siteHeader">
   <div class="wrap header-row">
     <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
-    <a class="btn btn-primary" href="#estimate">Free Estimate</a>
-    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a class="btn btn-primary" href="#estimate">Get a Free Guessimate</a>
   </div>
+  <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="main" id="mainNav">
+    <div class="wrap" id="navLinks">
+      <a href="#" class="on">Home</a>
+      <a href="#">About Us</a>
+      <a href="#">Services</a>
+      <a href="#">Portfolio</a>
+      <a href="#">Community</a>
+      <a href="#">Testimonials</a>
+      <a href="#">Contact Us</a>
+    </div>
+  </nav>
 </header>
-<nav class="main" id="mainNav">
-  <div class="wrap" id="navLinks">
-    <a href="#" class="on">Home</a>
-    <a href="#">About Us</a>
-    <a href="#">Services</a>
-    <a href="#">Portfolio</a>
-    <a href="#">Community</a>
-    <a href="#">Testimonials</a>
-    <a href="#">Contact Us</a>
-  </div>
-</nav>
 
 <div class="hero-wrap">
 <div class="hero-slider" data-slider>
@@ -346,7 +343,7 @@
 </div>
 
 <section>
-  <div class="wrap section-head rv">
+  <div class="section-head rv">
     <span class="section-badge">Selected Work</span>
     <h2 style="margin-top:18px;">Our recent portfolio</h2>
     <p>Explore recent Lifestyles Home Creations projects and see the quality, detail, and craftsmanship behind our work.</p>
@@ -419,30 +416,13 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
   document.querySelectorAll('.rv').forEach(x=>io.observe(x));
 
-  // Keeps --header-h in sync with the header's real rendered height, so
-  // the mobile nav bar (a separate sticky element, not nested inside
-  // header) tucks in directly beneath it rather than at a guessed offset.
-  (function(){
-    const header = document.getElementById('siteHeader');
-    if (!header) return;
-    function update(){
-      document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
-    }
-    update();
-    window.addEventListener('resize', update);
-    window.addEventListener('load', update);
-  })();
-
   // Mobile nav dropdown: hamburger toggle expands/collapses the page list.
-  // Icon doesn't change state on open — closing is tap-the-hamburger-again
-  // or tap-anywhere-outside, so there's no icon-swap to keep in sync.
   (function(){
     const toggle = document.getElementById('navToggle');
     const nav = document.getElementById('mainNav');
     if (!toggle || !nav) return;
 
-    toggle.addEventListener('click', (e)=>{
-      e.stopPropagation();
+    toggle.addEventListener('click', ()=>{
       const isOpen = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
@@ -452,13 +432,6 @@
         nav.classList.remove('open');
         toggle.setAttribute('aria-expanded', 'false');
       });
-    });
-
-    document.addEventListener('click', (e)=>{
-      if (nav.classList.contains('open') && !nav.contains(e.target)) {
-        nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
     });
   })();
 
