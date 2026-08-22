@@ -481,7 +481,7 @@
     <div class="section-head" style="margin-top:56px;">
       <div>
         <div class="eyebrow">2026 Season</div>
-        <h2>Rep teams, coaches &amp; tryouts</h2>
+        <h2>Rep teams &amp; tryouts</h2>
         <p>Click a team to see its head coach and 2027 tryout details. Pulled live from our team spreadsheet.</p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
@@ -687,7 +687,7 @@
   function parseTeamLabel(team) {
     const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
     if (!m) return { age: '', division: '' };
-    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Open' };
+    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Select' };
   }
 
   function populateFilters(teamNames) {
