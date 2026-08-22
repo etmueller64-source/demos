@@ -578,11 +578,46 @@
 
     <div class="section-head" style="margin-top:56px;">
       <div>
+        <div class="eyebrow">Looking ahead</div>
+        <h2>Next season's coaches</h2>
+        <p>Coaches confirmed for next year, posted as they're announced.</p>
+      </div>
+      <input type="text" id="future-directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
+    </div>
+    <div class="accordion-item" id="future-coaches-directory-item">
+      <button class="accordion-header" type="button" id="future-coaches-directory-toggle">
+        <span>View next season's coaches</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="accordion-body" id="future-coaches-directory-body">
+        <div class="accordion-body-inner" style="padding:0 22px 20px;">
+          <div style="overflow-x:auto;">
+            <table class="sched-table" id="future-coaches-directory-table">
+              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
+              <tbody id="future-coaches-directory-tbody">
+                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading next season's coaches…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:56px;">
+      <div>
         <div class="eyebrow">2026 Season</div>
         <h2>HP teams, coaches &amp; tryouts</h2>
         <p>Click a team to see its head coach and tryout details. Pulled live from our team spreadsheet.</p>
       </div>
-      <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
+        <select id="age-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All ages</option>
+        </select>
+        <select id="division-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All divisions</option>
+        </select>
+      </div>
     </div>
     <div id="teams-accordion">
       <div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Loading teams…</div></div>
@@ -705,10 +740,20 @@
      the exact same team name (e.g. "13U HP") in both sheets. A team can
      have more than one tryout row — the page sorts them by date and
      labels them Tryout 1, Tryout 2, etc. automatically.
+
+     ADDITIONAL SETUP (coaches for next season + tryout filters):
+     - Publish a "Future Coaches" tab (same columns as "Coaches") as CSV
+       and paste that link as FUTURE_COACHES_CSV_URL below. It feeds the
+       separate "Next season's coaches" section. Paste the same link into
+       the other program page (Rep/HP) too.
+     - The Age/Division filter dropdowns above the team list are built
+       automatically from each Team name (e.g. "10U AA" -> Age "10U",
+       Division "AA") — nothing extra to configure for those.
   ============================================================ */
   const PROGRAM = 'HP';
   const COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=742363233&single=true&output=csv';
   const TRYOUTS_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=40790808&single=true&output=csv';
+  const FUTURE_COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=2044605055&single=true&output=csv';
 
   function parseCSV(text) {
     const rows = [];
@@ -764,6 +809,49 @@
     return isNaN(d.getTime()) ? null : d;
   }
 
+  // Splits a team label like "10U AA" into { age: "10U", division: "AA" }.
+  // Falls back to division "Open" for labels with no division suffix (e.g. "22U").
+  function parseTeamLabel(team) {
+    const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
+    if (!m) return { age: '', division: '' };
+    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Open' };
+  }
+
+  function populateFilters(teamNames) {
+    const ages = new Set(), divisions = new Set();
+    teamNames.forEach(team => {
+      const { age, division } = parseTeamLabel(team);
+      if (age) ages.add(age);
+      if (division) divisions.add(division);
+    });
+    const ageSelect = document.getElementById('age-filter');
+    const divisionSelect = document.getElementById('division-filter');
+    if (ageSelect) {
+      const prev = ageSelect.value;
+      const sorted = Array.from(ages).sort((a, b) => parseInt(a) - parseInt(b));
+      ageSelect.innerHTML = '<option value="">All ages</option>' + sorted.map(a => `<option value="${a}">${a}</option>`).join('');
+      if (sorted.includes(prev)) ageSelect.value = prev;
+    }
+    if (divisionSelect) {
+      const prev = divisionSelect.value;
+      const sorted = Array.from(divisions).sort();
+      divisionSelect.innerHTML = '<option value="">All divisions</option>' + sorted.map(d => `<option value="${d}">${d}</option>`).join('');
+      if (sorted.includes(prev)) divisionSelect.value = prev;
+    }
+  }
+
+  function applyTeamFilters() {
+    const q = (document.getElementById('team-search')?.value || '').toLowerCase();
+    const ageVal = document.getElementById('age-filter')?.value || '';
+    const divisionVal = document.getElementById('division-filter')?.value || '';
+    document.querySelectorAll('#teams-accordion .accordion-item').forEach(item => {
+      const matchesText = !q || item.textContent.toLowerCase().includes(q);
+      const matchesAge = !ageVal || item.dataset.age === ageVal;
+      const matchesDivision = !divisionVal || item.dataset.division === divisionVal;
+      item.style.display = (matchesText && matchesAge && matchesDivision) ? '' : 'none';
+    });
+  }
+
   function buildAccordion(coachRows, tryoutRows) {
     const wrap = document.getElementById('teams-accordion');
 
@@ -816,8 +904,10 @@
           </div>`
         : `<div class="team-detail-row"><b>Tryout</b><span>Date to be announced</span></div>`;
 
+      const { age, division } = parseTeamLabel(team);
+
       return `
-        <div class="accordion-item">
+        <div class="accordion-item" data-age="${age}" data-division="${division}">
           <button class="accordion-header" type="button">
             <span>${team}</span>
             <span class="plus">+</span>
@@ -830,6 +920,8 @@
           </div>
         </div>`;
     }).join('');
+
+    populateFilters(Array.from(teams.keys()));
 
     wrap.querySelectorAll('.accordion-header').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -848,16 +940,16 @@
     });
   }
 
-  function buildCoachDirectory(coachRows) {
-    const tbody = document.getElementById('coaches-directory-tbody');
+  function buildCoachDirectoryInto(coachRows, tbodyId, emptyMsg, connectMsg) {
+    const tbody = document.getElementById(tbodyId);
     if (!tbody) return;
 
     if (coachRows === null) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Connect your coaches spreadsheet — see the comment near the top of this script.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">${connectMsg}</td></tr>`;
       return;
     }
     if (!coachRows.length) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">No coaches yet — add rows to the spreadsheet.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">${emptyMsg}</td></tr>`;
       return;
     }
 
@@ -871,56 +963,68 @@
     }).join('');
   }
 
-  Promise.all([fetchCSV(COACHES_CSV_URL), fetchCSV(TRYOUTS_CSV_URL)])
-    .then(([coachRows, tryoutRows]) => {
+  function buildCoachDirectory(coachRows) {
+    buildCoachDirectoryInto(coachRows, 'coaches-directory-tbody',
+      'No coaches yet — add rows to the spreadsheet.',
+      'Connect your coaches spreadsheet — see the comment near the top of this script.');
+  }
+
+  function buildFutureCoachDirectory(coachRows) {
+    buildCoachDirectoryInto(coachRows, 'future-coaches-directory-tbody',
+      "No coaches confirmed for next season yet — add rows to the 'Future Coaches' tab when ready.",
+      "Connect the 'Future Coaches' spreadsheet tab — see the comment near the top of this script.");
+  }
+
+  Promise.all([fetchCSV(COACHES_CSV_URL), fetchCSV(TRYOUTS_CSV_URL), fetchCSV(FUTURE_COACHES_CSV_URL)])
+    .then(([coachRows, tryoutRows, futureCoachRows]) => {
       buildAccordion(coachRows, tryoutRows);
       buildCoachDirectory(coachRows);
+      buildFutureCoachDirectory(futureCoachRows);
     });
 
-  const teamSearch = document.getElementById('team-search');
-  if (teamSearch) {
-    teamSearch.addEventListener('input', () => {
-      const q = teamSearch.value.toLowerCase();
-      document.querySelectorAll('#teams-accordion .accordion-item').forEach(item => {
-        item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+  ['team-search', 'age-filter', 'division-filter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(id === 'team-search' ? 'input' : 'change', applyTeamFilters);
+  });
+
+  function wireDirectory(toggleId, itemId, bodyId, searchId, tbodySelector) {
+    const toggle = document.getElementById(toggleId);
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const item = document.getElementById(itemId);
+        const body = document.getElementById(bodyId);
+        const wasOpen = item.classList.contains('open');
+        if (wasOpen) {
+          item.classList.remove('open');
+          body.style.maxHeight = '';
+        } else {
+          item.classList.add('open');
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
       });
-    });
-  }
+    }
 
-  const directoryToggle = document.getElementById('coaches-directory-toggle');
-  if (directoryToggle) {
-    directoryToggle.addEventListener('click', () => {
-      const item = document.getElementById('coaches-directory-item');
-      const body = document.getElementById('coaches-directory-body');
-      const wasOpen = item.classList.contains('open');
-      if (wasOpen) {
-        item.classList.remove('open');
-        body.style.maxHeight = '';
-      } else {
-        item.classList.add('open');
-        body.style.maxHeight = body.scrollHeight + 'px';
-      }
-    });
-  }
-
-  const directorySearch = document.getElementById('directory-search');
-  if (directorySearch) {
-    directorySearch.addEventListener('input', () => {
-      const q = directorySearch.value.toLowerCase();
-      document.querySelectorAll('#coaches-directory-tbody tr').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    const search = document.getElementById(searchId);
+    if (search) {
+      search.addEventListener('input', () => {
+        const q = search.value.toLowerCase();
+        document.querySelectorAll(tbodySelector + ' tr').forEach(row => {
+          row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+        const item = document.getElementById(itemId);
+        const body = document.getElementById(bodyId);
+        if (q && !item.classList.contains('open')) {
+          item.classList.add('open');
+        }
+        if (item.classList.contains('open')) {
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
       });
-      // Typing in the directory search auto-opens it so results are visible.
-      const item = document.getElementById('coaches-directory-item');
-      const body = document.getElementById('coaches-directory-body');
-      if (q && !item.classList.contains('open')) {
-        item.classList.add('open');
-      }
-      if (item.classList.contains('open')) {
-        body.style.maxHeight = body.scrollHeight + 'px';
-      }
-    });
+    }
   }
+
+  wireDirectory('coaches-directory-toggle', 'coaches-directory-item', 'coaches-directory-body', 'directory-search', '#coaches-directory-tbody');
+  wireDirectory('future-coaches-directory-toggle', 'future-coaches-directory-item', 'future-coaches-directory-body', 'future-directory-search', '#future-coaches-directory-tbody');
 </script>
 </body>
 </html>
