@@ -44,7 +44,7 @@
   /* Dropdown */
   .has-dropdown{position:relative;}
   .drop-toggle{display:flex;align-items:center;gap:5px;cursor:pointer;background:none;border:none;font:inherit;color:var(--ink);opacity:0.75;padding:8px 0;font-weight:500;}
-  .drop-toggle:hover,.has-dropdown.open .drop-toggle{opacity:1;}
+  .drop-toggle:hover,.has-dropdown.open .drop-toggle,.drop-toggle.active{opacity:1;}
   .drop-toggle svg{width:10px;height:10px;transition:transform .2s;}
   .has-dropdown.open .drop-toggle svg{transform:rotate(180deg);}
   .dropdown-menu{
@@ -318,7 +318,7 @@
     </a>
     <div class="navlinks">
       <div class="has-dropdown" id="home-dropdown">
-        <a href="index.html" class="drop-toggle">Home <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></a>
+        <a href="index.html" class="drop-toggle active">Home <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></a>
         <div class="dropdown-menu">
           <a href="about.html">About</a>
           <a href="locations.html">Fields</a>
@@ -332,7 +332,7 @@
           <a href="baseball-hp.html">HP</a>
         </div>
       </div>
-      <a href="umpires.html" class="active">Umpires</a>
+      <a href="umpires.html">Umpires</a>
       <a href="volunteer.html">Volunteering</a>
       <a href="coaching.html">Coaching</a>
       <a href="tournaments.html">Tournaments</a>
