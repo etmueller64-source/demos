@@ -738,6 +738,13 @@
       .catch(() => []);
   }
 
+  // Pulls the first age number out of a division label like "7U" or
+  // "4U & 5U Rally Cap" so divisions can be sorted youngest first.
+  function parseAgeFromDivision(division) {
+    const m = (division || '').match(/(\d+)U/i);
+    return m ? parseInt(m[1]) : 999;
+  }
+
   function buildFeesTable(feeRows) {
     const tbody = document.getElementById('fees-tbody');
     if (!tbody) return;
@@ -751,7 +758,13 @@
       return;
     }
 
-    tbody.innerHTML = feeRows.map(r => {
+    // Youngest first, oldest last — sorted by the numeric age parsed from
+    // the Division column (e.g. "4U & 5U Rally Cap" -> 4, "7U" -> 7).
+    const sortedRows = feeRows.slice().sort((a, b) => {
+      return parseAgeFromDivision(a[0]) - parseAgeFromDivision(b[0]);
+    });
+
+    tbody.innerHTML = sortedRows.map(r => {
       const cells = r.slice(0, 8).map(c => (c || '').trim());
       if (!cells[0]) return '';
       while (cells.length < 8) cells.push('');
