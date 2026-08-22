@@ -683,7 +683,7 @@
   }
 
   // Splits a team label like "10U AA" into { age: "10U", division: "AA" }.
-  // Falls back to division "Open" for labels with no division suffix (e.g. "22U").
+  // Falls back to division "Select" for labels with no division suffix (e.g. "22U").
   function parseTeamLabel(team) {
     const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
     if (!m) return { age: '', division: '' };
