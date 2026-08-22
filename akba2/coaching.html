@@ -44,7 +44,7 @@
   /* Dropdown */
   .has-dropdown{position:relative;}
   .drop-toggle{display:flex;align-items:center;gap:5px;cursor:pointer;background:none;border:none;font:inherit;color:var(--ink);opacity:0.75;padding:8px 0;font-weight:500;}
-  .drop-toggle:hover,.has-dropdown.open .drop-toggle,.drop-toggle.active{opacity:1;}
+  .drop-toggle:hover,.has-dropdown.open .drop-toggle{opacity:1;}
   .drop-toggle svg{width:10px;height:10px;transition:transform .2s;}
   .has-dropdown.open .drop-toggle svg{transform:rotate(180deg);}
   .dropdown-menu{
@@ -332,9 +332,9 @@
           <a href="baseball-hp.html">HP</a>
         </div>
       </div>
-      <a href="umpires.html">Umpires</a>
+      <a href="umpires.html" class="active">Umpires</a>
       <a href="volunteer.html">Volunteering</a>
-      <a href="coaching.html" class="active">Coaching</a>
+      <a href="coaching.html">Coaching</a>
       <a href="tournaments.html">Tournaments</a>
       <a href="registration.html">Registration</a>
       <a href="teams.html">Teams</a>
@@ -402,7 +402,15 @@
 
     <div class="section-head">
       <div><div class="eyebrow">2026 season</div><h2>Coaches</h2></div>
-      <input type="text" id="coach-search" placeholder="Search coach, team, or division…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" id="coach-search" placeholder="Search coach, team, or division…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
+        <select id="age-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All ages</option>
+        </select>
+        <select id="division-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All divisions</option>
+        </select>
+      </div>
     </div>
     <table class="sched-table" style="margin-bottom:16px;">
       <thead>
@@ -474,6 +482,49 @@
     return { cols, data: rows.slice(headerIndex + 1) };
   }
 
+  // Splits a team label like "10U AA" into { age: "10U", division: "AA" }.
+  // Falls back to division "Select" for labels with no division suffix (e.g. "22U").
+  function parseTeamLabel(team) {
+    const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
+    if (!m) return { age: '', division: '' };
+    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Select' };
+  }
+
+  function populateFilters(teamNames) {
+    const ages = new Set(), divisions = new Set();
+    teamNames.forEach(team => {
+      const { age, division } = parseTeamLabel(team);
+      if (age) ages.add(age);
+      if (division) divisions.add(division);
+    });
+    const ageSelect = document.getElementById('age-filter');
+    const divisionSelect = document.getElementById('division-filter');
+    if (ageSelect) {
+      const prev = ageSelect.value;
+      const sorted = Array.from(ages).sort((a, b) => parseInt(a) - parseInt(b));
+      ageSelect.innerHTML = '<option value="">All ages</option>' + sorted.map(a => `<option value="${a}">${a}</option>`).join('');
+      if (sorted.includes(prev)) ageSelect.value = prev;
+    }
+    if (divisionSelect) {
+      const prev = divisionSelect.value;
+      const sorted = Array.from(divisions).sort();
+      divisionSelect.innerHTML = '<option value="">All divisions</option>' + sorted.map(d => `<option value="${d}">${d}</option>`).join('');
+      if (sorted.includes(prev)) divisionSelect.value = prev;
+    }
+  }
+
+  function applyCoachFilters() {
+    const q = (document.getElementById('coach-search')?.value || '').toLowerCase();
+    const ageVal = document.getElementById('age-filter')?.value || '';
+    const divisionVal = document.getElementById('division-filter')?.value || '';
+    document.querySelectorAll('#coaches-body tr').forEach(row => {
+      const matchesText = !q || row.textContent.toLowerCase().includes(q);
+      const matchesAge = !ageVal || row.dataset.age === ageVal;
+      const matchesDivision = !divisionVal || row.dataset.division === divisionVal;
+      row.style.display = (matchesText && matchesAge && matchesDivision) ? '' : 'none';
+    });
+  }
+
   function renderCoaches(result) {
     const tbody = document.getElementById('coaches-body');
     const { cols, data } = result;
@@ -486,20 +537,35 @@
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:30px;">No coaches listed yet.</td></tr>';
       return;
     }
-    tbody.innerHTML = rows.map(r => {
+
+    // Youngest first, oldest last — sorted by the numeric age parsed from
+    // each team name (e.g. "9U" -> 9). Same-age teams keep a stable order
+    // by their full team label (so "10U A" sits before "10U AA").
+    const sortedRows = rows.slice().sort((a, b) => {
+      const teamA = get(a, cols.team), teamB = get(b, cols.team);
+      const ageA = parseInt(parseTeamLabel(teamA).age) || 0;
+      const ageB = parseInt(parseTeamLabel(teamB).age) || 0;
+      if (ageA !== ageB) return ageA - ageB;
+      return teamA.localeCompare(teamB);
+    });
+
+    tbody.innerHTML = sortedRows.map(r => {
       const program = get(r, cols.program), team = get(r, cols.team),
             coach = get(r, cols.coach), email = get(r, cols.email), phone = get(r, cols.phone);
+      const { age, division } = parseTeamLabel(team);
       const contactParts = [];
       if (email) contactParts.push(`<a href="mailto:${email}" style="color:var(--gold);">${email}</a>`);
       if (phone) contactParts.push(`<a href="tel:${phone.replace(/[^\d+]/g,'')}" style="color:var(--gold);">${phone}</a>`);
       const contact = contactParts.length ? contactParts.join(' — ') : '—';
-      return `<tr>
+      return `<tr data-age="${age}" data-division="${division}">
         <td>${coach || 'To be announced'}</td>
         <td>${team || ''}</td>
         <td><span class="div-tag">${program || ''}</span></td>
         <td>${contact}</td>
       </tr>`;
     }).join('');
+
+    populateFilters(sortedRows.map(r => get(r, cols.team)));
   }
 
   function loadCoaches() {
@@ -522,15 +588,10 @@
 
   loadCoaches();
 
-  const coachSearch = document.getElementById('coach-search');
-  if (coachSearch) {
-    coachSearch.addEventListener('input', () => {
-      const q = coachSearch.value.toLowerCase();
-      document.querySelectorAll('#coaches-body tr').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-      });
-    });
-  }
+  ['coach-search', 'age-filter', 'division-filter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(id === 'coach-search' ? 'input' : 'change', applyCoachFilters);
+  });
 </script>
 <footer>
   <div class="wrap">
