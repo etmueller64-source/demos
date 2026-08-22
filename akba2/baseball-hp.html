@@ -431,36 +431,78 @@
       </div>
     </div>
 
-    <div class="section-head">
+    <div class="section-head" style="margin-top:8px;">
       <div>
-        <div class="eyebrow">The pipeline</div>
-        <h2>Player Development Pipeline</h2>
-        <p>A structured, multi-stage development journey built to advance athletes to the highest levels of amateur baseball.</p>
+        <div class="eyebrow">Quick reference</div>
+        <h2>Coaches</h2>
+        <p>Every HP head coach and how to reach them, at a glance.</p>
+      </div>
+      <input type="text" id="directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
+    </div>
+    <div class="accordion-item" id="coaches-directory-item">
+      <button class="accordion-header" type="button" id="coaches-directory-toggle">
+        <span>View coaches</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="accordion-body" id="coaches-directory-body">
+        <div class="accordion-body-inner" style="padding:0 22px 20px;">
+          <div style="overflow-x:auto;">
+            <table class="sched-table" id="coaches-directory-table">
+              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
+              <tbody id="coaches-directory-tbody">
+                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading coaches…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="detail-grid" style="margin-bottom:56px;">
-      <div class="detail-card pipeline-card">
-        <div class="tag">12U–14U</div>
-        <h3>Development HP</h3>
-        <ul class="detail-list">
-          <li>Advanced skill development, game strategy, situational play, and strength &amp; conditioning</li>
-          <li>Introduces mental performance and leadership</li>
-          <li>High-level league and tournament play</li>
-          <li>Accommodates two-sport athletes</li>
-          <li>12U &amp; 13U compete in the interlock AAA loop with YSBA, TBA, and EOBA</li>
-          <li>14U may compete in the EBLO starting in 2027</li>
-        </ul>
+
+    <div class="section-head" style="margin-top:56px;">
+      <div>
+        <div class="eyebrow">Looking ahead</div>
+        <h2>Next season's coaches</h2>
+        <p>Coaches confirmed for next year, posted as they're announced.</p>
       </div>
-      <div class="detail-card pipeline-card">
-        <div class="tag">15U–18U</div>
-        <h3>HP</h3>
-        <ul class="detail-list">
-          <li>High-performance training environment with leadership and mentorship</li>
-          <li>Advanced competition — Provincial, National, and Showcase</li>
-          <li>Direct college/university pathway preparation</li>
-          <li>Competes in the EBLO</li>
-        </ul>
+      <input type="text" id="future-directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
+    </div>
+    <div class="accordion-item" id="future-coaches-directory-item">
+      <button class="accordion-header" type="button" id="future-coaches-directory-toggle">
+        <span>View next season's coaches</span>
+        <span class="plus">+</span>
+      </button>
+      <div class="accordion-body" id="future-coaches-directory-body">
+        <div class="accordion-body-inner" style="padding:0 22px 20px;">
+          <div style="overflow-x:auto;">
+            <table class="sched-table" id="future-coaches-directory-table">
+              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
+              <tbody id="future-coaches-directory-tbody">
+                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading next season's coaches…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <div class="section-head" style="margin-top:56px;">
+      <div>
+        <div class="eyebrow">2026 Season</div>
+        <h2>HP teams &amp; tryouts</h2>
+        <p>Click a team to see its head coach and tryout details.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
+        <select id="age-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All ages</option>
+        </select>
+        <select id="division-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
+          <option value="">All divisions</option>
+        </select>
+      </div>
+    </div>
+    <div id="teams-accordion">
+      <div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Loading teams…</div></div>
     </div>
 
     <div class="section-head">
@@ -549,78 +591,36 @@
       </div>
     </div>
 
-    <div class="section-head" style="margin-top:8px;">
+    <div class="section-head">
       <div>
-        <div class="eyebrow">Quick reference</div>
-        <h2>Coaches</h2>
-        <p>Every HP head coach and how to reach them, at a glance.</p>
-      </div>
-      <input type="text" id="directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
-    </div>
-    <div class="accordion-item" id="coaches-directory-item">
-      <button class="accordion-header" type="button" id="coaches-directory-toggle">
-        <span>View coaches</span>
-        <span class="plus">+</span>
-      </button>
-      <div class="accordion-body" id="coaches-directory-body">
-        <div class="accordion-body-inner" style="padding:0 22px 20px;">
-          <div style="overflow-x:auto;">
-            <table class="sched-table" id="coaches-directory-table">
-              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
-              <tbody id="coaches-directory-tbody">
-                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading coaches…</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <div class="eyebrow">The pipeline</div>
+        <h2>Player Development Pipeline</h2>
+        <p>A structured, multi-stage development journey built to advance athletes to the highest levels of amateur baseball.</p>
       </div>
     </div>
-
-    <div class="section-head" style="margin-top:56px;">
-      <div>
-        <div class="eyebrow">Looking ahead</div>
-        <h2>Next season's coaches</h2>
-        <p>Coaches confirmed for next year, posted as they're announced.</p>
+    <div class="detail-grid" style="margin-bottom:56px;">
+      <div class="detail-card pipeline-card">
+        <div class="tag">12U–14U</div>
+        <h3>Development HP</h3>
+        <ul class="detail-list">
+          <li>Advanced skill development, game strategy, situational play, and strength &amp; conditioning</li>
+          <li>Introduces mental performance and leadership</li>
+          <li>High-level league and tournament play</li>
+          <li>Accommodates two-sport athletes</li>
+          <li>12U &amp; 13U compete in the interlock AAA loop with YSBA, TBA, and EOBA</li>
+          <li>14U may compete in the EBLO starting in 2027</li>
+        </ul>
       </div>
-      <input type="text" id="future-directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
-    </div>
-    <div class="accordion-item" id="future-coaches-directory-item">
-      <button class="accordion-header" type="button" id="future-coaches-directory-toggle">
-        <span>View next season's coaches</span>
-        <span class="plus">+</span>
-      </button>
-      <div class="accordion-body" id="future-coaches-directory-body">
-        <div class="accordion-body-inner" style="padding:0 22px 20px;">
-          <div style="overflow-x:auto;">
-            <table class="sched-table" id="future-coaches-directory-table">
-              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
-              <tbody id="future-coaches-directory-tbody">
-                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading next season's coaches…</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="detail-card pipeline-card">
+        <div class="tag">15U–18U</div>
+        <h3>HP</h3>
+        <ul class="detail-list">
+          <li>High-performance training environment with leadership and mentorship</li>
+          <li>Advanced competition — Provincial, National, and Showcase</li>
+          <li>Direct college/university pathway preparation</li>
+          <li>Competes in the EBLO</li>
+        </ul>
       </div>
-    </div>
-
-    <div class="section-head" style="margin-top:56px;">
-      <div>
-        <div class="eyebrow">2026 Season</div>
-        <h2>HP teams &amp; tryouts</h2>
-        <p>Click a team to see its head coach and tryout details.</p>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
-        <select id="age-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
-          <option value="">All ages</option>
-        </select>
-        <select id="division-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
-          <option value="">All divisions</option>
-        </select>
-      </div>
-    </div>
-    <div id="teams-accordion">
-      <div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Loading teams…</div></div>
     </div>
 
     <div style="margin-top:48px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:6px;padding:44px 24px;">
