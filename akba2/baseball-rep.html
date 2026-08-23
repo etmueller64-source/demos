@@ -310,22 +310,28 @@
   .team-detail-row b{color:var(--ink);min-width:96px;flex-shrink:0;}
   .team-detail-row a{color:var(--gold);}
 
+  /* team bars: hint subtitle under the team name */
+  .header-left{display:flex;flex-direction:column;gap:3px;}
+  .team-name{font-size:14.5px;font-weight:600;color:var(--gold);}
+  .team-hint{font-size:11.5px;font-weight:400;color:var(--ink-soft);}
+
   .tryout-grid{margin-top:4px;}
-  .tryout-grid-row{display:grid;grid-template-columns:78px 128px 150px 1fr;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
+  .tryout-grid-row{display:grid;grid-template-columns:96px 124px 92px 150px 1fr;column-gap:28px;row-gap:0;padding:11px 4px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
   .tryout-grid-row:first-child{border-top:none;}
   .tryout-legend{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);padding-top:0;padding-bottom:6px;}
   .tryout-grid-row b{color:var(--ink);font-weight:600;font-size:13.5px;}
-  .tryout-reschedule{background:rgba(199,90,30,.08);border-radius:4px;}
+  /* indented + accented to read as nested under the tryout row above it */
+  .tryout-reschedule{background:rgba(199,90,30,.08);border-radius:4px;margin-left:26px;padding-left:14px;border-left:3px solid var(--reschedule);}
   .tryout-reschedule b{color:var(--reschedule);}
-  .tryout-note{font-size:12.5px;color:var(--ink-soft);font-style:italic;padding:8px 2px 2px;margin-top:2px;border-top:1px dashed var(--line);}
-  .tryout-note b{color:var(--ink-soft);font-style:normal;font-weight:600;}
   @media (max-width:640px){
-    .tryout-grid-row{grid-template-columns:1fr 1fr;grid-template-areas:"label label" "date time" "loc loc";row-gap:4px;}
+    .tryout-grid-row{grid-template-columns:1fr 1fr;grid-template-areas:"label label" "date time" "loc loc" "notes notes";row-gap:4px;}
     .tryout-legend{display:none;}
     .tryout-grid-row b{grid-area:label;}
     .tryout-grid-row span:nth-of-type(1){grid-area:date;}
     .tryout-grid-row span:nth-of-type(2){grid-area:time;}
     .tryout-grid-row span:nth-of-type(3){grid-area:loc;}
+    .tryout-grid-row span:nth-of-type(4){grid-area:notes;font-style:italic;}
+    .tryout-reschedule{margin-left:0;padding-left:12px;}
   }
 </style>
 </head>
@@ -435,7 +441,6 @@
         <h2>Coaches</h2>
         <p>Every Rep head coach and how to reach them, at a glance.</p>
       </div>
-      <input type="text" id="directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
     </div>
     <div class="accordion-item" id="coaches-directory-item">
       <button class="accordion-header" type="button" id="coaches-directory-toggle">
@@ -462,7 +467,6 @@
         <h2>Next season's coaches</h2>
         <p>Coaches confirmed for next year, posted as they're announced.</p>
       </div>
-      <input type="text" id="future-directory-search" placeholder="Search coaches…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:220px;">
     </div>
     <div class="accordion-item" id="future-coaches-directory-item">
       <button class="accordion-header" type="button" id="future-coaches-directory-toggle">
@@ -488,15 +492,6 @@
         <div class="eyebrow">2027 Season</div>
         <h2>Rep teams &amp; tryouts</h2>
         <p>Click a team to see its head coach and 2027 tryout details.</p>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <input type="text" id="team-search" placeholder="Search team or coach…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
-        <select id="age-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
-          <option value="">All ages</option>
-        </select>
-        <select id="division-filter" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;">
-          <option value="">All divisions</option>
-        </select>
       </div>
     </div>
     <div id="teams-accordion">
@@ -650,8 +645,8 @@
      to configure for those.
   ============================================================ */
   const PROGRAM = 'Rep';
-  const COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=796127798&single=true&output=csv';
-  const TRYOUTS_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=1202039270&single=true&output=csv';
+  const COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=742363233&single=true&output=csv';
+  const TRYOUTS_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=40790808&single=true&output=csv';
   const FUTURE_COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=2044605055&single=true&output=csv';
 
   function parseCSV(text) {
@@ -711,40 +706,6 @@
     return isNaN(d.getTime()) ? null : d;
   }
 
-  function populateFilters(entries) {
-    const ages = new Set(), divisions = new Set();
-    entries.forEach(({ age, level }) => {
-      if (age) ages.add(age);
-      if (level) divisions.add(level);
-    });
-    const ageSelect = document.getElementById('age-filter');
-    const divisionSelect = document.getElementById('division-filter');
-    if (ageSelect) {
-      const prev = ageSelect.value;
-      const sorted = Array.from(ages).sort((a, b) => parseInt(a) - parseInt(b));
-      ageSelect.innerHTML = '<option value="">All ages</option>' + sorted.map(a => `<option value="${a}">${a}</option>`).join('');
-      if (sorted.includes(prev)) ageSelect.value = prev;
-    }
-    if (divisionSelect) {
-      const prev = divisionSelect.value;
-      const sorted = Array.from(divisions).sort();
-      divisionSelect.innerHTML = '<option value="">All divisions</option>' + sorted.map(d => `<option value="${d}">${d}</option>`).join('');
-      if (sorted.includes(prev)) divisionSelect.value = prev;
-    }
-  }
-
-  function applyTeamFilters() {
-    const q = (document.getElementById('team-search')?.value || '').toLowerCase();
-    const ageVal = document.getElementById('age-filter')?.value || '';
-    const divisionVal = document.getElementById('division-filter')?.value || '';
-    document.querySelectorAll('#teams-accordion .accordion-item').forEach(item => {
-      const matchesText = !q || item.textContent.toLowerCase().includes(q);
-      const matchesAge = !ageVal || item.dataset.age === ageVal;
-      const matchesDivision = !divisionVal || item.dataset.division === divisionVal;
-      item.style.display = (matchesText && matchesAge && matchesDivision) ? '' : 'none';
-    });
-  }
-
   function buildAccordion(coachRows, tryoutRows) {
     const wrap = document.getElementById('teams-accordion');
 
@@ -800,34 +761,33 @@
         return 0;
       });
 
-      const anyScheduled = tryouts.some(t => t.date || t.time || t.location);
-
+      // No row for this team in the Tryouts tab = show nothing at all,
+      // not even a placeholder. Every tryout is numbered, even when
+      // there's only one — order follows date, not sheet row order
+      // (already handled by the sort above).
       const tryoutLines = tryouts.length
         ? `<div class="tryout-grid">
-            ${anyScheduled ? '<div class="tryout-grid-row tryout-legend"><span></span><span>Date</span><span>Time</span><span>Location</span></div>' : ''}
+            <div class="tryout-grid-row tryout-legend"><span></span><span>Date</span><span>Time</span><span>Location</span><span>Notes</span></div>
             ${tryouts.map((t, i) => {
-              const label = tryouts.length > 1 ? `Tryout ${i + 1}` : 'Tryout';
-              const hasSchedule = t.date || t.time || t.location;
+              const label = `Tryout ${i + 1}`;
               const hasReschedule = t.rDate || t.rTime || t.rLocation;
               const parts = [];
-              if (hasSchedule) {
-                parts.push(`<div class="tryout-grid-row"><b>${label}</b><span>${t.date || '—'}</span><span>${t.time || '—'}</span><span>${t.location || '—'}</span></div>`);
-              }
+              parts.push(`<div class="tryout-grid-row"><b>${label}</b><span>${t.date || '—'}</span><span>${t.time || '—'}</span><span>${t.location || '—'}</span><span>${t.notes || '—'}</span></div>`);
               if (hasReschedule) {
-                parts.push(`<div class="tryout-grid-row tryout-reschedule"><b>Rescheduled</b><span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span></div>`);
-              }
-              if (t.notes) {
-                parts.push(`<div class="tryout-note"><b>${hasSchedule ? 'Note' : label}:</b> ${t.notes}</div>`);
+                parts.push(`<div class="tryout-grid-row tryout-reschedule"><b>Rescheduled</b><span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span><span></span></div>`);
               }
               return parts.join('');
             }).join('')}
           </div>`
-        : `<div class="team-detail-row"><b>Tryout</b><span>Date to be announced</span></div>`;
+        : '';
 
       return `
-        <div class="accordion-item" data-age="${info.age}" data-division="${info.level}">
+        <div class="accordion-item">
           <button class="accordion-header" type="button">
-            <span>${team}</span>
+            <span class="header-left">
+              <span class="team-name">${team}</span>
+              <span class="team-hint">Click for coach and tryout info</span>
+            </span>
             <span class="plus">+</span>
           </button>
           <div class="accordion-body">
@@ -838,8 +798,6 @@
           </div>
         </div>`;
     }).join('');
-
-    populateFilters(sortedTeams.map(([, info]) => ({ age: info.age, level: info.level })));
 
     wrap.querySelectorAll('.accordion-header').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -900,11 +858,6 @@
       buildCoachDirectory(coachRows);
       buildFutureCoachDirectory(futureCoachRows);
     });
-
-  ['team-search', 'age-filter', 'division-filter'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener(id === 'team-search' ? 'input' : 'change', applyTeamFilters);
-  });
 
   function wireDirectory(toggleId, itemId, bodyId, searchId, tbodySelector) {
     const toggle = document.getElementById(toggleId);

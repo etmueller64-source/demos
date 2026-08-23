@@ -259,6 +259,9 @@
   .sched-table th{background:var(--cream);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-soft);padding:12px 16px;font-weight:700;}
   .sched-table td{padding:14px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);}
   .sched-table .div-tag{display:inline-block;background:var(--cream);color:var(--navy);font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;}
+  .sched-table .level-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.03em;}
+  .sched-table .level-badge-rep{background:#EEF0F3;color:var(--ink-soft);}
+  .sched-table .level-badge-hp{background:rgba(199,90,30,.12);color:#C75A1E;}
 
   .filter-row{display:flex;gap:10px;margin-bottom:36px;flex-wrap:wrap;}
   .filter-pill{padding:8px 16px;border:1px solid var(--line);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:#fff;font-family:'Inter',sans-serif;transition:all .2s;}
@@ -422,6 +425,22 @@
     </table>
     <p style="font-size:13px;color:var(--ink-soft);margin-bottom:56px;">This list updates automatically each season from our coaches spreadsheet.</p>
 
+    <div class="section-head">
+      <div><div class="eyebrow">Looking ahead</div><h2>Future Coaches</h2></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input type="text" id="future-coach-search" placeholder="Search coach, team, or division…" style="padding:11px 14px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff;min-width:180px;">
+      </div>
+    </div>
+    <table class="sched-table" style="margin-bottom:16px;">
+      <thead>
+        <tr><th>Coach</th><th>Team</th><th>Division</th><th>Contact</th></tr>
+      </thead>
+      <tbody id="future-coaches-body">
+        <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:30px;">Loading coaches…</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:56px;">Coaches confirmed for next season, posted as they're announced.</p>
+
     <div style="text-align:center;background:#fff;border:1px solid var(--line);border-radius:6px;padding:44px 24px;">
       <h2 style="font-size:24px;color:var(--navy);margin-bottom:12px;">Interested in coaching next season?</h2>
       <p style="color:var(--ink-soft);font-size:14.5px;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto;">Apply to coach a Rep team or a House League team below.</p>
@@ -431,11 +450,25 @@
 </section>
 
 <script>
-  // Paste your published Google Sheet "Coaches" tab CSV link below.
-  const COACHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=742363233&single=true&output=csv";
+  /* =========================================================
+     COACHES & FUTURE COACHES — pulled from the shared master
+     spreadsheet (same one the Rep and HP pages read from)
+     =========================================================
+     This page lists every team combined — Rep AND HP together —
+     from the "Coaches" and "Future Coaches" tabs.
 
-  // Same CSV parser used on the House League page — handles quoted fields,
-  // embedded commas, and Windows line endings from Google's CSV export.
+     Columns, in order: Age, Level, Birth Year, Head Coach,
+     Coach Contact, Coach Phone
+
+     Display order: youngest to oldest, and within the same age,
+     Select, then A, then AA, then AAA — with every HP team pushed
+     to the very bottom of the list, below all Rep teams, regardless
+     of age. The Level column shows as a grey badge for Rep tiers and
+     a burnt-orange badge for HP.
+  ============================================================ */
+  const COACHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=742363233&single=true&output=csv";
+  const FUTURE_COACHES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=2044605055&single=true&output=csv";
+
   function parseCSV(text) {
     const rows = [];
     let row = [], field = '', inQuotes = false;
@@ -458,47 +491,57 @@
     return rows.filter(r => r.some(cell => cell.trim() !== ''));
   }
 
-  // Finds the header row (any row containing a cell that says "coach"),
-  // maps the column positions by header name, and returns the data rows.
-  // This way the sheet's columns can be in any order and can have title
-  // rows above the header — same idea as the fees table.
-  function extractCoachRows(rows) {
-    const norm = c => (c || '').trim().toLowerCase();
-    const headerIndex = rows.findIndex(r => r.some(c => norm(c) === 'coach' || norm(c) === 'coach name'));
-    if (headerIndex === -1) {
-      // Fallback: assume row 1 is the header with the original expected order:
-      // Program, Team, Birth Year, Coach, Email, Phone
-      return { cols: { program:0, team:1, coach:3, email:4, phone:5 }, data: rows.slice(1) };
-    }
-    const header = rows[headerIndex].map(norm);
-    const find = (...names) => header.findIndex(h => names.includes(h));
-    const cols = {
-      program: find('program', 'division', 'level'),
-      team:    find('team', 'team name'),
-      coach:   find('coach', 'coach name', 'name'),
-      email:   find('email', 'e-mail', 'email address'),
-      phone:   find('phone', 'phone number', 'cell', 'contact number')
-    };
-    return { cols, data: rows.slice(headerIndex + 1) };
+  // Finds the real header row (first cell literally says "Age") and
+  // returns only the rows after it.
+  function stripToDataRows(rows) {
+    const headerIndex = rows.findIndex(r => (r[0] || '').trim().toLowerCase() === 'age');
+    if (headerIndex === -1) return rows.slice(1);
+    return rows.slice(headerIndex + 1);
   }
 
-  // Splits a team label like "10U AA" into { age: "10U", division: "AA" }.
-  // Falls back to division "Select" for labels with no division suffix (e.g. "22U").
-  function parseTeamLabel(team) {
-    const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
-    if (!m) return { age: '', division: '' };
-    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Select' };
-  }
-
-  function populateFilters(teamNames) {
-    const ages = new Set(), divisions = new Set();
-    teamNames.forEach(team => {
-      const { age, division } = parseTeamLabel(team);
-      if (age) ages.add(age);
-      if (division) divisions.add(division);
+  // Youngest to oldest; within the same age, Select/A/AA/AAA in that
+  // order; every HP team pushed below every Rep team, regardless of age.
+  const LEVEL_RANK = { select: 0, a: 1, aa: 2, aaa: 3 };
+  function sortRows(rows) {
+    const rep = rows.filter(r => (r[1] || '').trim().toLowerCase() !== 'hp');
+    const hp  = rows.filter(r => (r[1] || '').trim().toLowerCase() === 'hp');
+    rep.sort((a, b) => {
+      const ageA = parseInt(a[0]) || 0, ageB = parseInt(b[0]) || 0;
+      if (ageA !== ageB) return ageA - ageB;
+      const rankA = LEVEL_RANK[(a[1] || '').trim().toLowerCase()] ?? 99;
+      const rankB = LEVEL_RANK[(b[1] || '').trim().toLowerCase()] ?? 99;
+      return rankA - rankB;
     });
-    const ageSelect = document.getElementById('age-filter');
-    const divisionSelect = document.getElementById('division-filter');
+    hp.sort((a, b) => (parseInt(a[0]) || 0) - (parseInt(b[0]) || 0));
+    return [...rep, ...hp];
+  }
+
+  function levelBadge(level) {
+    const isHP = (level || '').trim().toLowerCase() === 'hp';
+    return `<span class="level-badge ${isHP ? 'level-badge-hp' : 'level-badge-rep'}">${level}</span>`;
+  }
+
+  function applyFilters(bodyId, searchId, ageFilterId, divisionFilterId) {
+    const q = (document.getElementById(searchId)?.value || '').toLowerCase();
+    const ageVal = ageFilterId ? (document.getElementById(ageFilterId)?.value || '') : '';
+    const divisionVal = divisionFilterId ? (document.getElementById(divisionFilterId)?.value || '') : '';
+    document.querySelectorAll(`#${bodyId} tr`).forEach(row => {
+      const matchesText = !q || row.textContent.toLowerCase().includes(q);
+      const matchesAge = !ageVal || row.dataset.age === ageVal;
+      const matchesDivision = !divisionVal || row.dataset.division === divisionVal;
+      row.style.display = (matchesText && matchesAge && matchesDivision) ? '' : 'none';
+    });
+  }
+
+  function populateFilters(rows, ageFilterId, divisionFilterId) {
+    const ages = new Set(), divisions = new Set();
+    rows.forEach(r => {
+      const age = (r[0] || '').trim(), level = (r[1] || '').trim();
+      if (age) ages.add(age);
+      if (level) divisions.add(level);
+    });
+    const ageSelect = ageFilterId ? document.getElementById(ageFilterId) : null;
+    const divisionSelect = divisionFilterId ? document.getElementById(divisionFilterId) : null;
     if (ageSelect) {
       const prev = ageSelect.value;
       const sorted = Array.from(ages).sort((a, b) => parseInt(a) - parseInt(b));
@@ -513,85 +556,63 @@
     }
   }
 
-  function applyCoachFilters() {
-    const q = (document.getElementById('coach-search')?.value || '').toLowerCase();
-    const ageVal = document.getElementById('age-filter')?.value || '';
-    const divisionVal = document.getElementById('division-filter')?.value || '';
-    document.querySelectorAll('#coaches-body tr').forEach(row => {
-      const matchesText = !q || row.textContent.toLowerCase().includes(q);
-      const matchesAge = !ageVal || row.dataset.age === ageVal;
-      const matchesDivision = !divisionVal || row.dataset.division === divisionVal;
-      row.style.display = (matchesText && matchesAge && matchesDivision) ? '' : 'none';
-    });
-  }
+  function renderCoachTable(rows, tbodyId, ageFilterId, divisionFilterId) {
+    const tbody = document.getElementById(tbodyId);
+    const valid = rows.filter(r => (r[0] || '').trim() && (r[1] || '').trim());
 
-  function renderCoaches(result) {
-    const tbody = document.getElementById('coaches-body');
-    const { cols, data } = result;
-    const get = (r, i) => (i >= 0 && r[i] != null) ? r[i].trim() : '';
-
-    // Ignore rows with no coach AND no team (spacer rows in the sheet)
-    const rows = data.filter(r => get(r, cols.coach) || get(r, cols.team));
-
-    if (!rows.length) {
+    if (!valid.length) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:30px;">No coaches listed yet.</td></tr>';
       return;
     }
 
-    // Youngest first, oldest last — sorted by the numeric age parsed from
-    // each team name (e.g. "9U" -> 9). Same-age teams keep a stable order
-    // by their full team label (so "10U A" sits before "10U AA").
-    const sortedRows = rows.slice().sort((a, b) => {
-      const teamA = get(a, cols.team), teamB = get(b, cols.team);
-      const ageA = parseInt(parseTeamLabel(teamA).age) || 0;
-      const ageB = parseInt(parseTeamLabel(teamB).age) || 0;
-      if (ageA !== ageB) return ageA - ageB;
-      return teamA.localeCompare(teamB);
-    });
+    const sorted = sortRows(valid);
 
-    tbody.innerHTML = sortedRows.map(r => {
-      const program = get(r, cols.program), team = get(r, cols.team),
-            coach = get(r, cols.coach), email = get(r, cols.email), phone = get(r, cols.phone);
-      const { age, division } = parseTeamLabel(team);
+    tbody.innerHTML = sorted.map(r => {
+      const [age, level, birthYear, coach, email] = r.map(c => (c || '').trim());
+      const phone = (r[5] || '').trim();
+      const team = `${age} ${level}`;
       const contactParts = [];
       if (email) contactParts.push(`<a href="mailto:${email}" style="color:var(--gold);">${email}</a>`);
       if (phone) contactParts.push(`<a href="tel:${phone.replace(/[^\d+]/g,'')}" style="color:var(--gold);">${phone}</a>`);
       const contact = contactParts.length ? contactParts.join(' — ') : '—';
-      return `<tr data-age="${age}" data-division="${division}">
+      return `<tr data-age="${age}" data-division="${level}">
         <td>${coach || 'To be announced'}</td>
-        <td>${team || ''}</td>
-        <td><span class="div-tag">${program || ''}</span></td>
+        <td>${team}</td>
+        <td>${levelBadge(level)}</td>
         <td>${contact}</td>
       </tr>`;
     }).join('');
 
-    populateFilters(sortedRows.map(r => get(r, cols.team)));
+    if (ageFilterId || divisionFilterId) populateFilters(sorted, ageFilterId, divisionFilterId);
   }
 
-  function loadCoaches() {
-    const tbody = document.getElementById('coaches-body');
-    if (!COACHES_CSV_URL || COACHES_CSV_URL.includes('PASTE_YOUR')) {
+  function loadCoachTable(url, tbodyId, ageFilterId, divisionFilterId) {
+    const tbody = document.getElementById(tbodyId);
+    if (!url || url.includes('PASTE_YOUR')) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:30px;">Connect the Google Sheet link in the code to show live coaches.</td></tr>';
       return;
     }
-    fetch(COACHES_CSV_URL)
+    fetch(url)
       .then(r => {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.text();
       })
-      .then(text => renderCoaches(extractCoachRows(parseCSV(text))))
+      .then(text => renderCoachTable(stripToDataRows(parseCSV(text)), tbodyId, ageFilterId, divisionFilterId))
       .catch(err => {
         console.error('Coaches CSV failed to load:', err);
         tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:30px;">Could not load coaches right now.</td></tr>';
       });
   }
 
-  loadCoaches();
+  loadCoachTable(COACHES_CSV_URL, 'coaches-body', 'age-filter', 'division-filter');
+  loadCoachTable(FUTURE_COACHES_CSV_URL, 'future-coaches-body', null, null);
 
   ['coach-search', 'age-filter', 'division-filter'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener(id === 'coach-search' ? 'input' : 'change', applyCoachFilters);
+    if (el) el.addEventListener(id === 'coach-search' ? 'input' : 'change', () => applyFilters('coaches-body', 'coach-search', 'age-filter', 'division-filter'));
   });
+  const futureSearch = document.getElementById('future-coach-search');
+  if (futureSearch) futureSearch.addEventListener('input', () => applyFilters('future-coaches-body', 'future-coach-search', null, null));
 </script>
 <footer>
   <div class="wrap">
