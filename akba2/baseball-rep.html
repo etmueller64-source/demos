@@ -317,7 +317,7 @@
   .team-hint::before{content:"·";margin-right:10px;color:var(--line);}
 
   .tryout-grid{margin-top:4px;}
-  .tryout-grid-row{display:grid;grid-template-columns:104px 130px 96px 156px 1fr;column-gap:32px;row-gap:0;padding:11px 4px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
+  .tryout-grid-row{display:grid;grid-template-columns:140px 140px 100px 170px 1fr;column-gap:36px;row-gap:0;padding:11px 4px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
   .tryout-grid-row:first-child{border-top:none;}
   .tryout-grid-row span{text-align:center;}
   .tryout-legend{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);padding-top:0;padding-bottom:6px;}
@@ -325,8 +325,20 @@
   /* same grid columns as every row above it, so Date/Time/Location/Notes
      stay perfectly lined up with the header — only the label itself gets
      an accent to show it belongs to the tryout above, not the whole row. */
-  .tryout-reschedule{background:rgba(199,90,30,.08);border-radius:4px;}
-  .tryout-reschedule b{color:var(--reschedule);padding-left:14px;border-left:3px solid var(--reschedule);}
+  /* Canceled tryouts: one single indented box, not two separate ones —
+     the cancel message and (if there's a real makeup date) the
+     Rescheduled row both live inside it with no divider between them. */
+  /* Border-left lives on the block; horizontal padding lives on the
+     note text only — NOT on the block itself and NOT overriding the
+     nested grid row's own padding, so that row keeps the exact same
+     left inset as every other tryout row and its columns land in the
+     same spot under the header. */
+  .tryout-cancel-block{background:rgba(199,90,30,.08);border-radius:4px;border-left:3px solid var(--reschedule);margin-top:2px;}
+  .tryout-cancel-note{font-size:13px;color:var(--reschedule);padding:9px 14px 9px 15px;}
+  .tryout-cancel-note b{color:var(--reschedule);font-weight:700;}
+  .tryout-cancel-block .tryout-grid-row{border-top:none;padding-top:6px;padding-bottom:11px;}
+  .tryout-cancel-block .tryout-grid-row b{color:var(--reschedule);}
+  .tryout-grid-row b.tryout-resched-label{font-weight:400;}
   @media (max-width:640px){
     .tryout-grid-row{grid-template-columns:1fr 1fr;grid-template-areas:"label label" "date time" "loc loc" "notes notes";row-gap:4px;}
     .tryout-grid-row span{text-align:left;}
@@ -616,8 +628,15 @@
      Coaches / Future Coaches sheet columns, in order:
        Age, Level, Birth Year, Head Coach, Coach Contact, Coach Phone
      Tryouts sheet columns, in order:
-       Age, Level, Date, Time, Location,
+       Age, Level, Date, Time, Location, Canceled-tryout? (Yes/No),
        Reschedule Date, Reschedule Time, Reschedule Location, Notes
+
+     Canceled-tryout? is a Yes/No dropdown. Leave it "No" for a normal
+     tryout — the Reschedule columns are ignored either way in that
+     case. Set it to "Yes" if a tryout gets called off (weather, etc.)
+     and the site shows a plain "Canceled — new date to be announced"
+     note until the Reschedule Date/Time/Location cells get filled in
+     with a real makeup date, at which point it shows those instead.
 
      Age and Level are dropdowns in the sheet, not free text — see the
      companion workbook for the exact lists. This replaces the old
@@ -726,13 +745,16 @@
       const existing = teams.get(team) || { age, level, tryouts: [] };
       teams.set(team, { ...existing, birthYear, coach, coachEmail, coachPhone: (r[5] || '').trim() });
     });
+    // Column F is "Canceled-tryout?" (Yes/No) — everything from
+    // Reschedule Date onward shifted one column right to make room for it.
     (tryoutRows || []).forEach(r => {
-      const [age, level, date, time, location, rDate, rTime, rLocation, notes] = r.map(c => (c || '').trim());
+      const [age, level, date, time, location, canceled, rDate, rTime, rLocation, notes] = r.map(c => (c || '').trim());
       if (!age || !level) return;
       if (!date && !time && !location && !notes) return; // nothing at all on this row — skip it
       const team = `${age} ${level}`;
       const existing = teams.get(team) || { age, level, tryouts: [] };
-      existing.tryouts = [...(existing.tryouts || []), { date, time, location, rDate, rTime, rLocation, notes }];
+      const isCanceled = canceled.toLowerCase() === 'yes';
+      existing.tryouts = [...(existing.tryouts || []), { date, time, location, isCanceled, rDate, rTime, rLocation, notes }];
       teams.set(team, existing);
     });
 
@@ -743,13 +765,23 @@
 
     // Youngest first, oldest last — sorted by numeric Age. Same-age
     // teams are ordered by their combined label (so "10U A" sits
-    // before "10U AA").
-    const sortedTeams = Array.from(teams.entries()).sort((a, b) => {
-      const ageA = parseInt(a[1].age) || 0;
-      const ageB = parseInt(b[1].age) || 0;
-      if (ageA !== ageB) return ageA - ageB;
-      return a[0].localeCompare(b[0]);
-    });
+    // before "10U AA"). Only teams with an actual tryout row show up
+    // here — this section is specifically "Teams & Tryouts", a coach
+    // with no tryout posted yet just doesn't appear (they're still in
+    // the Coaches directory table above, that list isn't filtered).
+    const sortedTeams = Array.from(teams.entries())
+      .filter(([, info]) => (info.tryouts || []).length > 0)
+      .sort((a, b) => {
+        const ageA = parseInt(a[1].age) || 0;
+        const ageB = parseInt(b[1].age) || 0;
+        if (ageA !== ageB) return ageA - ageB;
+        return a[0].localeCompare(b[0]);
+      });
+
+    if (!sortedTeams.length) {
+      wrap.innerHTML = `<div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">No tryout dates posted yet — check back soon.</div></div>`;
+      return;
+    }
 
     wrap.innerHTML = sortedTeams.map(([team, info]) => {
       const coachLine = info.coach
@@ -774,11 +806,22 @@
             <div class="tryout-grid-row tryout-legend"><span></span><span>Date</span><span>Time</span><span>Location</span><span>Notes</span></div>
             ${tryouts.map((t, i) => {
               const label = `Tryout ${i + 1}`;
-              const hasReschedule = t.rDate || t.rTime || t.rLocation;
               const parts = [];
               parts.push(`<div class="tryout-grid-row"><b>${label}</b><span>${t.date || '—'}</span><span>${t.time || '—'}</span><span>${t.location || '—'}</span><span>${t.notes || '—'}</span></div>`);
-              if (hasReschedule) {
-                parts.push(`<div class="tryout-grid-row tryout-reschedule"><b>Rescheduled</b><span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span><span></span></div>`);
+              // Reschedule cells are locked/inert on the sheet unless
+              // Canceled-tryout? is Yes, so only look at them at all when
+              // that flag is set. "TBD" is the sheet's default once
+              // unlocked — the note's wording (and whether the actual
+              // grid row shows at all) depends on whether a real makeup
+              // date has been filled in yet.
+              if (t.isCanceled) {
+                const isTBD = v => !v || v.trim().toLowerCase() === 'tbd';
+                const hasRealReschedule = !(isTBD(t.rDate) && isTBD(t.rTime) && isTBD(t.rLocation));
+                const tail = hasRealReschedule ? 'rescheduled tryout details below' : 'stay tuned for reschedule details';
+                const reschedRow = hasRealReschedule
+                  ? `<div class="tryout-grid-row"><b class="tryout-resched-label">   Rescheduled Details</b><span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span><span></span></div>`
+                  : '';
+                parts.push(`<div class="tryout-cancel-block"><div class="tryout-cancel-note"><b>${label} Canceled</b> — ${tail}</div>${reschedRow}</div>`);
               }
               return parts.join('');
             }).join('')}
