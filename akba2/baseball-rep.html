@@ -310,28 +310,32 @@
   .team-detail-row b{color:var(--ink);min-width:96px;flex-shrink:0;}
   .team-detail-row a{color:var(--gold);}
 
-  /* team bars: hint subtitle under the team name */
-  .header-left{display:flex;flex-direction:column;gap:3px;}
+  /* team bars: hint sits on the same line as the team name, not stacked */
+  .header-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
   .team-name{font-size:14.5px;font-weight:600;color:var(--gold);}
   .team-hint{font-size:11.5px;font-weight:400;color:var(--ink-soft);}
+  .team-hint::before{content:"·";margin-right:10px;color:var(--line);}
 
   .tryout-grid{margin-top:4px;}
-  .tryout-grid-row{display:grid;grid-template-columns:96px 124px 92px 150px 1fr;column-gap:28px;row-gap:0;padding:11px 4px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
+  .tryout-grid-row{display:grid;grid-template-columns:104px 130px 96px 156px 1fr;column-gap:32px;row-gap:0;padding:11px 4px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
   .tryout-grid-row:first-child{border-top:none;}
+  .tryout-grid-row span{text-align:center;}
   .tryout-legend{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);padding-top:0;padding-bottom:6px;}
   .tryout-grid-row b{color:var(--ink);font-weight:600;font-size:13.5px;}
-  /* indented + accented to read as nested under the tryout row above it */
-  .tryout-reschedule{background:rgba(199,90,30,.08);border-radius:4px;margin-left:26px;padding-left:14px;border-left:3px solid var(--reschedule);}
-  .tryout-reschedule b{color:var(--reschedule);}
+  /* same grid columns as every row above it, so Date/Time/Location/Notes
+     stay perfectly lined up with the header — only the label itself gets
+     an accent to show it belongs to the tryout above, not the whole row. */
+  .tryout-reschedule{background:rgba(199,90,30,.08);border-radius:4px;}
+  .tryout-reschedule b{color:var(--reschedule);padding-left:14px;border-left:3px solid var(--reschedule);}
   @media (max-width:640px){
     .tryout-grid-row{grid-template-columns:1fr 1fr;grid-template-areas:"label label" "date time" "loc loc" "notes notes";row-gap:4px;}
+    .tryout-grid-row span{text-align:left;}
     .tryout-legend{display:none;}
     .tryout-grid-row b{grid-area:label;}
     .tryout-grid-row span:nth-of-type(1){grid-area:date;}
     .tryout-grid-row span:nth-of-type(2){grid-area:time;}
     .tryout-grid-row span:nth-of-type(3){grid-area:loc;}
     .tryout-grid-row span:nth-of-type(4){grid-area:notes;font-style:italic;}
-    .tryout-reschedule{margin-left:0;padding-left:12px;}
   }
 </style>
 </head>
