@@ -13,6 +13,7 @@
     --navy-2:#123A69;
     --gold:#C9A227;
     --gold-deep:#A67F1A;
+    --reschedule:#C75A1E;
     --ink:#1A1D24;
     --ink-soft:#5B6072;
     --line:rgba(27,75,133,0.12);
@@ -318,6 +319,10 @@
   .tryout-grid-row:first-child{border-top:none;}
   .tryout-legend{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);padding-top:0;padding-bottom:6px;}
   .tryout-grid-row b{color:var(--ink);font-weight:600;font-size:13.5px;}
+  .tryout-reschedule{background:rgba(199,90,30,.08);border-radius:4px;}
+  .tryout-reschedule b{color:var(--reschedule);}
+  .tryout-note{font-size:12.5px;color:var(--ink-soft);font-style:italic;padding:8px 2px 2px;margin-top:2px;border-top:1px dashed var(--line);}
+  .tryout-note b{color:var(--ink-soft);font-style:normal;font-weight:600;}
   @media (max-width:640px){
     .tryout-grid-row{grid-template-columns:1fr 1fr;grid-template-areas:"label label" "date time" "loc loc";row-gap:4px;}
     .tryout-legend{display:none;}
@@ -713,42 +718,61 @@
   document.querySelectorAll('.block-card').forEach(el => observer.observe(el));
 
   /* =========================================================
-     HP TEAMS: COACHES & TRYOUT DATES — pulled from a shared
-     master spreadsheet (also used by the Rep page)
+     HP TEAMS: COACHES & TRYOUT DATES — pulled from a
+     shared master spreadsheet (also used by the Rep page)
      =========================================================
-     This page and the Rep page both read from the SAME two published
-     tabs of one Google Sheet — a "Coaches" tab and a "Tryouts" tab —
-     each with a Program column so every row knows which page it
-     belongs to. This page only shows rows where Program = "HP".
+     This page and the Rep page both read from the SAME three
+     published tabs of one Google Sheet — "Coaches", "Future Coaches",
+     and "Tryouts" — each row tagged with an Age and a Level so the
+     page knows which program it belongs to. This page only shows
+     rows where Level = "HP".
 
      To connect the master sheet:
-     1. Open the sheet (one tab called "Coaches", one called "Tryouts").
-     2. File → Share → Publish to web.
-     3. Publish the "Coaches" tab as CSV, copy the link, paste it as
-        COACHES_CSV_URL below.
-     4. Publish the "Tryouts" tab as CSV, copy the link, paste it as
-        TRYOUTS_CSV_URL below.
-     5. Paste those exact same two links into baseball-rep.html as well —
-        both pages read the same two tabs, they just filter differently.
+     1. Open the sheet (tabs called "Coaches", "Future Coaches", "Tryouts").
+     2. File → Share → Publish to web → publish the ENTIRE document
+        (not one tab at a time) — that's what lets every tab's CSV
+        link work off gid alone, no separate publish step per tab.
+     3. Open the "Coaches" tab, copy its link from the address bar
+        (the part after #gid=), paste it as COACHES_CSV_URL below.
+     4. Do the same for "Tryouts" → TRYOUTS_CSV_URL, and
+        "Future Coaches" → FUTURE_COACHES_CSV_URL.
+     5. Paste those same three links into baseball-rep.html too —
+        both pages read the same three tabs, they just filter differently.
 
-     Coaches sheet columns, in order: Program, Team, Birth Year, Head Coach, Coach Contact, Coach Phone
-     Tryouts sheet columns, in order: Program, Team, Date, Time, Location
-     Program must be exactly "Rep" or "HP" (not case-sensitive).
-     A title row above the real header is fine — the page finds the row
-     that starts with "Program" and reads everything after it.
-     Rows are matched between the two sheets by the "Team" column, so use
-     the exact same team name (e.g. "13U HP") in both sheets. A team can
-     have more than one tryout row — the page sorts them by date and
-     labels them Tryout 1, Tryout 2, etc. automatically.
+     Coaches / Future Coaches sheet columns, in order:
+       Age, Level, Birth Year, Head Coach, Coach Contact, Coach Phone
+     Tryouts sheet columns, in order:
+       Age, Level, Date, Time, Location,
+       Reschedule Date, Reschedule Time, Reschedule Location, Notes
 
-     ADDITIONAL SETUP (coaches for next season + tryout filters):
-     - Publish a "Future Coaches" tab (same columns as "Coaches") as CSV
-       and paste that link as FUTURE_COACHES_CSV_URL below. It feeds the
-       separate "Next season's coaches" section. Paste the same link into
-       the other program page (Rep/HP) too.
-     - The Age/Division filter dropdowns above the team list are built
-       automatically from each Team name (e.g. "10U AA" -> Age "10U",
-       Division "AA") — nothing extra to configure for those.
+     Age and Level are dropdowns in the sheet, not free text — see the
+     companion workbook for the exact lists. This replaces the old
+     single "Team" text column, so there's no way to end up with
+     "10u aa" in one row and "10U AA" in another.
+
+     A title row above the real header is fine — the page finds the
+     row whose first cell literally says "Age" and reads everything
+     after it.
+
+     Rescheduled tryouts: if a tryout gets moved (weather, etc.), leave
+     its original Date/Time/Location as-is and just fill in Reschedule
+     Date/Time/Location on that same row — the new info shows up right
+     under the original, in an orange "Rescheduled" heading. The
+     original stays visible so families can see what changed.
+
+     Private / by-appointment tryouts: leave Date/Time/Location blank
+     and just write something in Notes (e.g. "Email the coach to
+     schedule a private tryout"). As long as Age and Level are filled
+     in, that row shows up — Date/Time/Location are optional, not
+     required. A team can have more than one Tryout row (mix of
+     scheduled and private/notes-only) — the page sorts them by date
+     and labels them Tryout 1, Tryout 2, etc. automatically, with
+     notes-only rows keeping their own place in that order.
+
+     The Age/Division filter dropdowns above the team list, and the
+     "12U AA"-style team labels throughout the page, are built
+     automatically by combining each row's Age + Level — nothing extra
+     to configure for those.
   ============================================================ */
   const PROGRAM = 'HP';
   const COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=742363233&single=true&output=csv';
@@ -777,29 +801,32 @@
     return rows.filter(r => r.some(cell => cell.trim() !== ''));
   }
 
-  // Finds the real header row (first cell literally says "Program") and
+  // Finds the real header row (first cell literally says "Age") and
   // returns only the rows after it — so title rows, spacer rows, or
   // anything else Google Sheets exports above the header get ignored.
   function stripToDataRows(rows) {
-    const headerIndex = rows.findIndex(r => (r[0] || '').trim().toLowerCase() === 'program');
+    const headerIndex = rows.findIndex(r => (r[0] || '').trim().toLowerCase() === 'age');
     if (headerIndex === -1) return rows.slice(1); // fallback: assume row 1 is the header
     return rows.slice(headerIndex + 1);
   }
 
-  // Keeps only rows tagged for this page's program, then drops the
-  // Program column — everything below this point works exactly like
-  // it did with a page-specific spreadsheet.
-  function filterByProgram(rows) {
-    return rows
-      .filter(r => (r[0] || '').trim().toLowerCase() === PROGRAM.toLowerCase())
-      .map(r => r.slice(1));
+  // Keeps only rows whose Level belongs on this page. Level "HP" goes
+  // to the HP page; Select/A/AA/AAA go to the Rep page. Unlike the old
+  // Program column, nothing gets stripped off the row here — Age and
+  // Level both stay, since the rest of the page needs them.
+  function filterByLevel(rows) {
+    return rows.filter(r => {
+      const level = (r[1] || '').trim().toLowerCase();
+      if (!level) return false;
+      return PROGRAM === 'HP' ? level === 'hp' : level !== 'hp';
+    });
   }
 
   function fetchCSV(url) {
     if (!url || url.startsWith('PASTE_')) return Promise.resolve(null);
     return fetch(url)
       .then(r => r.text())
-      .then(text => filterByProgram(stripToDataRows(parseCSV(text))))
+      .then(text => filterByLevel(stripToDataRows(parseCSV(text))))
       .catch(() => []);
   }
 
@@ -809,20 +836,11 @@
     return isNaN(d.getTime()) ? null : d;
   }
 
-  // Splits a team label like "10U AA" into { age: "10U", division: "AA" }.
-  // Falls back to division "Select" for labels with no division suffix (e.g. "22U").
-  function parseTeamLabel(team) {
-    const m = (team || '').trim().match(/^(\d+U)\s*(.*)$/i);
-    if (!m) return { age: '', division: '' };
-    return { age: m[1].toUpperCase(), division: (m[2] || '').trim() || 'Select' };
-  }
-
-  function populateFilters(teamNames) {
+  function populateFilters(entries) {
     const ages = new Set(), divisions = new Set();
-    teamNames.forEach(team => {
-      const { age, division } = parseTeamLabel(team);
+    entries.forEach(({ age, level }) => {
       if (age) ages.add(age);
-      if (division) divisions.add(division);
+      if (level) divisions.add(level);
     });
     const ageSelect = document.getElementById('age-filter');
     const divisionSelect = document.getElementById('division-filter');
@@ -860,18 +878,21 @@
       return;
     }
 
-    const teams = new Map(); // team name -> { coach, coachEmail, tryouts: [{date,time,location}] }
+    const teams = new Map(); // "Age Level" -> { age, level, birthYear, coach, coachEmail, coachPhone, tryouts: [...] }
     (coachRows || []).forEach(r => {
-      const [team, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
-      if (!team) return;
-      const existing = teams.get(team) || { tryouts: [] };
-      teams.set(team, { ...existing, birthYear, coach, coachEmail, coachPhone: (r[4] || '').trim() });
+      const [age, level, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
+      if (!age || !level) return;
+      const team = `${age} ${level}`;
+      const existing = teams.get(team) || { age, level, tryouts: [] };
+      teams.set(team, { ...existing, birthYear, coach, coachEmail, coachPhone: (r[5] || '').trim() });
     });
     (tryoutRows || []).forEach(r => {
-      const [team, date, time, location] = r.map(c => (c || '').trim());
-      if (!team || (!date && !time && !location)) return;
-      const existing = teams.get(team) || { tryouts: [] };
-      existing.tryouts = [...(existing.tryouts || []), { date, time, location }];
+      const [age, level, date, time, location, rDate, rTime, rLocation, notes] = r.map(c => (c || '').trim());
+      if (!age || !level) return;
+      if (!date && !time && !location && !notes) return; // nothing at all on this row — skip it
+      const team = `${age} ${level}`;
+      const existing = teams.get(team) || { age, level, tryouts: [] };
+      existing.tryouts = [...(existing.tryouts || []), { date, time, location, rDate, rTime, rLocation, notes }];
       teams.set(team, existing);
     });
 
@@ -880,12 +901,12 @@
       return;
     }
 
-    // Youngest first, oldest last — sorted by the numeric age parsed from
-    // each team name (e.g. "9U" -> 9). Same-age teams are ordered by their
-    // full label (so "10U A" sits before "10U AA").
+    // Youngest first, oldest last — sorted by numeric Age. Same-age
+    // teams are ordered by their combined label (so "10U A" sits
+    // before "10U AA").
     const sortedTeams = Array.from(teams.entries()).sort((a, b) => {
-      const ageA = parseInt(parseTeamLabel(a[0]).age) || 0;
-      const ageB = parseInt(parseTeamLabel(b[0]).age) || 0;
+      const ageA = parseInt(a[1].age) || 0;
+      const ageB = parseInt(b[1].age) || 0;
       if (ageA !== ageB) return ageA - ageB;
       return a[0].localeCompare(b[0]);
     });
@@ -904,20 +925,32 @@
         return 0;
       });
 
+      const anyScheduled = tryouts.some(t => t.date || t.time || t.location);
+
       const tryoutLines = tryouts.length
         ? `<div class="tryout-grid">
-            <div class="tryout-grid-row tryout-legend"><span></span><span>Date</span><span>Time</span><span>Location</span></div>
+            ${anyScheduled ? '<div class="tryout-grid-row tryout-legend"><span></span><span>Date</span><span>Time</span><span>Location</span></div>' : ''}
             ${tryouts.map((t, i) => {
               const label = tryouts.length > 1 ? `Tryout ${i + 1}` : 'Tryout';
-              return `<div class="tryout-grid-row"><b>${label}</b><span>${t.date || '—'}</span><span>${t.time || '—'}</span><span>${t.location || '—'}</span></div>`;
+              const hasSchedule = t.date || t.time || t.location;
+              const hasReschedule = t.rDate || t.rTime || t.rLocation;
+              const parts = [];
+              if (hasSchedule) {
+                parts.push(`<div class="tryout-grid-row"><b>${label}</b><span>${t.date || '—'}</span><span>${t.time || '—'}</span><span>${t.location || '—'}</span></div>`);
+              }
+              if (hasReschedule) {
+                parts.push(`<div class="tryout-grid-row tryout-reschedule"><b>Rescheduled</b><span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span></div>`);
+              }
+              if (t.notes) {
+                parts.push(`<div class="tryout-note"><b>${hasSchedule ? 'Note' : label}:</b> ${t.notes}</div>`);
+              }
+              return parts.join('');
             }).join('')}
           </div>`
         : `<div class="team-detail-row"><b>Tryout</b><span>Date to be announced</span></div>`;
 
-      const { age, division } = parseTeamLabel(team);
-
       return `
-        <div class="accordion-item" data-age="${age}" data-division="${division}">
+        <div class="accordion-item" data-age="${info.age}" data-division="${info.level}">
           <button class="accordion-header" type="button">
             <span>${team}</span>
             <span class="plus">+</span>
@@ -931,7 +964,7 @@
         </div>`;
     }).join('');
 
-    populateFilters(Array.from(teams.keys()));
+    populateFilters(sortedTeams.map(([, info]) => ({ age: info.age, level: info.level })));
 
     wrap.querySelectorAll('.accordion-header').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -964,9 +997,10 @@
     }
 
     tbody.innerHTML = coachRows.map(r => {
-      const [team, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
-      const coachPhone = (r[4] || '').trim();
-      if (!team) return '';
+      const [age, level, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
+      const coachPhone = (r[5] || '').trim();
+      if (!age || !level) return '';
+      const team = `${age} ${level}`;
       const contact = coachEmail ? `<a href="mailto:${coachEmail}" style="color:var(--gold);">${coachEmail}</a>` : '—';
       const phone = coachPhone ? `<a href="tel:${coachPhone.replace(/[^\d+]/g,'')}" style="color:var(--gold);">${coachPhone}</a>` : '—';
       return `<tr><td>${team}</td><td>${coach || 'To be announced'}</td><td>${contact}</td><td>${phone}</td></tr>`;
