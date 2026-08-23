@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rep — Aurora-King Baseball Association</title>
+<title>HP — Aurora-King Baseball Association</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -86,7 +86,7 @@
     position:relative;color:#fff;min-height:560px;display:flex;align-items:center;
     background:
       linear-gradient(100deg, rgba(16,27,52,0.94) 20%, rgba(16,27,52,0.55) 60%, rgba(16,27,52,0.75) 100%),
-      url('Images/Rep.png');
+      url('Images/HP.png');
     background-size:cover;
     background-position:center 30%;
     overflow:hidden;
@@ -302,7 +302,11 @@
   }
   .hands-graphic svg{position:absolute;inset:0;width:100%;height:100%;opacity:0.35;}
 
-  #teams-accordion .accordion-item.open .accordion-body{max-height:260px;}
+  @media (max-width:900px){
+    .volunteer-hero{grid-template-columns:1fr;gap:28px;}
+  }
+
+  #teams-accordion .accordion-item.open .accordion-body{max-height:320px;}
   #teams-accordion .accordion-header{color:var(--navy);}
   #teams-accordion .accordion-header .team-sub{color:var(--ink-soft);font-weight:500;font-size:13px;margin-left:10px;}
   .team-detail-row{display:flex;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);}
@@ -343,6 +347,9 @@
     .tryout-grid-row span:nth-of-type(3){grid-area:loc;}
     .tryout-grid-row span:nth-of-type(4){grid-area:notes;font-style:italic;}
   }
+
+  .pipeline-card .tag{font-size:11.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+  .num-role .icon{font-size:15px;}
 </style>
 </head>
 <body>
@@ -421,35 +428,35 @@
 </nav>
 <section class="page-header">
   <div class="wrap">
-    <div class="eyebrow">Programs · Competitive</div>
-    <h1>Rep</h1>
-    <p>Competitive travel baseball affiliated with York Simcoe Baseball Association and Baseball Ontario. Rosters are set through tryouts each spring.</p>
+    <div class="eyebrow">Programs · High Performance</div>
+    <h1>HP</h1>
+    <p>A core branch of AKBA's Player Development Pipeline — preparing committed athletes for Provincial, College, University, and other advanced competitive pathways.</p>
   </div>
 </section>
 <section class="section">
   <div class="wrap">
-    <div class="detail-grid">
+    <div class="detail-grid" style="margin-bottom:56px;">
       <div class="detail-card">
         <div class="tag">Ages</div>
-        <h3>Ages 9+</h3>
-        <p>Tryout-based travel teams for players aged 9 and up, competing against other associations across the region.</p>
+        <h3>12U–18U</h3>
+        <p>Elite development for athletes who show a strong commitment to high-level competition and long-term athletic growth, structured across two stages of the pipeline.</p>
       </div>
       <div class="detail-card">
         <div class="tag">What to expect</div>
         <h3>Season format</h3>
         <ul class="detail-list">
-          <li><b>Format:</b> Tryout-based travel teams</li>
-          <li><b>Season:</b> April – August, plus tournaments</li>
-          <li><b>Commitment:</b> 3–4 practices/games per week</li>
+          <li><b>Format:</b> Tryout-based, elite competitive</li>
+          <li><b>Season:</b> Year-round — mandatory off-season plus spring/summer season</li>
+          <li><b>Commitment:</b> 4+ sessions per week</li>
         </ul>
       </div>
     </div>
 
-    <div class="section-head" style="margin-top:64px;">
+    <div class="section-head" style="margin-top:8px;">
       <div>
         <div class="eyebrow">Quick reference</div>
         <h2>Coaches</h2>
-        <p>Every Rep head coach and how to reach them, at a glance.</p>
+        <p>Every HP head coach and how to reach them, at a glance.</p>
       </div>
     </div>
     <div class="accordion-item" id="coaches-directory-item">
@@ -499,19 +506,137 @@
 
     <div class="section-head" style="margin-top:56px;">
       <div>
-        <div class="eyebrow">2027 Season</div>
-        <h2>Rep teams &amp; tryouts</h2>
-        <p>Click a team to see its head coach and 2027 tryout details.</p>
+        <div class="eyebrow">2026 Season</div>
+        <h2>HP teams &amp; tryouts</h2>
+        <p>Click a team to see its head coach and tryout details.</p>
       </div>
     </div>
     <div id="teams-accordion">
       <div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Loading teams…</div></div>
     </div>
 
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Mandatory program</div>
+        <h2>Off-season development</h2>
+        <p>Every HP team takes part in a comprehensive off-season training program.</p>
+      </div>
+    </div>
+    <div class="role-grid" style="margin-bottom:56px;">
+      <div class="role-card">
+        <div class="icon">1</div>
+        <h3>Fall Ball</h3>
+        <p>A fall schedule of at least six (6) games, weather permitting.</p>
+      </div>
+      <div class="role-card">
+        <div class="icon">2</div>
+        <h3>Strength &amp; Conditioning</h3>
+        <p>Structured sessions led by a certified strength and conditioning coach, plus independent routines.</p>
+      </div>
+      <div class="role-card">
+        <div class="icon">3</div>
+        <h3>Baseball Skills Development</h3>
+        <p>At least five (5) hours of organized training per week — hitting, pitching, catching, fielding, throwing, and baseball-specific athleticism.</p>
+      </div>
+      <div class="role-card">
+        <div class="icon">4</div>
+        <h3>Mental Performance Training</h3>
+        <p>At least two (2) large-group sessions per off-season covering focus, confidence, resilience, goal-setting, and leadership.</p>
+      </div>
+      <div class="role-card">
+        <div class="icon">5</div>
+        <h3>Nutrition Education</h3>
+        <p>At least two (2) annual sessions delivered by a qualified professional.</p>
+      </div>
+      <div class="role-card">
+        <div class="icon">6</div>
+        <h3>Individual Development Plans</h3>
+        <p>Every athlete gets a customized IDP covering strengths, areas for improvement, goals, and progress benchmarks.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Selection</div>
+        <h2>Tryouts &amp; rosters</h2>
+        <p>How HP teams are formed each season.</p>
+      </div>
+    </div>
+    <div class="detail-grid" style="margin-bottom:56px;">
+      <div class="detail-card">
+        <div class="tag">Tryout guidelines</div>
+        <h3>Open, fair, and transparent</h3>
+        <p>HP tryouts are publicly advertised, open to all eligible athletes, and conducted fairly. Private tryouts can be coordinated directly with each team's coach. Independent evaluators are used whenever reasonably possible to ensure unbiased selection.</p>
+      </div>
+      <div class="detail-card">
+        <div class="tag">Roster sizes</div>
+        <h3>Minimum &amp; maximum per group</h3>
+        <ul class="detail-list">
+          <li><b>12U–14U:</b> Minimum 12, maximum 14 players</li>
+          <li><b>15U–18U:</b> Minimum 12, maximum 17 players</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Commitments</div>
+        <h2>Expectations for players &amp; families</h2>
+        <p>What it takes to hold a roster spot on an HP team.</p>
+      </div>
+    </div>
+    <div class="detail-grid" style="margin-bottom:64px;">
+      <div class="detail-card">
+        <div class="tag">Player &amp; family commitment</div>
+        <h3>A significant dedication of time</h3>
+        <p>Accepting an HP roster spot requires regular attendance at all practices, training sessions, games, and tournaments, along with respectful conduct as a representative of AKBA.</p>
+      </div>
+      <div class="detail-card">
+        <div class="tag">Tournament schedule</div>
+        <h3>At least four events a year</h3>
+        <ul class="detail-list">
+          <li>Minimum of four (4) tournaments annually, not including mandatory championship events like OBA Eliminations or Provincial Championships</li>
+          <li>Schedules may include showcase events in the United States or elsewhere in Canada</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">The pipeline</div>
+        <h2>Player Development Pipeline</h2>
+        <p>A structured, multi-stage development journey built to advance athletes to the highest levels of amateur baseball.</p>
+      </div>
+    </div>
+    <div class="detail-grid" style="margin-bottom:56px;">
+      <div class="detail-card pipeline-card">
+        <div class="tag">12U–14U</div>
+        <h3>Development HP</h3>
+        <ul class="detail-list">
+          <li>Advanced skill development, game strategy, situational play, and strength &amp; conditioning</li>
+          <li>Introduces mental performance and leadership</li>
+          <li>High-level league and tournament play</li>
+          <li>Accommodates two-sport athletes</li>
+          <li>12U &amp; 13U compete in the interlock AAA loop with YSBA, TBA, and EOBA</li>
+          <li>14U may compete in the EBLO starting in 2027</li>
+        </ul>
+      </div>
+      <div class="detail-card pipeline-card">
+        <div class="tag">15U–18U</div>
+        <h3>HP</h3>
+        <ul class="detail-list">
+          <li>High-performance training environment with leadership and mentorship</li>
+          <li>Advanced competition — Provincial, National, and Showcase</li>
+          <li>Direct college/university pathway preparation</li>
+          <li>Competes in the EBLO</li>
+        </ul>
+      </div>
+    </div>
+
     <div style="margin-top:48px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:6px;padding:44px 24px;">
-      <h2 style="font-size:24px;color:var(--navy);margin-bottom:12px;">Ready to join Rep?</h2>
+      <h2 style="font-size:24px;color:var(--navy);margin-bottom:12px;">Ready to join HP?</h2>
       <p style="color:var(--ink-soft);font-size:14.5px;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto;">Registration is handled securely through TeamSnap, our official registration and payments partner.</p>
-      <a href="https://register.teamsnap.com/akba" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block;">Register for Rep →</a>
+      <a href="https://register.teamsnap.com/akba" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block;">Register for HP →</a>
     </div>
   </div>
 </section>
@@ -548,11 +673,11 @@
         <h4>Contact</h4>
         <a href="contact.html">info@akba.ca</a>
         <a href="contact.html">Aurora &amp; King Township, ON</a>
-        <a href="registration.html">Register for 2027</a>
+        <a href="registration.html">Register for 2026</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2027 Aurora-King Baseball Association. All rights reserved.</div>
+      <div>© 2026 Aurora-King Baseball Association. All rights reserved.</div>
       <div>Registered not-for-profit, Ontario</div>
     </div>
   </div>
@@ -598,14 +723,14 @@
   document.querySelectorAll('.block-card').forEach(el => observer.observe(el));
 
   /* =========================================================
-     REP TEAMS: COACHES & TRYOUT DATES — pulled from a
-     shared master spreadsheet (also used by the HP page)
+     HP TEAMS: COACHES & TRYOUT DATES — pulled from a
+     shared master spreadsheet (also used by the Rep page)
      =========================================================
-     This page and the HP page both read from the SAME three
+     This page and the Rep page both read from the SAME three
      published tabs of one Google Sheet — "Coaches", "Future Coaches",
      and "Tryouts" — each row tagged with an Age and a Level so the
      page knows which program it belongs to. This page only shows
-     rows where Level = "HP" (i.e. Level is Select, A, AA, or AAA).
+     rows where Level = "HP".
 
      To connect the master sheet:
      1. Open the sheet (tabs called "Coaches", "Future Coaches", "Tryouts").
@@ -616,7 +741,7 @@
         (the part after #gid=), paste it as COACHES_CSV_URL below.
      4. Do the same for "Tryouts" → TRYOUTS_CSV_URL, and
         "Future Coaches" → FUTURE_COACHES_CSV_URL.
-     5. Paste those same three links into baseball-hp.html too —
+     5. Paste those same three links into baseball-rep.html too —
         both pages read the same three tabs, they just filter differently.
 
      Coaches / Future Coaches sheet columns, in order:
@@ -661,7 +786,7 @@
      automatically by combining each row's Age + Level — nothing extra
      to configure for those.
   ============================================================ */
-  const PROGRAM = 'Rep';
+  const PROGRAM = 'HP';
   const COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=796127798&single=true&output=csv';
   const TRYOUTS_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=1202039270&single=true&output=csv';
   const FUTURE_COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=2044605055&single=true&output=csv';
