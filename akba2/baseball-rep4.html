@@ -813,7 +813,7 @@
                 const hasRealReschedule = !(isTBD(t.rDate) && isTBD(t.rTime) && isTBD(t.rLocation));
                 const tail = hasRealReschedule ? 'rescheduled tryout details below' : 'stay tuned for reschedule details';
                 const reschedRow = hasRealReschedule
-                  ? `<div class="tryout-grid-row">Rescheduled<span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span><span></span></div>`
+                  ? `<div class="tryout-grid-row">Rescheduled Tryout Details<span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span><span></span></div>`
                   : '';
                 parts.push(`<div class="tryout-cancel-block"><div class="tryout-cancel-note"><b>${label} Canceled</b> — ${tail}</div>${reschedRow}</div>`);
               }
