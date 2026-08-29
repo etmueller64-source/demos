@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tryouts — Aurora-King Baseball Association</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#E3F0FA;
+    --navy:#1B4B85;
+    --navy-2:#123A69;
+    --gold:#C9A227;
+    --gold-deep:#A67F1A;
+    --ink:#1A1D24;
+    --ink-soft:#5B6072;
+    --line:rgba(27,75,133,0.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  h1,h2,.display{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:0.01em;text-transform:uppercase;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  section{scroll-margin-top:84px;}
+
+  /* NAV */
+  nav{background:var(--cream);border-bottom:1px solid var(--line);position:relative;z-index:100;}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:84px;}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-badge{width:38px;height:38px;border-radius:50%;border:2px solid var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .logo-badge svg{width:20px;height:20px;}
+  .logo-text .l1{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.03em;color:var(--navy);}
+  .logo-text .l2{font-size:10.5px;color:var(--ink-soft);letter-spacing:0.1em;}
+  .navlinks{display:flex;gap:26px;font-size:14px;font-weight:500;align-items:center;}
+  .navlinks > a{color:var(--ink);opacity:0.75;transition:opacity .2s;padding:8px 0;}
+  .navlinks > a:hover,.navlinks > a.active{opacity:1;}
+  .nav-cta{background:var(--gold);color:#fff;padding:11px 22px;border-radius:3px;font-size:13px;font-weight:700;letter-spacing:0.04em;transition:background .2s;white-space:nowrap;margin-left:24px;flex-shrink:0;}
+  .nav-cta:hover{background:var(--gold-deep);}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;}
+  .menu-btn span{display:block;width:22px;height:2px;background:var(--navy);margin:5px 0;}
+
+  /* Dropdown */
+  .has-dropdown{position:relative;}
+  .drop-toggle{display:flex;align-items:center;gap:5px;cursor:pointer;background:none;border:none;font:inherit;color:var(--ink);opacity:0.75;padding:8px 0;font-weight:500;}
+  .drop-toggle:hover,.has-dropdown.open .drop-toggle,.drop-toggle.active{opacity:1;}
+  .drop-toggle svg{width:10px;height:10px;transition:transform .2s;}
+  .has-dropdown.open .drop-toggle svg{transform:rotate(180deg);}
+  .dropdown-menu{
+    position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--line);border-radius:6px;
+    box-shadow:0 16px 32px rgba(16,27,52,0.14);min-width:190px;padding:8px;
+    opacity:0;visibility:hidden;transform:translateY(6px);transition:all .18s ease;
+  }
+  .has-dropdown.open .dropdown-menu,.has-dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+  .dropdown-menu a{display:block;padding:10px 12px;font-size:13.5px;font-weight:500;color:var(--ink);border-radius:4px;transition:background .15s;}
+  .dropdown-menu a:hover{background:var(--cream);}
+
+  /* Mobile nav */
+  .mobile-panel{display:none;}
+  @media (max-width:900px){
+    .navlinks{display:none;}
+    .menu-btn{display:block;}
+    .nav-cta{padding:9px 16px;font-size:12px;}
+    .mobile-panel{
+      display:block;position:absolute;top:100%;left:0;right:0;background:var(--cream);
+      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .3s ease;
+    }
+    .mobile-panel.open{max-height:calc(100vh - 84px);overflow-y:auto;}
+    .mobile-panel .wrap{display:flex;flex-direction:column;align-items:center;padding:12px 40px 20px;height:auto;}
+    .mobile-panel a{display:block;width:100%;padding:12px 0;font-size:14.5px;font-weight:600;text-align:center;border-bottom:1px solid var(--line);}
+    .mobile-panel .sub-link{font-weight:500;font-size:13.5px;color:var(--ink-soft);}
+    .mobile-drop{width:100%;}
+    .mobile-drop-row{display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:1px solid var(--line);}
+    .mobile-drop-row > a,.mobile-drop-row > span{width:auto;padding:12px 0;font-size:14.5px;font-weight:600;border-bottom:none;}
+    .mobile-drop-toggle{background:none;border:none;padding:12px 4px;cursor:pointer;color:var(--ink);flex-shrink:0;}
+    .mobile-drop-toggle svg{width:11px;height:11px;transition:transform .2s;}
+    .mobile-drop.open .mobile-drop-toggle svg{transform:rotate(180deg);}
+    .mobile-submenu{max-height:0;overflow:hidden;transition:max-height .25s ease;display:flex;flex-direction:column;align-items:center;width:100%;}
+    .mobile-drop.open .mobile-submenu{max-height:200px;}
+  }
+
+  .btn-primary{background:var(--gold);color:#fff;padding:15px 26px;font-size:13.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-radius:3px;transition:background .2s;display:inline-block;}
+  .btn-primary:hover{background:var(--gold-deep);}
+  .btn-outline{border:1.5px solid rgba(255,255,255,0.5);color:#fff;padding:15px 26px;font-size:13.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-radius:3px;transition:all .2s;display:inline-block;}
+  .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.08);}
+  .btn-outline-dark{border:1.5px solid var(--line);color:var(--navy);padding:15px 26px;font-size:13.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;border-radius:3px;transition:all .2s;display:inline-block;}
+  .btn-outline-dark:hover{border-color:var(--navy);background:var(--navy);color:#fff;}
+
+  /* SECTION HEAD */
+  .section{padding:88px 0;}
+  .section:first-of-type{padding-top:64px;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;gap:24px;flex-wrap:wrap;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:0.12em;color:var(--gold);margin-bottom:8px;}
+  .section-head h2{font-size:clamp(24px,3vw,32px);color:var(--navy);max-width:560px;}
+  .section-head p{color:var(--ink-soft);max-width:360px;font-size:14.5px;}
+
+  /* CTA */
+  .cta-band{background:var(--navy);color:#fff;padding:56px 0;}
+  .cta-band .wrap{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;}
+  .cta-band h2{font-size:clamp(24px,3vw,32px);margin-bottom:10px;}
+  .cta-band p{color:rgba(255,255,255,0.65);font-size:14.5px;max-width:520px;}
+
+  /* FOOTER */
+  footer{background:var(--navy);color:rgba(255,255,255,0.6);padding:56px 0 28px;border-top:1px solid rgba(255,255,255,0.08);}
+  .footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;padding-bottom:40px;}
+  .footer-brand p{font-size:13px;margin-top:14px;max-width:250px;}
+  .footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;color:#fff;}
+  .footer-col a{display:block;font-size:13.5px;margin-bottom:9px;color:rgba(255,255,255,0.55);transition:color .2s;}
+  .footer-col a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:22px;display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:10px;}
+
+  @media (max-width:980px){
+    .footer-top{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:720px){
+    .cta-band .wrap{flex-direction:column;align-items:flex-start;}
+    .wrap{padding:0 20px;}
+  }
+</style>
+
+<style>
+  .page-header{background:var(--navy);color:#fff;padding:56px 0 46px;position:relative;overflow:hidden;}
+  .page-header::after{content:'';position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;border:2px dashed rgba(192,57,46,0.25);}
+  .page-header .wrap{position:relative;}
+  .page-header .eyebrow{color:#F0A69E;}
+  .page-header h1{font-size:clamp(28px,4vw,42px);max-width:640px;}
+  .page-header p{color:rgba(255,255,255,0.7);max-width:560px;margin-top:14px;font-size:15px;}
+  .page-header .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px;}
+
+  .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+  .detail-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:28px;scroll-margin-top:100px;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;}
+  .detail-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(27,75,133,.14),0 0 0 1px rgba(201,162,39,.35);border-color:rgba(201,162,39,.45);}
+  .detail-card .tag{font-size:11.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+  .detail-card h3{font-size:19px;color:var(--navy);text-transform:none;letter-spacing:0;margin-bottom:12px;font-family:'Oswald',sans-serif;font-weight:600;}
+  .detail-card p{font-size:14px;color:var(--ink-soft);margin-bottom:14px;}
+  .detail-list{list-style:none;font-size:13.5px;color:var(--ink-soft);}
+  .detail-list li{padding:6px 0;border-top:1px solid var(--line);}
+  .detail-list li:first-child{border-top:none;}
+  .detail-list b{color:var(--ink);}
+
+  .sched-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .sched-table th{background:var(--cream);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-soft);padding:12px 16px;font-weight:700;}
+  .sched-table td{padding:14px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);vertical-align:top;}
+  .sched-table .div-tag{display:inline-block;background:var(--cream);color:var(--navy);font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;}
+  .sched-table .prog-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:0.03em;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+  .prog-tag.rep{background:rgba(27,75,133,0.12);color:var(--navy);}
+  .prog-tag.hp{background:rgba(63,82,48,0.16);color:#3f5230;}
+
+  .filter-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;}
+  .filter-pill{padding:8px 16px;border:1px solid var(--line);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:#fff;font-family:'Inter',sans-serif;transition:all .2s;}
+  .filter-pill.active,.filter-pill:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  @media (max-width:900px){
+    .detail-grid{grid-template-columns:1fr;}
+    .sched-table{display:block;overflow-x:auto;}
+  }
+</style>
+
+<style>
+  /* Tryouts page — specific layout */
+  .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .step-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:24px;position:relative;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;}
+  .step-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(27,75,133,.14),0 0 0 1px rgba(201,162,39,.35);border-color:rgba(201,162,39,.45);}
+  .step-num{width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+  .step-card h3{font-size:15.5px;color:var(--navy);text-transform:none;letter-spacing:0;margin-bottom:8px;font-family:'Oswald',sans-serif;font-weight:600;}
+  .step-card p{font-size:13.5px;color:var(--ink-soft);}
+
+  .checklist-card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:32px;}
+  .checklist{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:14px 32px;}
+  .checklist li{display:flex;align-items:flex-start;gap:12px;font-size:14.5px;color:var(--ink);}
+  .checklist li svg{flex-shrink:0;width:18px;height:18px;color:var(--gold);margin-top:2px;}
+  .checklist li b{display:block;color:var(--navy);font-size:14px;}
+  .checklist li span{color:var(--ink-soft);font-size:13px;}
+
+  .callout{background:#fff;border:1px dashed var(--gold);border-radius:6px;padding:20px 24px;font-size:14px;color:var(--ink-soft);margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+  .callout b{color:var(--ink);}
+  .callout a{color:var(--gold);font-weight:700;white-space:nowrap;}
+
+  /* Accordion (FAQ) */
+  .accordion-item{background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:12px;overflow:hidden;}
+  .accordion-header{
+    display:flex;justify-content:space-between;align-items:center;padding:18px 22px;cursor:pointer;
+    font-size:14.5px;font-weight:600;color:var(--gold);background:none;border:none;width:100%;text-align:left;
+    font-family:'Inter',sans-serif;
+  }
+  .accordion-header .plus{font-size:20px;color:var(--gold);transition:transform .2s;font-weight:400;flex-shrink:0;margin-left:16px;}
+  .accordion-item.open .accordion-header .plus{transform:rotate(45deg);}
+  .accordion-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .accordion-body-inner{padding:0 22px 20px;font-size:14px;color:var(--ink-soft);}
+
+  @media (max-width:900px){
+    .steps-grid{grid-template-columns:repeat(2,1fr);}
+    .checklist{grid-template-columns:1fr;}
+  }
+  @media (max-width:600px){
+    .steps-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1B4B85" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M6 8c3 1 9 1 12 0M6 16c3-1 9-1 12 0"/></svg>
+      </div>
+      <div class="logo-text">
+        <div class="l1">AURORA-KING</div>
+        <div class="l2">BASEBALL ASSOCIATION</div>
+      </div>
+    </a>
+    <div class="navlinks">
+      <div class="has-dropdown" id="home-dropdown">
+        <a href="index.html" class="drop-toggle">Home <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="about.html">About</a>
+          <a href="locations.html">Fields</a>
+        </div>
+      </div>
+      <div class="has-dropdown" id="baseball-dropdown">
+        <button class="drop-toggle">Programs <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></button>
+        <div class="dropdown-menu">
+          <a href="baseball-house-league.html">House League</a>
+          <a href="baseball-rep.html">Rep</a>
+          <a href="baseball-hp.html">HP</a>
+        </div>
+      </div>
+      <a href="umpires.html">Umpires</a>
+      <a href="volunteer.html">Volunteering</a>
+      <a href="coaching.html">Coaching</a>
+      <a href="tournaments.html">Tournaments</a>
+      <a href="registration.html">Registration</a>
+      <a href="teams.html">Teams</a>
+      <a href="news.html">News</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="registration.html" class="nav-cta">Register</a>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-panel" id="mobile-panel">
+    <div class="wrap">
+      <div class="mobile-drop" id="mobile-home-drop">
+        <div class="mobile-drop-row">
+          <a href="index.html">Home</a>
+          <button class="mobile-drop-toggle" aria-label="Toggle Home submenu"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></button>
+        </div>
+        <div class="mobile-submenu">
+          <a href="about.html" class="sub-link">About</a>
+          <a href="locations.html" class="sub-link">Fields</a>
+        </div>
+      </div>
+      <div class="mobile-drop" id="mobile-programs-drop">
+        <div class="mobile-drop-row">
+          <span>Programs</span>
+          <button class="mobile-drop-toggle" aria-label="Toggle Programs submenu"><svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 1l5 5 5-5"/></svg></button>
+        </div>
+        <div class="mobile-submenu">
+          <a href="baseball-house-league.html" class="sub-link">House League</a>
+          <a href="baseball-rep.html" class="sub-link">Rep</a>
+          <a href="baseball-hp.html" class="sub-link">HP</a>
+        </div>
+      </div>
+      <a href="umpires.html">Umpires</a>
+      <a href="volunteer.html">Volunteering</a>
+      <a href="coaching.html">Coaching</a>
+      <a href="tournaments.html">Tournaments</a>
+      <a href="registration.html">Registration</a>
+      <a href="teams.html">Teams</a>
+      <a href="news.html">News</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="wrap">
+    <div class="eyebrow">New player? Start here</div>
+    <h1>Tryouts, explained simply</h1>
+    <p>Everything a new player or parent needs to know before tryout day — who needs one, when they happen, and what to bring. No baseball experience required to read this page.</p>
+    <div class="hero-actions">
+      <a href="registration.html" class="btn-primary">Register for 2026 →</a>
+      <a href="#upcoming" class="btn-outline">See upcoming tryout dates</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="eyebrow">Getting started</div><h2>How tryouts work at AKBA</h2></div>
+      <p>Four steps from "brand new" to "on a team" — the same path every family follows.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Register first</h3>
+        <p>Every player registers with AKBA before tryouts — this is how we know your child's age group and how to reach you with dates.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Find your program</h3>
+        <p>House League is open to everyone, no tryout needed. Rep and HP are competitive travel programs and are tryout-based.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Attend your tryout</h3>
+        <p>Rep and HP tryouts are grouped by age. Check the schedule below, or watch your email — coaches also reach out directly.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Team placement</h3>
+        <p>After tryouts, the coaching staff places players on rosters and reaches out with next steps, schedules, and equipment info.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap section">
+    <div class="section-head">
+      <div><div class="eyebrow">Which program is my child?</div><h2>Not every program needs a tryout</h2></div>
+      <p>Not sure which path fits? Here's the difference in plain terms.</p>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="tag">No tryout needed</div>
+        <h3>House League</h3>
+        <p>Our recreational program is open to every player who registers, from Rally Cap (ages 4–5) through 18U. Teams are balanced by the House League committee after registration closes — there's nothing to prepare for and no one is cut.</p>
+        <ul class="detail-list">
+          <li><b>Ages:</b> 4U – 18U</li>
+          <li><b>How teams form:</b> Balanced automatically after registration</li>
+          <li><b>Learn more:</b> <a href="baseball-house-league.html" style="color:var(--gold);font-weight:600;">House League details →</a></li>
+        </ul>
+      </div>
+      <div class="detail-card">
+        <div class="tag">Tryout-based</div>
+        <h3>Rep &amp; HP</h3>
+        <p>Rep is competitive travel baseball for ages 9 and up; HP is our high-performance stream for players pursuing the next level. Both place players onto teams through tryouts each season — see the schedule below for your child's age group.</p>
+        <ul class="detail-list">
+          <li><b>Ages:</b> 9+ (Rep), select ages (HP)</li>
+          <li><b>How teams form:</b> Tryout evaluation by coaching staff</li>
+          <li><b>Learn more:</b> <a href="baseball-rep.html" style="color:var(--gold);font-weight:600;">Rep details →</a> &nbsp;/&nbsp; <a href="baseball-hp.html" style="color:var(--gold);font-weight:600;">HP details →</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="upcoming">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="eyebrow">Schedule</div><h2>Upcoming tryout dates</h2></div>
+      <p>Pulled straight from each team's tryout schedule, sorted by date. Filter by program below.</p>
+    </div>
+
+    <div class="callout">
+      <span><b>Playing House League?</b> There's no tryout to attend — just complete registration and your team assignment will follow.</span>
+      <a href="registration.html">Register now →</a>
+    </div>
+
+    <div class="filter-row" id="tryout-filters">
+      <button class="filter-pill active" data-filter="all" type="button">All programs</button>
+      <button class="filter-pill" data-filter="rep" type="button">Rep</button>
+      <button class="filter-pill" data-filter="hp" type="button">HP</button>
+    </div>
+
+    <table class="sched-table">
+      <thead>
+        <tr><th>Team</th><th>Program</th><th>Date</th><th>Time</th><th>Location</th><th>Notes</th></tr>
+      </thead>
+      <tbody id="tryouts-tbody">
+        <tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading tryout dates…</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">Looking for a specific team's head coach or full details? Visit the <a href="baseball-rep.html" style="color:var(--gold);font-weight:600;">Rep</a> or <a href="baseball-hp.html" style="color:var(--gold);font-weight:600;">HP</a> page and open your team.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap section">
+    <div class="section-head">
+      <div><div class="eyebrow">Tryout day</div><h2>What to bring</h2></div>
+      <p>Simple prep so tryout day is one less thing to worry about.</p>
+    </div>
+    <div class="checklist-card">
+      <ul class="checklist">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <div><b>Glove &amp; bat</b><span>Their own equipment if they have it — loaners are available if not.</span></div>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <div><b>Cleats &amp; comfortable clothes</b><span>Baseball or turf cleats if available; running shoes work too.</span></div>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <div><b>Water bottle</b><span>Tryouts run for an hour or more, often outdoors.</span></div>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <div><b>Batting helmet, if owned</b><span>Not required — shared helmets are on hand for evaluations.</span></div>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <div><b>A positive attitude</b><span>Coaches are evaluating effort and coachability as much as skill.</span></div>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <div><b>Arrive 15 minutes early</b><span>Gives time to check in and warm up before things start.</span></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="eyebrow">Common questions</div><h2>New parent FAQ</h2></div>
+      <p>The short answers to what most new families ask us. See our full <a href="faq.html" style="color:var(--gold);font-weight:600;">FAQ page</a> for everything else.</p>
+    </div>
+    <div id="tryout-faq">
+      <div class="accordion-item">
+        <button class="accordion-header" type="button"><span>Do I need to register before tryouts?</span><span class="plus">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">Yes — registration comes first for every program. It's how we confirm your child's age group and get tryout details to you.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" type="button"><span>What if we miss the scheduled tryout?</span><span class="plus">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">Reach out to the team's head coach as soon as you can — contact info is listed on the <a href="baseball-rep.html" style="color:var(--gold);">Rep</a> and <a href="baseball-hp.html" style="color:var(--gold);">HP</a> pages. Many teams can arrange a private evaluation.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" type="button"><span>How do I know which age division my child is in?</span><span class="plus">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">Age divisions are based on birth year, not school grade. During registration you'll see the exact cutoff dates, and full division breakdowns are listed on each program's page.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" type="button"><span>Is House League really tryout-free?</span><span class="plus">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">Yes. House League is recreational and open to everyone who registers — teams are balanced after the fact, so there's nothing to prepare for competitively.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" type="button"><span>What happens if my child isn't placed on a Rep or HP team?</span><span class="plus">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">Players not placed on a Rep or HP roster are welcome to join House League for the season — reach out to <a href="contact.html" style="color:var(--gold);">info@akba.ca</a> and we'll help with next steps.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <div>
+      <h2>Ready for your first season with AKBA?</h2>
+      <p>Register now to lock in your child's age group and get tryout details as soon as they're posted.</p>
+    </div>
+    <a href="registration.html" class="btn-primary">Start registration</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-badge" style="border-color:#fff;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M6 8c3 1 9 1 12 0M6 16c3-1 9-1 12 0"/></svg>
+          </div>
+          <div class="logo-text"><div class="l1" style="color:#fff;">AURORA-KING</div><div class="l2">BASEBALL ASSOCIATION</div></div>
+        </div>
+        <p>Community baseball for Aurora &amp; King Township — Rally Cap through Elite Rep, built by volunteers since 1975.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Baseball</h4>
+        <a href="baseball-house-league.html">House League</a>
+        <a href="baseball-rep.html">Rep</a>
+        <a href="baseball-hp.html">HP</a>
+        <a href="umpires.html">Umpires</a>
+      </div>
+      <div class="footer-col">
+        <h4>Quick links</h4>
+        <a href="tournaments.html">Tournaments</a>
+        <a href="teams.html">Teams</a>
+        <a href="news.html">News</a>
+        <a href="locations.html">Fields</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="contact.html">info@akba.ca</a>
+        <a href="contact.html">Aurora &amp; King Township, ON</a>
+        <a href="registration.html">Register for 2026</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Aurora-King Baseball Association. All rights reserved.</div>
+      <div>Registered not-for-profit, Ontario</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const mobilePanel = document.getElementById('mobile-panel');
+  menuBtn.addEventListener('click', () => mobilePanel.classList.toggle('open'));
+
+  // Mobile dropdown accordions (Home / Programs)
+  document.querySelectorAll('.mobile-drop-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.mobile-drop').classList.toggle('open');
+    });
+  });
+
+  // Dropdowns (Home + Baseball): close on load, close on mouseleave, toggle on click for touch
+  document.querySelectorAll('.has-dropdown').forEach(dd => {
+    dd.classList.remove('open');
+    const toggle = dd.querySelector('.drop-toggle');
+    if (toggle.tagName === 'BUTTON') {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.has-dropdown').forEach(other => {
+          if (other !== dd) other.classList.remove('open');
+        });
+        dd.classList.toggle('open');
+      });
+    }
+    dd.addEventListener('mouseleave', () => dd.classList.remove('open'));
+  });
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('.has-dropdown.open').forEach(dd => {
+      if (!dd.contains(e.target)) dd.classList.remove('open');
+    });
+  });
+
+  // FAQ accordions
+  document.querySelectorAll('#tryout-faq .accordion-header').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.accordion-item');
+      const body = item.querySelector('.accordion-body');
+      const wasOpen = item.classList.contains('open');
+      if (wasOpen) {
+        item.classList.remove('open');
+        body.style.maxHeight = '';
+      } else {
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* =========================================================
+     UPCOMING TRYOUTS — reads the SAME "Tryouts" spreadsheet tab
+     already used by baseball-rep.html and baseball-hp.html, so
+     there's nothing new to set up. This page just combines both
+     programs into one chronological list for new families,
+     instead of splitting them across two pages.
+
+     Sheet columns, in order:
+       Age, Level, Date, Time, Location, Canceled-tryout? (Yes/No),
+       Reschedule Date, Reschedule Time, Reschedule Location, Notes
+
+     Level = "HP" is tagged HP; every other level (Select/A/AA/AAA)
+     is tagged REP. Rows with no date are shown at the bottom of
+     their program group so "contact coach to book" style notes
+     still appear without breaking the date sort.
+  ============================================================ */
+  const TRYOUTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=1202039270&single=true&output=csv';
+
+  function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i], next = text[i + 1];
+      if (inQuotes) {
+        if (c === '"' && next === '"') { field += '"'; i++; }
+        else if (c === '"') { inQuotes = false; }
+        else { field += c; }
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\n' || c === '\r') {
+          if (field.length || row.length) { row.push(field); rows.push(row); row = []; field = ''; }
+          if (c === '\r' && next === '\n') i++;
+        } else field += c;
+      }
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(cell => cell.trim() !== ''));
+  }
+
+  function stripToDataRows(rows) {
+    const headerIndex = rows.findIndex(r => (r[0] || '').trim().toLowerCase() === 'age');
+    if (headerIndex === -1) return rows.slice(1);
+    return rows.slice(headerIndex + 1);
+  }
+
+  function parseDateForSort(dateStr, timeStr) {
+    if (!dateStr) return null;
+    const d = new Date(`${dateStr} ${timeStr || ''}`.trim());
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  let allTryouts = [];
+  let activeFilter = 'all';
+
+  function renderTryouts() {
+    const tbody = document.getElementById('tryouts-tbody');
+    const rows = activeFilter === 'all' ? allTryouts : allTryouts.filter(t => t.program === activeFilter);
+
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">No tryout dates posted yet — check back soon.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map(t => {
+      const progLabel = t.program === 'hp' ? 'HP' : 'Rep';
+      const progClass = t.program === 'hp' ? 'hp' : 'rep';
+      let noteText = t.notes || '—';
+      if (t.isCanceled) {
+        noteText = `<span style="color:#B4472F;font-weight:600;">Canceled</span> — ${t.notes || 'new date to be announced'}`;
+      }
+      return `<tr>
+        <td><span class="div-tag">${t.team}</span></td>
+        <td><span class="prog-tag ${progClass}">${progLabel}</span></td>
+        <td>${t.date || 'Contact coach'}</td>
+        <td>${t.time || '—'}</td>
+        <td>${t.location || '—'}</td>
+        <td>${noteText}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function buildTryouts(rows) {
+    const tbody = document.getElementById('tryouts-tbody');
+    if (rows === null) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">Connect the Tryouts spreadsheet — see the comment near the top of this script.</td></tr>`;
+      return;
+    }
+
+    allTryouts = rows.map(r => {
+      const [age, level, date, time, location, canceled, rDate, rTime, rLocation, notes] = r.map(c => (c || '').trim());
+      if (!age || !level) return null;
+      if (!date && !time && !location && !notes) return null;
+      const isCanceled = (canceled || '').toLowerCase() === 'yes';
+      const isTBD = v => !v || v.trim().toLowerCase() === 'tbd';
+      let finalNotes = notes;
+      if (isCanceled && !(isTBD(rDate) && isTBD(rTime) && isTBD(rLocation))) {
+        finalNotes = `Rescheduled: ${rDate || '—'} ${rTime || ''} — ${rLocation || '—'}${notes ? ' · ' + notes : ''}`.trim();
+      }
+      return {
+        team: `${age} ${level}`,
+        program: level.toLowerCase() === 'hp' ? 'hp' : 'rep',
+        date, time, location,
+        notes: finalNotes,
+        isCanceled,
+        sortDate: parseDateForSort(date, time)
+      };
+    }).filter(Boolean);
+
+    allTryouts.sort((a, b) => {
+      if (a.sortDate && b.sortDate) return a.sortDate - b.sortDate;
+      if (a.sortDate) return -1;
+      if (b.sortDate) return 1;
+      return a.team.localeCompare(b.team);
+    });
+
+    renderTryouts();
+  }
+
+  document.getElementById('tryout-filters').addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-pill');
+    if (!btn) return;
+    document.querySelectorAll('#tryout-filters .filter-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderTryouts();
+  });
+
+  if (!TRYOUTS_CSV_URL || TRYOUTS_CSV_URL.startsWith('PASTE_')) {
+    buildTryouts(null);
+  } else {
+    fetch(TRYOUTS_CSV_URL)
+      .then(r => r.text())
+      .then(text => buildTryouts(stripToDataRows(parseCSV(text))))
+      .catch(() => buildTryouts([]));
+  }
+</script>
+</body>
+</html>
