@@ -16,6 +16,7 @@
     --ink:#1A1D24;
     --ink-soft:#5B6072;
     --line:rgba(27,75,133,0.12);
+    --reschedule:#C75A1E;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
@@ -143,7 +144,7 @@
   .sched-table th{background:var(--cream);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-soft);padding:12px 16px;font-weight:700;}
   .sched-table td{padding:14px 16px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);vertical-align:top;}
   .sched-table .div-tag{display:inline-block;background:var(--cream);color:var(--navy);font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;}
-  .sched-table .prog-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:0.03em;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
+  .prog-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:0.03em;padding:3px 9px;border-radius:20px;text-transform:uppercase;}
   .prog-tag.rep{background:rgba(27,75,133,0.12);color:var(--navy);}
   .prog-tag.hp{background:rgba(63,82,48,0.16);color:#3f5230;}
 
@@ -188,6 +189,51 @@
   .accordion-item.open .accordion-header .plus{transform:rotate(45deg);}
   .accordion-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
   .accordion-body-inner{padding:0 22px 20px;font-size:14px;color:var(--ink-soft);}
+
+  /* Tryout list inside each accordion item — identical formatting to
+     the Rep/HP pages' "Teams & Tryouts" section. */
+  .header-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .team-name{font-size:14.5px;font-weight:600;color:var(--gold);}
+  .team-hint{font-size:11.5px;font-weight:400;color:var(--ink-soft);}
+  .team-hint::before{content:"·";margin-right:10px;color:var(--line);}
+  .team-detail-row{display:flex;gap:8px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);}
+  .team-detail-row:first-child{border-top:none;}
+  .team-detail-row b{color:var(--ink);min-width:96px;flex-shrink:0;}
+  .team-detail-row a{color:var(--gold);}
+
+  .tryout-grid{margin-top:4px;}
+  .tryout-grid-row{display:grid;grid-template-columns:175px 140px 100px 170px 1fr;column-gap:36px;row-gap:0;padding:11px 4px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);align-items:center;}
+  .tryout-grid-row:first-child{border-top:none;}
+  .tryout-grid-row span{text-align:center;}
+  .tryout-legend{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--gold);padding-top:0;padding-bottom:6px;}
+  .tryout-grid-row b{color:var(--ink);font-weight:600;font-size:13.5px;}
+  .tryout-cancel-block{position:relative;margin-top:2px;}
+  .tryout-cancel-block::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(199,90,30,.08);
+    border-left:3px solid var(--reschedule);
+    border-radius:4px;
+    z-index:0;
+  }
+  .tryout-cancel-note,
+  .tryout-cancel-block .tryout-grid-row{position:relative;z-index:1;}
+  .tryout-cancel-note{font-size:13px;color:var(--reschedule);padding:9px 14px 9px 15px;}
+  .tryout-cancel-note b{color:var(--reschedule);font-weight:700;}
+  .tryout-cancel-block .tryout-grid-row{border-top:none;padding-top:6px;padding-bottom:11px;}
+  .tryout-cancel-block .tryout-grid-row b{color:var(--reschedule);}
+  .tryout-grid-row b.tryout-resched-label{font-weight:400;padding-left:11px;white-space:nowrap;}
+  @media (max-width:640px){
+    .tryout-grid-row{grid-template-columns:1fr 1fr;grid-template-areas:"label label" "date time" "loc loc" "notes notes";row-gap:4px;}
+    .tryout-grid-row span{text-align:left;}
+    .tryout-legend{display:none;}
+    .tryout-grid-row b{grid-area:label;}
+    .tryout-grid-row span:nth-of-type(1){grid-area:date;}
+    .tryout-grid-row span:nth-of-type(2){grid-area:time;}
+    .tryout-grid-row span:nth-of-type(3){grid-area:loc;}
+    .tryout-grid-row span:nth-of-type(4){grid-area:notes;font-style:italic;}
+  }
 
   @media (max-width:900px){
     .steps-grid{grid-template-columns:repeat(2,1fr);}
@@ -291,7 +337,6 @@
   <div class="wrap">
     <div class="section-head">
       <div><div class="eyebrow">Getting started</div><h2>How tryouts work at AKBA</h2></div>
-      <p>Four steps from "brand new" to "on a team" — the same path every family follows.</p>
     </div>
     <div class="steps-grid">
       <div class="step-card">
@@ -322,7 +367,6 @@
   <div class="wrap section">
     <div class="section-head">
       <div><div class="eyebrow">Schedule</div><h2>Upcoming tryout dates</h2></div>
-      <p>Pulled straight from each team's tryout schedule, sorted by date. Filter by program below.</p>
     </div>
 
     <div class="callout">
@@ -336,15 +380,10 @@
       <button class="filter-pill" data-filter="hp" type="button">HP</button>
     </div>
 
-    <table class="sched-table">
-      <thead>
-        <tr><th>Team</th><th>Program</th><th>Date</th><th>Time</th><th>Location</th><th>Notes</th></tr>
-      </thead>
-      <tbody id="tryouts-tbody">
-        <tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading tryout dates…</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">Looking for a specific team's head coach or full details? Visit the <a href="baseball-rep.html" style="color:var(--gold);font-weight:600;">Rep</a> or <a href="baseball-hp.html" style="color:var(--gold);font-weight:600;">HP</a> page and open your team.</p>
+    <div id="tryouts-accordion">
+      <div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Loading tryout dates…</div></div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">Looking for full team details? Visit the <a href="baseball-rep.html" style="color:var(--gold);font-weight:600;">Rep</a> or <a href="baseball-hp.html" style="color:var(--gold);font-weight:600;">HP</a> page and open your team.</p>
   </div>
 </section>
 
@@ -352,7 +391,6 @@
   <div class="wrap">
     <div class="section-head">
       <div><div class="eyebrow">Which program is my child?</div><h2>Not every program needs a tryout</h2></div>
-      <p>Not sure which path fits? Here's the difference in plain terms.</p>
     </div>
     <div class="detail-grid">
       <div class="detail-card">
@@ -383,7 +421,6 @@
   <div class="wrap section">
     <div class="section-head">
       <div><div class="eyebrow">Tryout day</div><h2>What to bring</h2></div>
-      <p>Simple prep so tryout day is one less thing to worry about.</p>
     </div>
     <div class="checklist-card">
       <ul class="checklist">
@@ -420,7 +457,6 @@
   <div class="wrap">
     <div class="section-head">
       <div><div class="eyebrow">Common questions</div><h2>New parent FAQ</h2></div>
-      <p>The short answers to what most new families ask us. See our full <a href="faq.html" style="color:var(--gold);font-weight:600;">FAQ page</a> for everything else.</p>
     </div>
     <div id="tryout-faq">
       <div class="accordion-item">
@@ -550,21 +586,23 @@
   });
 
   /* =========================================================
-     UPCOMING TRYOUTS — reads the SAME "Tryouts" spreadsheet tab
-     already used by baseball-rep.html and baseball-hp.html, so
-     there's nothing new to set up. This page just combines both
-     programs into one chronological list for new families,
-     instead of splitting them across two pages.
+     UPCOMING TRYOUTS — reads the SAME "Coaches" and "Tryouts"
+     spreadsheet tabs already used by baseball-rep.html and
+     baseball-hp.html, so there's nothing new to set up. This page
+     combines Rep and HP into one accordion list for new families,
+     using the exact same accordion + tryout-grid formatting as
+     the "Teams & Tryouts" section on those two pages.
 
-     Sheet columns, in order:
+     Coaches sheet columns, in order:
+       Age, Level, Head Coach, Coach Contact, Coach Phone
+     Tryouts sheet columns, in order:
        Age, Level, Date, Time, Location, Canceled-tryout? (Yes/No),
        Reschedule Date, Reschedule Time, Reschedule Location, Notes
 
      Level = "HP" is tagged HP; every other level (Select/A/AA/AAA)
-     is tagged REP. Rows with no date are shown at the bottom of
-     their program group so "contact coach to book" style notes
-     still appear without breaking the date sort.
+     is tagged REP.
   ============================================================ */
+  const COACHES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=796127798&single=true&output=csv';
   const TRYOUTS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTyvLfQ8at39yzgu0hah7gVwD5as3_jyryK3s4RcJbYE08TThuPZieug4dy76A7bfvwxjI0k9IszbKs/pub?gid=1202039270&single=true&output=csv';
 
   function parseCSV(text) {
@@ -595,75 +633,163 @@
     return rows.slice(headerIndex + 1);
   }
 
+  function fetchCSV(url) {
+    if (!url || url.startsWith('PASTE_')) return Promise.resolve(null);
+    return fetch(url)
+      .then(r => r.text())
+      .then(text => stripToDataRows(parseCSV(text)))
+      .catch(() => []);
+  }
+
   function parseDateForSort(dateStr, timeStr) {
     if (!dateStr) return null;
     const d = new Date(`${dateStr} ${timeStr || ''}`.trim());
     return isNaN(d.getTime()) ? null : d;
   }
 
-  let allTryouts = [];
+  let allTeams = [];
   let activeFilter = 'all';
 
   function renderTryouts() {
-    const tbody = document.getElementById('tryouts-tbody');
-    const rows = activeFilter === 'all' ? allTryouts : allTryouts.filter(t => t.program === activeFilter);
+    const wrap = document.getElementById('tryouts-accordion');
+    const teams = activeFilter === 'all' ? allTeams : allTeams.filter(([, info]) => info.program === activeFilter);
 
-    if (!rows.length) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">No tryout dates posted yet — check back soon.</td></tr>`;
+    if (!teams.length) {
+      wrap.innerHTML = `<div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">No tryout dates posted yet — check back soon.</div></div>`;
       return;
     }
 
-    tbody.innerHTML = rows.map(t => {
-      const progLabel = t.program === 'hp' ? 'HP' : 'Rep';
-      const progClass = t.program === 'hp' ? 'hp' : 'rep';
-      let noteText = t.notes || '—';
-      if (t.isCanceled) {
-        noteText = `<span style="color:#B4472F;font-weight:600;">Canceled</span> — ${t.notes || 'new date to be announced'}`;
-      }
-      return `<tr>
-        <td><span class="div-tag">${t.team}</span></td>
-        <td><span class="prog-tag ${progClass}">${progLabel}</span></td>
-        <td>${t.date || 'Contact coach'}</td>
-        <td>${t.time || '—'}</td>
-        <td>${t.location || '—'}</td>
-        <td>${noteText}</td>
-      </tr>`;
+    wrap.innerHTML = teams.map(([team, info]) => {
+      const progLabel = info.program === 'hp' ? 'HP' : 'REP';
+      const progClass = info.program === 'hp' ? 'hp' : 'rep';
+
+      const coachLine = info.coach
+        ? `<div class="team-detail-row"><b>Head coach</b><span>${info.coach}${info.coachEmail ? ` — <a href="mailto:${info.coachEmail}">${info.coachEmail}</a>` : ''}${info.coachPhone ? ` — <a href="tel:${info.coachPhone.replace(/[^\d+]/g,'')}">${info.coachPhone}</a>` : ''}</span></div>`
+        : `<div class="team-detail-row"><b>Head coach</b><span>To be announced</span></div>`;
+
+      const tryouts = (info.tryouts || []).slice().sort((a, b) => {
+        const da = parseDateForSort(a.date, a.time);
+        const db = parseDateForSort(b.date, b.time);
+        if (da && db) return da - db;
+        if (da) return -1;
+        if (db) return 1;
+        return 0;
+      });
+
+      const tryoutLines = tryouts.length
+        ? `<div class="tryout-grid">
+            <div class="tryout-grid-row tryout-legend"><span></span><span>Date</span><span>Time</span><span>Location</span><span>Notes</span></div>
+            ${tryouts.map((t, i) => {
+              const label = `Tryout ${i + 1}`;
+              const parts = [];
+              parts.push(`<div class="tryout-grid-row"><b>${label}</b><span>${t.date || '—'}</span><span>${t.time || '—'}</span><span>${t.location || '—'}</span><span>${t.notes || '—'}</span></div>`);
+              if (t.isCanceled) {
+                const isTBD = v => !v || v.trim().toLowerCase() === 'tbd';
+                const hasRealReschedule = !(isTBD(t.rDate) && isTBD(t.rTime) && isTBD(t.rLocation));
+                const tail = hasRealReschedule ? 'rescheduled tryout details below' : 'stay tuned for reschedule details';
+                const reschedRow = hasRealReschedule
+                  ? `<div class="tryout-grid-row"><b class="tryout-resched-label">Rescheduled Details</b><span>${t.rDate || '—'}</span><span>${t.rTime || '—'}</span><span>${t.rLocation || '—'}</span><span></span></div>`
+                  : '';
+                parts.push(`<div class="tryout-cancel-block"><div class="tryout-cancel-note"><b>${label} Canceled</b> — ${tail}</div>${reschedRow}</div>`);
+              }
+              return parts.join('');
+            }).join('')}
+          </div>`
+        : '';
+
+      return `
+        <div class="accordion-item">
+          <button class="accordion-header" type="button">
+            <span class="header-left">
+              <span class="team-name">${team}</span>
+              <span class="prog-tag ${progClass}">${progLabel}</span>
+              <span class="team-hint">Click for coach and tryout info</span>
+            </span>
+            <span class="plus">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              ${coachLine}
+              ${tryoutLines}
+            </div>
+          </div>
+        </div>`;
     }).join('');
+
+    wrap.querySelectorAll('.accordion-header').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.accordion-item');
+        const wasOpen = item.classList.contains('open');
+        wrap.querySelectorAll('.accordion-item.open').forEach(el => {
+          el.classList.remove('open');
+          el.querySelector('.accordion-body').style.maxHeight = '';
+        });
+        if (!wasOpen) {
+          item.classList.add('open');
+          const body = item.querySelector('.accordion-body');
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      });
+    });
   }
 
-  function buildTryouts(rows) {
-    const tbody = document.getElementById('tryouts-tbody');
-    if (rows === null) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">Connect the Tryouts spreadsheet — see the comment near the top of this script.</td></tr>`;
+  // Youngest to oldest; within the same age, Select/A/AA/AAA in that
+  // order; every HP team pushed below every Rep team, regardless of age.
+  const LEVEL_RANK = { select: 0, a: 1, aa: 2, aaa: 3 };
+  function sortTeams(teams) {
+    const rep = teams.filter(([, info]) => info.program !== 'hp');
+    const hp  = teams.filter(([, info]) => info.program === 'hp');
+    rep.sort((a, b) => {
+      const ageA = parseInt(a[1].age) || 0, ageB = parseInt(b[1].age) || 0;
+      if (ageA !== ageB) return ageA - ageB;
+      const rankA = LEVEL_RANK[(a[1].level || '').toLowerCase()] ?? 99;
+      const rankB = LEVEL_RANK[(b[1].level || '').toLowerCase()] ?? 99;
+      return rankA - rankB;
+    });
+    hp.sort((a, b) => (parseInt(a[1].age) || 0) - (parseInt(b[1].age) || 0));
+    return [...rep, ...hp];
+  }
+
+  function buildTryouts(coachRows, tryoutRows) {
+    const wrap = document.getElementById('tryouts-accordion');
+
+    if (coachRows === null && tryoutRows === null) {
+      wrap.innerHTML = `<div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">Connect your coaches and tryouts spreadsheets — see the comment near the top of this script.</div></div>`;
       return;
     }
 
-    allTryouts = rows.map(r => {
-      const [age, level, date, time, location, canceled, rDate, rTime, rLocation, notes] = r.map(c => (c || '').trim());
-      if (!age || !level) return null;
-      if (!date && !time && !location && !notes) return null;
-      const isCanceled = (canceled || '').toLowerCase() === 'yes';
-      const isTBD = v => !v || v.trim().toLowerCase() === 'tbd';
-      let finalNotes = notes;
-      if (isCanceled && !(isTBD(rDate) && isTBD(rTime) && isTBD(rLocation))) {
-        finalNotes = `Rescheduled: ${rDate || '—'} ${rTime || ''} — ${rLocation || '—'}${notes ? ' · ' + notes : ''}`.trim();
-      }
-      return {
-        team: `${age} ${level}`,
-        program: level.toLowerCase() === 'hp' ? 'hp' : 'rep',
-        date, time, location,
-        notes: finalNotes,
-        isCanceled,
-        sortDate: parseDateForSort(date, time)
-      };
-    }).filter(Boolean);
-
-    allTryouts.sort((a, b) => {
-      if (a.sortDate && b.sortDate) return a.sortDate - b.sortDate;
-      if (a.sortDate) return -1;
-      if (b.sortDate) return 1;
-      return a.team.localeCompare(b.team);
+    const teams = new Map(); // "Age Level" -> { age, level, program, coach, coachEmail, coachPhone, tryouts: [...] }
+    (coachRows || []).forEach(r => {
+      const [age, level, coach, coachEmail] = r.map(c => (c || '').trim());
+      if (!age || !level) return;
+      const team = `${age} ${level}`;
+      const program = level.toLowerCase() === 'hp' ? 'hp' : 'rep';
+      const existing = teams.get(team) || { age, level, program, tryouts: [] };
+      teams.set(team, { ...existing, coach, coachEmail, coachPhone: (r[4] || '').trim() });
     });
+    (tryoutRows || []).forEach(r => {
+      const [age, level, date, time, location, canceled, rDate, rTime, rLocation, notes] = r.map(c => (c || '').trim());
+      if (!age || !level) return;
+      if (!date && !time && !location && !notes) return;
+      const team = `${age} ${level}`;
+      const program = level.toLowerCase() === 'hp' ? 'hp' : 'rep';
+      const existing = teams.get(team) || { age, level, program, tryouts: [] };
+      const isCanceled = canceled.toLowerCase() === 'yes';
+      existing.tryouts = [...(existing.tryouts || []), { date, time, location, isCanceled, rDate, rTime, rLocation, notes }];
+      teams.set(team, existing);
+    });
+
+    if (!teams.size) {
+      wrap.innerHTML = `<div class="accordion-item"><div class="accordion-body-inner" style="padding:18px 22px;">No teams yet — add rows to the spreadsheet.</div></div>`;
+      return;
+    }
+
+    // Only teams with an actual tryout row show up here — a coach with
+    // no tryout posted yet just doesn't appear (they're still on the
+    // Rep/HP pages' own coach directory, that list isn't filtered).
+    allTeams = sortTeams(
+      Array.from(teams.entries()).filter(([, info]) => (info.tryouts || []).length > 0)
+    );
 
     renderTryouts();
   }
@@ -677,14 +803,8 @@
     renderTryouts();
   });
 
-  if (!TRYOUTS_CSV_URL || TRYOUTS_CSV_URL.startsWith('PASTE_')) {
-    buildTryouts(null);
-  } else {
-    fetch(TRYOUTS_CSV_URL)
-      .then(r => r.text())
-      .then(text => buildTryouts(stripToDataRows(parseCSV(text))))
-      .catch(() => buildTryouts([]));
-  }
+  Promise.all([fetchCSV(COACHES_CSV_URL), fetchCSV(TRYOUTS_CSV_URL)])
+    .then(([coachRows, tryoutRows]) => buildTryouts(coachRows, tryoutRows));
 </script>
 </body>
 </html>
