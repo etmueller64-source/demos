@@ -490,9 +490,9 @@
         <div class="accordion-body-inner" style="padding:0 22px 20px;">
           <div style="overflow-x:auto;">
             <table class="sched-table" id="coaches-directory-table">
-              <thead><tr><th>Team</th><th>Birth Year</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
+              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
               <tbody id="coaches-directory-tbody">
-                <tr><td colspan="5" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading coaches…</td></tr>
+                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading coaches…</td></tr>
               </tbody>
             </table>
           </div>
@@ -516,9 +516,9 @@
         <div class="accordion-body-inner" style="padding:0 22px 20px;">
           <div style="overflow-x:auto;">
             <table class="sched-table" id="future-coaches-directory-table">
-              <thead><tr><th>Team</th><th>Birth Year</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
+              <thead><tr><th>Team</th><th>Head Coach</th><th>Contact</th><th>Phone</th></tr></thead>
               <tbody id="future-coaches-directory-tbody">
-                <tr><td colspan="5" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading next season's coaches…</td></tr>
+                <tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading next season's coaches…</td></tr>
               </tbody>
             </table>
           </div>
@@ -649,7 +649,7 @@
         both pages read the same three tabs, they just filter differently.
 
      Coaches / Future Coaches sheet columns, in order:
-       Age, Level, Birth Year, Head Coach, Coach Contact, Coach Phone
+       Age, Level, Head Coach, Coach Contact, Coach Phone
      Tryouts sheet columns, in order:
        Age, Level, Date, Time, Location, Canceled-tryout? (Yes/No),
        Reschedule Date, Reschedule Time, Reschedule Location, Notes
@@ -760,13 +760,13 @@
       return;
     }
 
-    const teams = new Map(); // "Age Level" -> { age, level, birthYear, coach, coachEmail, coachPhone, tryouts: [...] }
+    const teams = new Map(); // "Age Level" -> { age, level, coach, coachEmail, coachPhone, tryouts: [...] }
     (coachRows || []).forEach(r => {
-      const [age, level, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
+      const [age, level, coach, coachEmail] = r.map(c => (c || '').trim());
       if (!age || !level) return;
       const team = `${age} ${level}`;
       const existing = teams.get(team) || { age, level, tryouts: [] };
-      teams.set(team, { ...existing, birthYear, coach, coachEmail, coachPhone: (r[5] || '').trim() });
+      teams.set(team, { ...existing, coach, coachEmail, coachPhone: (r[4] || '').trim() });
     });
     // Column F is "Canceled-tryout?" (Yes/No) — everything from
     // Reschedule Date onward shifted one column right to make room for it.
@@ -906,22 +906,22 @@
     if (!tbody) return;
 
     if (coachRows === null) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--ink-soft);padding:24px;">${connectMsg}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">${connectMsg}</td></tr>`;
       return;
     }
     if (!coachRows.length) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--ink-soft);padding:24px;">${emptyMsg}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:24px;">${emptyMsg}</td></tr>`;
       return;
     }
 
     tbody.innerHTML = sortCoachRows(coachRows).map(r => {
-      const [age, level, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
-      const coachPhone = (r[5] || '').trim();
+      const [age, level, coach, coachEmail] = r.map(c => (c || '').trim());
+      const coachPhone = (r[4] || '').trim();
       if (!age || !level) return '';
       const team = `${age} ${level}`;
       const contact = coachEmail ? `<a href="mailto:${coachEmail}" style="color:var(--gold);">${coachEmail}</a>` : '—';
       const phone = coachPhone ? `<a href="tel:${coachPhone.replace(/[^\d+]/g,'')}" style="color:var(--gold);">${coachPhone}</a>` : '—';
-      return `<tr><td>${team}</td><td>${birthYear || '—'}</td><td>${coach || 'To be announced'}</td><td>${contact}</td><td>${phone}</td></tr>`;
+      return `<tr><td>${team}</td><td>${coach || 'To be announced'}</td><td>${contact}</td><td>${phone}</td></tr>`;
     }).join('');
   }
 

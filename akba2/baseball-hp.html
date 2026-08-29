@@ -777,7 +777,7 @@
         both pages read the same three tabs, they just filter differently.
 
      Coaches / Future Coaches sheet columns, in order:
-       Age, Level, Birth Year, Head Coach, Coach Contact, Coach Phone
+       Age, Level, Head Coach, Coach Contact, Coach Phone
      Tryouts sheet columns, in order:
        Age, Level, Date, Time, Location, Canceled-tryout? (Yes/No),
        Reschedule Date, Reschedule Time, Reschedule Location, Notes
@@ -888,13 +888,13 @@
       return;
     }
 
-    const teams = new Map(); // "Age Level" -> { age, level, birthYear, coach, coachEmail, coachPhone, tryouts: [...] }
+    const teams = new Map(); // "Age Level" -> { age, level, coach, coachEmail, coachPhone, tryouts: [...] }
     (coachRows || []).forEach(r => {
-      const [age, level, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
+      const [age, level, coach, coachEmail] = r.map(c => (c || '').trim());
       if (!age || !level) return;
       const team = `${age} ${level}`;
       const existing = teams.get(team) || { age, level, tryouts: [] };
-      teams.set(team, { ...existing, birthYear, coach, coachEmail, coachPhone: (r[5] || '').trim() });
+      teams.set(team, { ...existing, coach, coachEmail, coachPhone: (r[4] || '').trim() });
     });
     // Column F is "Canceled-tryout?" (Yes/No) — everything from
     // Reschedule Date onward shifted one column right to make room for it.
@@ -1043,8 +1043,8 @@
     }
 
     tbody.innerHTML = sortCoachRows(coachRows).map(r => {
-      const [age, level, birthYear, coach, coachEmail] = r.map(c => (c || '').trim());
-      const coachPhone = (r[5] || '').trim();
+      const [age, level, coach, coachEmail] = r.map(c => (c || '').trim());
+      const coachPhone = (r[4] || '').trim();
       if (!age || !level) return '';
       const team = `${age} ${level}`;
       const contact = coachEmail ? `<a href="mailto:${coachEmail}" style="color:var(--gold);">${coachEmail}</a>` : '—';

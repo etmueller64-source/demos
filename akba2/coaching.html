@@ -468,7 +468,7 @@
      This page lists every team combined — Rep AND HP together —
      from the "Coaches" and "Future Coaches" tabs.
 
-     Columns, in order: Age, Level, Birth Year, Head Coach,
+     Columns, in order: Age, Level, Head Coach,
      Coach Contact, Coach Phone
 
      Display order: youngest to oldest, and within the same age,
@@ -579,8 +579,8 @@
     const sorted = sortRows(valid);
 
     tbody.innerHTML = sorted.map(r => {
-      const [age, level, birthYear, coach, email] = r.map(c => (c || '').trim());
-      const phone = (r[5] || '').trim();
+      const [age, level, coach, email] = r.map(c => (c || '').trim());
+      const phone = (r[4] || '').trim();
       const team = `${age} ${level}`;
       const contactParts = [];
       if (email) contactParts.push(`<a href="mailto:${email}" style="color:var(--gold);">${email}</a>`);

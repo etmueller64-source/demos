@@ -291,8 +291,8 @@
   <div class="wrap">
     <div class="section-head">
       <div><div class="eyebrow">Getting started</div><h2>How tryouts work at AKBA</h2></div>
-
-
+      <p>Four steps from "brand new" to "on a team" — the same path every family follows.</p>
+    </div>
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-num">1</div>
@@ -318,11 +318,41 @@
   </div>
 </section>
 
-<section class="section" style="padding-top:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+<section class="section" id="upcoming" style="padding-top:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
   <div class="wrap section">
     <div class="section-head">
+      <div><div class="eyebrow">Schedule</div><h2>Upcoming tryout dates</h2></div>
+      <p>Pulled straight from each team's tryout schedule, sorted by date. Filter by program below.</p>
+    </div>
+
+    <div class="callout">
+      <span><b>Playing House League?</b> There's no tryout to attend — just complete registration and your team assignment will follow.</span>
+      <a href="registration.html">Register now →</a>
+    </div>
+
+    <div class="filter-row" id="tryout-filters">
+      <button class="filter-pill active" data-filter="all" type="button">All programs</button>
+      <button class="filter-pill" data-filter="rep" type="button">Rep</button>
+      <button class="filter-pill" data-filter="hp" type="button">HP</button>
+    </div>
+
+    <table class="sched-table">
+      <thead>
+        <tr><th>Team</th><th>Program</th><th>Date</th><th>Time</th><th>Location</th><th>Notes</th></tr>
+      </thead>
+      <tbody id="tryouts-tbody">
+        <tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading tryout dates…</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">Looking for a specific team's head coach or full details? Visit the <a href="baseball-rep.html" style="color:var(--gold);font-weight:600;">Rep</a> or <a href="baseball-hp.html" style="color:var(--gold);font-weight:600;">HP</a> page and open your team.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
       <div><div class="eyebrow">Which program is my child?</div><h2>Not every program needs a tryout</h2></div>
-      <p> </p>
+      <p>Not sure which path fits? Here's the difference in plain terms.</p>
     </div>
     <div class="detail-grid">
       <div class="detail-card">
@@ -346,36 +376,6 @@
         </ul>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="section" id="upcoming">
-  <div class="wrap">
-    <div class="section-head">
-      <div><div class="eyebrow">Schedule</div><h2>Upcoming tryout dates</h2></div>
-      <p></p>
-    </div>
-
-    <div class="callout">
-      <span><b>Playing House League?</b> There's no tryout to attend — just complete registration and your team assignment will follow.</span>
-      <a href="registration.html">Register now →</a>
-    </div>
-
-    <div class="filter-row" id="tryout-filters">
-      <button class="filter-pill active" data-filter="all" type="button">All programs</button>
-      <button class="filter-pill" data-filter="rep" type="button">Rep</button>
-      <button class="filter-pill" data-filter="hp" type="button">HP</button>
-    </div>
-
-    <table class="sched-table">
-      <thead>
-        <tr><th>Team</th><th>Program</th><th>Date</th><th>Time</th><th>Location</th><th>Notes</th></tr>
-      </thead>
-      <tbody id="tryouts-tbody">
-        <tr><td colspan="6" style="text-align:center;color:var(--ink-soft);padding:24px;">Loading tryout dates…</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:14px;">Looking for a specific team's head coach or full details? Visit the <a href="baseball-rep.html" style="color:var(--gold);font-weight:600;">Rep</a> or <a href="baseball-hp.html" style="color:var(--gold);font-weight:600;">HP</a> page and open your team.</p>
   </div>
 </section>
 
