@@ -34,11 +34,9 @@
   .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);background:transparent;}
   .btn-gold:hover{background:var(--gold);color:var(--bg);}
 
-  /* -------- sticky roll-up nav -------- */
   nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
   nav.main.hide{transform:translateY(-100%);}
 
-  /* -------- top utility bar -------- */
   .util-bar{background:var(--red);padding:9px 0;}
   .util-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,0.92);}
   .util-row a{display:inline-flex;align-items:center;gap:6px;}
@@ -46,7 +44,6 @@
   @media(max-width:760px){ .util-row{flex-direction:column;gap:6px;text-align:center;} }
   @media(max-width:700px){ .util-links{display:none;} .util-bar{padding:7px 0;} }
 
-  /* -------- header -------- */
   header{
     position:relative;
     background:
@@ -95,13 +92,8 @@
   }
 
   section{padding:88px 0;}
-  .section-head{max-width:600px;margin:0 auto 48px;text-align:center;}
-  .section-head h2{font-size:clamp(28px,3.6vw,38px);}
-  .section-head p{color:var(--ink-soft);margin-top:12px;}
   .section-badge{display:inline-block;background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:7px 18px;border-radius:999px;}
-  .section-rule{width:56px;height:3px;background:var(--gold);margin:22px auto 0;border-radius:2px;}
 
-  /* -------- CTA band -------- */
   .cta-band{background:linear-gradient(160deg,var(--red),var(--red-deep));text-align:center;padding:90px 0;}
   .cta-band h2{color:#fff;}
   .cta-band p{color:rgba(255,255,255,0.82);max-width:480px;margin:14px auto 28px;}
@@ -118,10 +110,9 @@
   .rv.in{opacity:1;transform:none;}
 
   /* ===================================================================
-     PORTFOLIO PAGE — everything below is new for this page
+     PORTFOLIO PAGE
      =================================================================== */
 
-  /* -------- page banner -------- */
   .page-banner{
     position:relative;text-align:center;padding:110px 0 86px;
     background:
@@ -135,7 +126,6 @@
   .crumbs a{color:var(--gold-soft);}
   .crumbs .sep{margin:0 8px;color:var(--ink-soft);opacity:.5;}
 
-  /* -------- stats strip (reuses trust-strip visual language) -------- */
   .trust-strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
   .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding-top:46px;padding-bottom:46px;text-align:center;}
   .trust-item{display:flex;flex-direction:column;align-items:center;}
@@ -157,78 +147,70 @@
   .ba-hint{text-align:center;font-size:11.5px;letter-spacing:0.05em;color:var(--ink-soft);margin-top:12px;}
   .ba-hint svg{width:13px;height:13px;vertical-align:-2px;stroke:var(--gold-soft);fill:none;stroke-width:2;}
 
-  /* -------- featured spotlight -------- */
-  .spotlight{padding:90px 0 40px;}
-  .spotlight-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:52px;align-items:center;}
-  .spotlight-copy .tag{display:inline-block;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin-bottom:16px;}
-  .spotlight-copy h2{font-size:clamp(26px,3.2vw,36px);margin-top:2px;}
-  .spotlight-copy p{color:var(--ink-soft);margin-top:14px;font-size:15.5px;}
-  .spotlight-meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px;}
-  .spotlight-meta div{display:flex;flex-direction:column;}
-  .spotlight-meta b{color:var(--ink);font-size:14px;}
-  .spotlight-meta span{color:var(--ink-soft);font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;margin-top:2px;}
-  .spotlight-copy .btn{margin-top:26px;}
-  .spotlight-ba-wrap{aspect-ratio:5/4;border-radius:10px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,0.4);}
-  @media(max-width:900px){ .spotlight-grid{grid-template-columns:1fr;} .spotlight-ba-wrap{order:-1;} }
+  /* -------- portfolio layout: sidebar + content -------- */
+  .portfolio-section{padding:70px 0 100px;}
+  .portfolio-layout{display:grid;grid-template-columns:210px 1fr;gap:48px;align-items:start;}
+  .side-nav{position:sticky;top:110px;display:flex;flex-direction:column;gap:2px;}
+  .side-item{display:flex;align-items:center;gap:8px;padding:11px 0 11px 16px;border-left:2px solid transparent;font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;color:var(--ink-soft);transition:all .2s ease;cursor:pointer;}
+  .side-item:hover{color:var(--gold-soft);}
+  .side-item.on{color:var(--gold-soft);border-left-color:var(--gold);}
+  .side-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex:none;}
+  .side-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink-soft);padding-right:2px;}
+  .side-item.on .side-count{color:var(--gold-soft);}
+  .side-divider{height:1px;background:var(--line);margin:10px 0 10px 16px;}
+  @media(max-width:900px){
+    .portfolio-layout{grid-template-columns:1fr;}
+    .side-nav{position:static;flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:30px;}
+    .side-item{border-left:none;border-bottom:2px solid transparent;padding:10px 14px;white-space:nowrap;}
+    .side-item.on{border-left-color:transparent;border-bottom-color:var(--gold);}
+    .side-divider{width:1px;height:22px;background:var(--line);margin:0 6px;align-self:center;}
+  }
 
-  /* -------- filter bar -------- */
-  .filter-bar{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;}
-  .filter-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;}
-  .filter-pill{padding:10px 20px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink-soft);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;cursor:pointer;background:transparent;transition:all .2s;display:inline-flex;align-items:center;gap:9px;}
-  .filter-pill .count{background:rgba(243,239,230,0.1);padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;}
-  .filter-pill:hover{border-color:var(--gold);color:var(--gold-soft);}
-  .filter-pill.on{background:var(--gold);border-color:var(--gold);color:var(--bg);}
-  .filter-pill.on .count{background:rgba(20,17,15,0.2);color:var(--bg);}
+  .content-head{margin-bottom:30px;}
+  .content-head h2{font-size:22px;}
+  .content-head p{color:var(--ink-soft);font-size:13.5px;margin-top:6px;}
 
-  /* -------- project grid -------- */
-  .proj-section{padding:64px 0 96px;}
-  .proj-meta-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:30px;flex-wrap:wrap;gap:10px;}
-  .proj-meta-row h2{font-size:21px;}
-  .proj-meta-row span{color:var(--ink-soft);font-size:13px;letter-spacing:0.03em;}
-  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-  @media(max-width:980px){ .proj-grid{grid-template-columns:repeat(2,1fr);} }
-  @media(max-width:600px){ .proj-grid{grid-template-columns:1fr;} }
-  .proj-card{cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease;}
-  .proj-card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(0,0,0,0.35);}
-  .proj-photo{position:relative;aspect-ratio:4/3;overflow:hidden;}
-  .proj-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
-  .proj-card:hover .proj-photo img{transform:scale(1.07);}
-  .proj-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 38%,rgba(20,17,15,0.9) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
-  .proj-cat-tag{align-self:flex-start;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;}
-  .proj-ba-badge{position:absolute;top:14px;right:14px;background:rgba(20,17,15,0.6);backdrop-filter:blur(4px);color:#fff;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);display:flex;align-items:center;gap:5px;}
-  .proj-ba-badge svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2;}
-  .proj-view{color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;opacity:0;transform:translateY(6px);transition:all .25s ease;margin-top:10px;}
-  .proj-view svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;}
-  .proj-card:hover .proj-view{opacity:1;transform:none;}
-  .proj-info{padding:18px 20px 20px;}
-  .proj-info h3{font-size:17px;color:var(--ink);margin-bottom:6px;}
-  .proj-info p{font-size:13px;color:var(--ink-soft);}
-  .proj-load-more{text-align:center;margin-top:44px;}
-  .proj-empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-size:14.5px;}
+  /* -------- category masonry gallery -------- */
+  .masonry{column-count:3;column-gap:18px;}
+  .masonry-tile{display:block;width:100%;break-inside:avoid;margin:0 0 18px;border-radius:8px;overflow:hidden;position:relative;cursor:zoom-in;border:1px solid var(--line);background:var(--surface);}
+  .masonry-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
+  .masonry-tile:hover img{transform:scale(1.05);}
+  .mt-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 55%,rgba(20,17,15,0.85) 100%);opacity:0;transition:opacity .25s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;}
+  .masonry-tile:hover .mt-overlay{opacity:1;}
+  .mt-job-badge{align-self:flex-start;background:rgba(201,162,39,0.92);color:#1E1C1B;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;margin-bottom:auto;}
+  .mt-caption{color:#fff;font-size:12px;font-weight:600;}
+  @media(max-width:860px){ .masonry{column-count:2;} }
+  @media(max-width:520px){ .masonry{column-count:1;} }
 
-  /* -------- project modal -------- */
-  .modal-overlay{position:fixed;inset:0;background:rgba(10,8,7,0.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;justify-content:center;padding:5vh 20px;z-index:100;opacity:0;pointer-events:none;transition:opacity .3s ease;overflow-y:auto;}
-  .modal-overlay.open{opacity:1;pointer-events:auto;}
-  .modal-panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;max-width:960px;width:100%;height:fit-content;margin:auto 0;box-shadow:0 30px 80px rgba(0,0,0,0.5);transform:translateY(24px) scale(0.98);transition:transform .3s ease;}
-  .modal-overlay.open .modal-panel{transform:none;}
-  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:28px 30px 0;}
-  .modal-tag{display:inline-block;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;margin-bottom:12px;}
-  .modal-title h3{font-size:clamp(22px,3vw,28px);}
-  .modal-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;}
-  .modal-meta div{display:flex;flex-direction:column;}
-  .modal-meta b{color:var(--ink);font-size:13.5px;}
-  .modal-meta span{color:var(--ink-soft);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;margin-top:2px;}
-  .modal-close-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;}
-  .modal-close-btn:hover{border-color:var(--gold);color:var(--gold-soft);}
-  .modal-close-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
-  .modal-body-pad{padding:22px 30px 32px;}
-  .modal-ba-wrap{aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1px solid var(--line);}
-  .modal-gallery-head{margin-top:32px;margin-bottom:16px;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);font-weight:600;}
-  .modal-gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-  @media(max-width:700px){ .modal-gallery{grid-template-columns:repeat(3,1fr);} .modal-meta{gap:16px;} }
-  .gallery-thumb{aspect-ratio:1/1;border-radius:6px;overflow:hidden;cursor:zoom-in;border:1px solid var(--line);}
-  .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
-  .gallery-thumb:hover img{transform:scale(1.08);}
+  /* -------- Full Jobs collections grid -------- */
+  .collections-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .collection-tile{position:relative;display:block;aspect-ratio:4/3;border-radius:10px;overflow:hidden;border:1px solid var(--line);cursor:pointer;box-shadow:0 14px 30px rgba(0,0,0,0.28);transition:transform .25s ease,box-shadow .25s ease;}
+  .collection-tile:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+  .collection-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+  .collection-tile:hover img{transform:scale(1.06);}
+  .collection-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 40%,rgba(20,17,15,0.88) 100%);}
+  .ct-cat{position:absolute;left:16px;top:14px;z-index:2;background:var(--gold);color:var(--bg);font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:5px 11px;border-radius:999px;}
+  .ct-title{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;color:#fff;font-size:16px;font-weight:700;}
+  @media(max-width:860px){ .collections-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .collections-grid{grid-template-columns:1fr;} }
+
+  /* -------- job detail view -------- */
+  .job-back{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-soft);cursor:pointer;margin-bottom:26px;}
+  .job-back:hover{color:var(--gold-soft);}
+  .job-tag{display:inline-block;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  .job-head h2{font-size:clamp(24px,3vw,34px);}
+  .job-meta{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;}
+  .job-meta div{display:flex;flex-direction:column;}
+  .job-meta b{color:var(--ink);font-size:14px;}
+  .job-meta span{color:var(--ink-soft);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;margin-top:2px;}
+  .job-desc{color:var(--ink-soft);font-size:15px;margin-top:16px;max-width:640px;}
+  .job-ba-wrap{aspect-ratio:16/9;border-radius:10px;overflow:hidden;border:1px solid var(--line);margin-top:32px;box-shadow:0 24px 60px rgba(0,0,0,0.35);}
+  .job-gallery-head{margin-top:36px;margin-bottom:16px;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .job-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media(max-width:700px){ .job-gallery{grid-template-columns:repeat(2,1fr);} }
+  .gthumb{aspect-ratio:1/1;border-radius:8px;overflow:hidden;cursor:zoom-in;border:1px solid var(--line);}
+  .gthumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
+  .gthumb:hover img{transform:scale(1.08);}
 
   /* -------- fullscreen lightbox -------- */
   .lightbox{position:fixed;inset:0;background:rgba(8,6,5,0.96);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s ease;}
@@ -242,7 +224,9 @@
   .lightbox-arrow svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;}
   .lightbox-arrow.prev{left:16px;} .lightbox-arrow.next{right:16px;}
   .lightbox-counter{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.85);font-size:13px;letter-spacing:0.04em;background:rgba(255,255,255,0.08);padding:6px 14px;border-radius:999px;}
-  @media(max-width:640px){ .lightbox-arrow{width:38px;height:38px;} .lightbox-close{width:36px;height:36px;} }
+  .lightbox-job-link{position:absolute;bottom:22px;right:22px;display:none;align-items:center;gap:7px;color:#1E1C1B;background:var(--gold-soft);font-size:12px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;padding:9px 16px;border-radius:999px;cursor:pointer;border:none;}
+  .lightbox-job-link svg{width:13px;height:13px;stroke:#1E1C1B;fill:none;stroke-width:2;}
+  @media(max-width:640px){ .lightbox-arrow{width:38px;height:38px;} .lightbox-close{width:36px;height:36px;} .lightbox-job-link{right:auto;left:50%;transform:translateX(-50%);bottom:70px;} }
 </style>
 </head>
 <body>
@@ -282,7 +266,7 @@
   <div class="wrap">
     <div class="crumbs"><a href="index.html">Home</a><span class="sep">/</span>Portfolio</div>
     <h1>Our Portfolio</h1>
-    <p>Every project tells a story. Browse our work by room, step inside a full project gallery, and drag the slider to see each transformation for yourself.</p>
+    <p>Browse by room to see the full range of our work, or step into Full Jobs to follow one project start to finish, before-and-after slider included.</p>
   </div>
 </div>
 
@@ -307,57 +291,21 @@
   </div>
 </div>
 
-<!-- ============ FEATURED SPOTLIGHT ============ -->
-<section class="spotlight">
-  <div class="wrap spotlight-grid rv">
-    <div class="spotlight-copy">
-      <span class="tag">Featured Project</span>
-      <h2 id="spotlightTitle">Loading…</h2>
-      <p id="spotlightDesc"></p>
-      <div class="spotlight-meta">
-        <div><b id="spotlightLoc">—</b><span>Location</span></div>
-        <div><b id="spotlightDur">—</b><span>Duration</span></div>
-        <div><b id="spotlightScope">—</b><span>Scope</span></div>
-      </div>
-      <a class="btn btn-gold" href="javascript:void(0)" id="spotlightBtn">View Full Project</a>
-    </div>
-    <div class="spotlight-ba-wrap">
-      <div class="ba" id="spotlightBa" data-before="" data-after="">
-        <div class="ba-after"></div>
-        <div class="ba-before"></div>
-        <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg></div></div>
-        <span class="ba-label before">Before</span>
-        <span class="ba-label after">After</span>
-      </div>
-    </div>
-  </div>
-  <div class="wrap" style="max-width:600px;">
-    <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>&nbsp; Drag the handle to compare before &amp; after</p>
-  </div>
-</section>
-
-<!-- ============ FILTER BAR ============ -->
-<div class="filter-bar">
-  <div class="wrap filter-row" id="filterRow">
-    <button class="filter-pill" data-filter="all">All Projects <span class="count" id="countAll">0</span></button>
-    <button class="filter-pill" data-filter="kitchens">Kitchens <span class="count" id="countKitchens">0</span></button>
-    <button class="filter-pill" data-filter="bathrooms">Bathrooms <span class="count" id="countBathrooms">0</span></button>
-    <button class="filter-pill" data-filter="basements">Basements <span class="count" id="countBasements">0</span></button>
-    <button class="filter-pill" data-filter="other">Other Projects <span class="count" id="countOther">0</span></button>
-  </div>
-</div>
-
-<!-- ============ PROJECT GRID ============ -->
-<section class="proj-section">
-  <div class="wrap">
-    <div class="proj-meta-row">
-      <h2 id="gridTitle">All Projects</h2>
-      <span id="gridCount"></span>
-    </div>
-    <div class="proj-grid" id="projGrid"></div>
-    <div class="proj-load-more" id="loadMoreWrap" style="display:none;">
-      <button class="btn btn-gold" id="loadMoreBtn">Load More Projects</button>
-    </div>
+<!-- ============ PORTFOLIO: SIDEBAR + ROUTED CONTENT ============ -->
+<section class="portfolio-section">
+  <div class="wrap portfolio-layout">
+    <nav class="side-nav" id="sideNav">
+      <a class="side-item" data-route="kitchens" href="#kitchens">Kitchens <span class="side-count" id="cntKitchens"></span></a>
+      <a class="side-item" data-route="bathrooms" href="#bathrooms">Bathrooms <span class="side-count" id="cntBathrooms"></span></a>
+      <a class="side-item" data-route="basements" href="#basements">Basements <span class="side-count" id="cntBasements"></span></a>
+      <a class="side-item" data-route="other" href="#other">Other Jobs <span class="side-count" id="cntOther"></span></a>
+      <div class="side-divider"></div>
+      <a class="side-item" data-route="full-jobs" href="#full-jobs">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 7l2-4h6l2 4"/></svg>
+        Full Jobs <span class="side-count" id="cntFullJobs"></span>
+      </a>
+    </nav>
+    <div id="portfolioContent"></div>
   </div>
 </section>
 
@@ -393,38 +341,6 @@
   <div class="foot-bottom">Copyright &copy; 2026 Lifestyles Home Creations Inc. All Rights Reserved.</div>
 </footer>
 
-<!-- ============ PROJECT MODAL ============ -->
-<div class="modal-overlay" id="projectModal">
-  <div class="modal-panel" id="modalPanel">
-    <div class="modal-head">
-      <div class="modal-title">
-        <div class="modal-tag" id="modalTag">Category</div>
-        <h3 id="modalTitleText">Project Title</h3>
-        <div class="modal-meta">
-          <div><b id="modalLoc">—</b><span>Location</span></div>
-          <div><b id="modalDur">—</b><span>Duration</span></div>
-          <div><b id="modalScope">—</b><span>Scope</span></div>
-        </div>
-      </div>
-      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="modal-body-pad">
-      <div class="modal-ba-wrap">
-        <div class="ba" id="modalBa">
-          <div class="ba-after"></div>
-          <div class="ba-before"></div>
-          <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg></div></div>
-          <span class="ba-label before">Before</span>
-          <span class="ba-label after">After</span>
-        </div>
-      </div>
-      <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>&nbsp; Drag to compare before &amp; after</p>
-      <div class="modal-gallery-head">Full Project Gallery</div>
-      <div class="modal-gallery" id="modalGallery"></div>
-    </div>
-  </div>
-</div>
-
 <!-- ============ FULLSCREEN LIGHTBOX ============ -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-stage">
@@ -433,78 +349,87 @@
     <img id="lightboxImg" src="" alt="">
     <button class="lightbox-arrow next" id="lightboxNext" aria-label="Next"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
     <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    <button class="lightbox-job-link" id="lightboxJobLink"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 7l2-4h6l2 4"/></svg>View full job</button>
   </div>
 </div>
 
 <script>
   /* ===================================================================
-     PROJECT DATA
-     Swap the image paths below for your real photos once they're ready —
-     the folder/filename pattern is images/portfolio/{project-id}-*.jpg
+     DATA
+     Real photo paths follow the pattern images/portfolio/{job-id}-*.jpg
+     for Full Jobs, and images/portfolio/loose/{id}.jpg for standalone
+     category photos that aren't part of a documented full job.
      =================================================================== */
-  const CATEGORY_LABELS = { kitchens:'Kitchens', bathrooms:'Bathrooms', basements:'Basements', other:'Other Projects' };
+  const CATEGORY_LABELS = { kitchens:'Kitchens', bathrooms:'Bathrooms', basements:'Basements', other:'Other Jobs' };
+  const RATIOS = ['4/5','1/1','4/3','3/4','16/10','5/4'];
+  function ratioFor(i){ return RATIOS[i % RATIOS.length]; }
 
-  const PROJECTS = [
+  const JOBS = [
     { id:'modern-farmhouse-kitchen', category:'kitchens', title:'Modern Farmhouse Kitchen', location:'Newmarket, ON', duration:'5 Weeks', scope:'Full Renovation',
-      description:'A dated, closed-off kitchen opened up into a bright farmhouse-style hub with custom shaker cabinetry, a quartz waterfall island, and warm brass fixtures throughout.',
-      before:'images/portfolio/modern-farmhouse-kitchen-before.jpg', after:'images/portfolio/modern-farmhouse-kitchen-after.jpg',
-      gallery:['images/portfolio/modern-farmhouse-kitchen-before.jpg','images/portfolio/modern-farmhouse-kitchen-after.jpg','images/portfolio/modern-farmhouse-kitchen-detail-1.jpg','images/portfolio/modern-farmhouse-kitchen-detail-2.jpg','images/portfolio/modern-farmhouse-kitchen-detail-3.jpg'] },
+      description:'A dated, closed-off kitchen opened up into a bright farmhouse-style hub with custom shaker cabinetry, a quartz waterfall island, and warm brass fixtures throughout.' },
     { id:'sleek-galley-kitchen', category:'kitchens', title:'Sleek Galley Kitchen Remodel', location:'Aurora, ON', duration:'4 Weeks', scope:'Full Renovation',
-      description:'A tight galley layout re-engineered for storage and flow, with two-tone cabinetry, a full-height pantry wall, and under-cabinet lighting that makes the narrow footprint feel wide open.',
-      before:'images/portfolio/sleek-galley-kitchen-before.jpg', after:'images/portfolio/sleek-galley-kitchen-after.jpg',
-      gallery:['images/portfolio/sleek-galley-kitchen-before.jpg','images/portfolio/sleek-galley-kitchen-after.jpg','images/portfolio/sleek-galley-kitchen-detail-1.jpg','images/portfolio/sleek-galley-kitchen-detail-2.jpg','images/portfolio/sleek-galley-kitchen-detail-3.jpg'] },
+      description:'A tight galley layout re-engineered for storage and flow, with two-tone cabinetry, a full-height pantry wall, and under-cabinet lighting that makes the narrow footprint feel wide open.' },
     { id:'open-concept-kitchen', category:'kitchens', title:'Open-Concept Kitchen &amp; Island', location:'King City, ON', duration:'7 Weeks', scope:'Design + Build',
-      description:'We removed a load-bearing wall to merge the kitchen with the living space, anchored by an 11-foot island built for both cooking and entertaining.',
-      before:'images/portfolio/open-concept-kitchen-before.jpg', after:'images/portfolio/open-concept-kitchen-after.jpg',
-      gallery:['images/portfolio/open-concept-kitchen-before.jpg','images/portfolio/open-concept-kitchen-after.jpg','images/portfolio/open-concept-kitchen-detail-1.jpg','images/portfolio/open-concept-kitchen-detail-2.jpg','images/portfolio/open-concept-kitchen-detail-3.jpg'] },
+      description:'We removed a load-bearing wall to merge the kitchen with the living space, anchored by an 11-foot island built for both cooking and entertaining.' },
 
     { id:'spa-inspired-ensuite', category:'bathrooms', title:'Spa-Inspired Ensuite', location:'Newmarket, ON', duration:'3 Weeks', scope:'Full Renovation',
-      description:'A cramped ensuite transformed into a spa-like retreat with a freestanding soaker tub, curbless glass shower, and heated porcelain tile floors.',
-      before:'images/portfolio/spa-inspired-ensuite-before.jpg', after:'images/portfolio/spa-inspired-ensuite-after.jpg',
-      gallery:['images/portfolio/spa-inspired-ensuite-before.jpg','images/portfolio/spa-inspired-ensuite-after.jpg','images/portfolio/spa-inspired-ensuite-detail-1.jpg','images/portfolio/spa-inspired-ensuite-detail-2.jpg','images/portfolio/spa-inspired-ensuite-detail-3.jpg'] },
+      description:'A cramped ensuite transformed into a spa-like retreat with a freestanding soaker tub, curbless glass shower, and heated porcelain tile floors.' },
     { id:'heritage-bathroom-refresh', category:'bathrooms', title:'Heritage Bathroom Refresh', location:'Richmond Hill, ON', duration:'2 Weeks', scope:'Refresh &amp; Update',
-      description:'Working within a century-home footprint, we modernized the fixtures and tile while preserving the original character of the space.',
-      before:'images/portfolio/heritage-bathroom-refresh-before.jpg', after:'images/portfolio/heritage-bathroom-refresh-after.jpg',
-      gallery:['images/portfolio/heritage-bathroom-refresh-before.jpg','images/portfolio/heritage-bathroom-refresh-after.jpg','images/portfolio/heritage-bathroom-refresh-detail-1.jpg','images/portfolio/heritage-bathroom-refresh-detail-2.jpg'] },
+      description:'Working within a century-home footprint, we modernized the fixtures and tile while preserving the original character of the space.' },
     { id:'walk-in-shower-remodel', category:'bathrooms', title:'Walk-In Shower Remodel', location:'Vaughan, ON', duration:'3 Weeks', scope:'Full Renovation',
-      description:'A tub-shower combo gave way to an oversized walk-in shower with a linear drain, floor-to-ceiling large-format tile, and a built-in bench.',
-      before:'images/portfolio/walk-in-shower-remodel-before.jpg', after:'images/portfolio/walk-in-shower-remodel-after.jpg',
-      gallery:['images/portfolio/walk-in-shower-remodel-before.jpg','images/portfolio/walk-in-shower-remodel-after.jpg','images/portfolio/walk-in-shower-remodel-detail-1.jpg','images/portfolio/walk-in-shower-remodel-detail-2.jpg','images/portfolio/walk-in-shower-remodel-detail-3.jpg'] },
+      description:'A tub-shower combo gave way to an oversized walk-in shower with a linear drain, floor-to-ceiling large-format tile, and a built-in bench.' },
 
     { id:'basement-rec-room', category:'basements', title:'Basement Rec Room &amp; Wet Bar', location:'Newmarket, ON', duration:'6 Weeks', scope:'Full Basement Finish',
-      description:'An unfinished basement became a full entertaining space, complete with a custom wet bar, built-in media wall, and a dedicated games area.',
-      before:'images/portfolio/basement-rec-room-before.jpg', after:'images/portfolio/basement-rec-room-after.jpg',
-      gallery:['images/portfolio/basement-rec-room-before.jpg','images/portfolio/basement-rec-room-after.jpg','images/portfolio/basement-rec-room-detail-1.jpg','images/portfolio/basement-rec-room-detail-2.jpg','images/portfolio/basement-rec-room-detail-3.jpg','images/portfolio/basement-rec-room-detail-4.jpg'] },
+      description:'An unfinished basement became a full entertaining space, complete with a custom wet bar, built-in media wall, and a dedicated games area.' },
     { id:'basement-in-law-suite', category:'basements', title:'Basement In-Law Suite', location:'Markham, ON', duration:'8 Weeks', scope:'Design + Build',
-      description:'A full secondary suite with its own kitchenette, bedroom, bathroom, and separate entrance — built to legal-suite standard for multi-generational living.',
-      before:'images/portfolio/basement-in-law-suite-before.jpg', after:'images/portfolio/basement-in-law-suite-after.jpg',
-      gallery:['images/portfolio/basement-in-law-suite-before.jpg','images/portfolio/basement-in-law-suite-after.jpg','images/portfolio/basement-in-law-suite-detail-1.jpg','images/portfolio/basement-in-law-suite-detail-2.jpg','images/portfolio/basement-in-law-suite-detail-3.jpg'] },
+      description:'A full secondary suite with its own kitchenette, bedroom, bathroom, and separate entrance — built to legal-suite standard for multi-generational living.' },
     { id:'basement-home-theatre', category:'basements', title:'Basement Home Theatre', location:'East Gwillimbury, ON', duration:'5 Weeks', scope:'Full Basement Finish',
-      description:'Acoustic insulation, tiered flooring, and a dedicated projector wall turned an empty basement into a true home theatre.',
-      before:'images/portfolio/basement-home-theatre-before.jpg', after:'images/portfolio/basement-home-theatre-after.jpg',
-      gallery:['images/portfolio/basement-home-theatre-before.jpg','images/portfolio/basement-home-theatre-after.jpg','images/portfolio/basement-home-theatre-detail-1.jpg','images/portfolio/basement-home-theatre-detail-2.jpg'] },
+      description:'Acoustic insulation, tiered flooring, and a dedicated projector wall turned an empty basement into a true home theatre.' },
 
     { id:'backyard-deck-build', category:'other', title:'Backyard Deck &amp; Pergola', location:'Newmarket, ON', duration:'3 Weeks', scope:'Outdoor Living',
-      description:'A composite deck with a cedar pergola and built-in seating, designed to extend the living space straight into the backyard.',
-      before:'images/portfolio/backyard-deck-build-before.jpg', after:'images/portfolio/backyard-deck-build-after.jpg',
-      gallery:['images/portfolio/backyard-deck-build-before.jpg','images/portfolio/backyard-deck-build-after.jpg','images/portfolio/backyard-deck-build-detail-1.jpg','images/portfolio/backyard-deck-build-detail-2.jpg'] },
+      description:'A composite deck with a cedar pergola and built-in seating, designed to extend the living space straight into the backyard.' },
     { id:'whole-home-flooring', category:'other', title:'Whole-Home Hardwood Flooring', location:'Aurora, ON', duration:'2 Weeks', scope:'Flooring',
-      description:'Wall-to-wall carpet replaced with wide-plank engineered hardwood across the main and upper floors, including custom staircase treads.',
-      before:'images/portfolio/whole-home-flooring-before.jpg', after:'images/portfolio/whole-home-flooring-after.jpg',
-      gallery:['images/portfolio/whole-home-flooring-before.jpg','images/portfolio/whole-home-flooring-after.jpg','images/portfolio/whole-home-flooring-detail-1.jpg'] },
+      description:'Wall-to-wall carpet replaced with wide-plank engineered hardwood across the main and upper floors, including custom staircase treads.' },
     { id:'attic-loft-conversion', category:'other', title:'Attic Loft Conversion', location:'Bradford, ON', duration:'6 Weeks', scope:'Design + Build',
-      description:'An unused attic was converted into a bright loft bedroom with a dormer addition, skylights, and a compact ensuite.',
-      before:'images/portfolio/attic-loft-conversion-before.jpg', after:'images/portfolio/attic-loft-conversion-after.jpg',
-      gallery:['images/portfolio/attic-loft-conversion-before.jpg','images/portfolio/attic-loft-conversion-after.jpg','images/portfolio/attic-loft-conversion-detail-1.jpg','images/portfolio/attic-loft-conversion-detail-2.jpg','images/portfolio/attic-loft-conversion-detail-3.jpg'] }
+      description:'An unused attic was converted into a bright loft bedroom with a dormer addition, skylights, and a compact ensuite.' }
   ];
 
-  const FEATURED_ID = 'basement-rec-room';
-  const PAGE_SIZE = 6;
-  let activeFilter = 'all';
-  let visibleCount = PAGE_SIZE;
-  let currentProject = null;
+  const LOOSE_PHOTOS = [
+    { id:'kitchen-loose-1', category:'kitchens', caption:'New quartz waterfall countertop' },
+    { id:'kitchen-loose-2', category:'kitchens', caption:'Custom shaker cabinetry detail' },
+    { id:'kitchen-loose-3', category:'kitchens', caption:'Under-cabinet lighting install' },
+    { id:'kitchen-loose-4', category:'kitchens', caption:'Farmhouse sink close-up' },
+    { id:'bath-loose-1', category:'bathrooms', caption:'Heated porcelain tile floor' },
+    { id:'bath-loose-2', category:'bathrooms', caption:'Floating vanity with brass fixtures' },
+    { id:'bath-loose-3', category:'bathrooms', caption:'Curbless glass shower detail' },
+    { id:'bath-loose-4', category:'bathrooms', caption:'Freestanding soaker tub' },
+    { id:'basement-loose-1', category:'basements', caption:'Custom wet bar build' },
+    { id:'basement-loose-2', category:'basements', caption:'Built-in media wall' },
+    { id:'basement-loose-3', category:'basements', caption:'Egress window installation' },
+    { id:'basement-loose-4', category:'basements', caption:'Engineered basement flooring' },
+    { id:'other-loose-1', category:'other', caption:'Cedar pergola construction' },
+    { id:'other-loose-2', category:'other', caption:'Wide-plank hardwood install' },
+    { id:'other-loose-3', category:'other', caption:'Custom staircase refinish' },
+    { id:'other-loose-4', category:'other', caption:'Attic dormer framing' }
+  ];
 
-  /* -------- before/after slider (shared, works for any .ba element) -------- */
+  function jobBefore(j){ return `images/portfolio/${j.id}-before.jpg`; }
+  function jobAfter(j){ return `images/portfolio/${j.id}-after.jpg`; }
+  function jobGallery(j){ return [jobBefore(j), jobAfter(j), `images/portfolio/${j.id}-detail-1.jpg`, `images/portfolio/${j.id}-detail-2.jpg`]; }
+  function looseSrc(p){ return `images/portfolio/loose/${p.id}.jpg`; }
+
+  function jobsByCategory(cat){ return JOBS.filter(j=>j.category===cat); }
+  function loosePhotosByCategory(cat){ return LOOSE_PHOTOS.filter(p=>p.category===cat); }
+
+  function categoryPool(cat){
+    const loose = loosePhotosByCategory(cat).map(p=>({ src:looseSrc(p), caption:p.caption, jobId:null }));
+    const fromJobs = jobsByCategory(cat).flatMap(j=> jobGallery(j).map(src=>({ src, caption:j.title, jobId:j.id })));
+    return [...loose, ...fromJobs];
+  }
+
+  const contentEl = document.getElementById('portfolioContent');
+
+  /* -------- before/after slider (shared) -------- */
   function setupBeforeAfter(container, beforeSrc, afterSrc){
     if(!container) return;
     container.querySelector('.ba-after').innerHTML = `<img src="${afterSrc}" alt="After">`;
@@ -545,127 +470,24 @@
     setPos(50);
   }
 
-  /* -------- featured spotlight -------- */
-  function renderSpotlight(){
-    const p = PROJECTS.find(x=>x.id===FEATURED_ID);
-    if(!p) return;
-    document.getElementById('spotlightTitle').textContent = p.title;
-    document.getElementById('spotlightDesc').textContent = p.description;
-    document.getElementById('spotlightLoc').textContent = p.location;
-    document.getElementById('spotlightDur').textContent = p.duration;
-    document.getElementById('spotlightScope').textContent = p.scope;
-    document.getElementById('spotlightBtn').addEventListener('click', ()=> openProject(p.id));
-    setupBeforeAfter(document.getElementById('spotlightBa'), p.before, p.after);
-  }
-
-  /* -------- filter pill counts -------- */
-  function renderCounts(){
-    document.getElementById('countAll').textContent = PROJECTS.length;
-    document.getElementById('countKitchens').textContent = PROJECTS.filter(p=>p.category==='kitchens').length;
-    document.getElementById('countBathrooms').textContent = PROJECTS.filter(p=>p.category==='bathrooms').length;
-    document.getElementById('countBasements').textContent = PROJECTS.filter(p=>p.category==='basements').length;
-    document.getElementById('countOther').textContent = PROJECTS.filter(p=>p.category==='other').length;
-  }
-
-  /* -------- grid rendering -------- */
-  function currentList(){
-    return activeFilter === 'all' ? PROJECTS : PROJECTS.filter(p=>p.category===activeFilter);
-  }
-  function cardHTML(p){
-    return `<div class="proj-card rv" data-id="${p.id}">
-      <div class="proj-photo">
-        <img src="${p.after}" alt="${p.title}" loading="lazy">
-        <div class="proj-ba-badge"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>Before/After</div>
-        <div class="proj-overlay">
-          <span class="proj-cat-tag">${CATEGORY_LABELS[p.category]}</span>
-          <span class="proj-view">View Project <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-        </div>
-      </div>
-      <div class="proj-info">
-        <h3>${p.title}</h3>
-        <p>${p.location} &middot; ${p.scope}</p>
-      </div>
-    </div>`;
-  }
-  function renderGrid(){
-    const list = currentList();
-    const shown = list.slice(0, visibleCount);
-    const grid = document.getElementById('projGrid');
-    grid.innerHTML = shown.length ? shown.map(cardHTML).join('') : `<div class="proj-empty">No projects in this category yet — check back soon.</div>`;
-
-    [...grid.querySelectorAll('.proj-card')].forEach((card, i)=>{
-      setTimeout(()=> card.classList.add('in'), 40 * i);
-    });
-
-    document.getElementById('gridTitle').textContent = activeFilter === 'all' ? 'All Projects' : CATEGORY_LABELS[activeFilter];
-    document.getElementById('gridCount').textContent = `${list.length} project${list.length !== 1 ? 's' : ''}`;
-    document.getElementById('loadMoreWrap').style.display = visibleCount < list.length ? 'block' : 'none';
-  }
-
-  document.getElementById('loadMoreBtn').addEventListener('click', ()=>{
-    visibleCount += PAGE_SIZE;
-    renderGrid();
-  });
-
-  document.getElementById('projGrid').addEventListener('click', e=>{
-    const card = e.target.closest('.proj-card');
-    if(card) openProject(card.dataset.id);
-  });
-
-  document.querySelectorAll('.filter-pill').forEach(pill=>{
-    pill.addEventListener('click', ()=>{
-      document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('on'));
-      pill.classList.add('on');
-      activeFilter = pill.dataset.filter;
-      visibleCount = PAGE_SIZE;
-      history.replaceState(null, '', activeFilter === 'all' ? location.pathname : `#${activeFilter}`);
-      renderGrid();
-    });
-  });
-
-  /* -------- project modal -------- */
-  const modal = document.getElementById('projectModal');
-  const modalGallery = document.getElementById('modalGallery');
-
-  function openProject(id){
-    const p = PROJECTS.find(x=>x.id===id);
-    if(!p) return;
-    currentProject = p;
-    document.getElementById('modalTag').textContent = CATEGORY_LABELS[p.category];
-    document.getElementById('modalTitleText').textContent = p.title;
-    document.getElementById('modalLoc').textContent = p.location;
-    document.getElementById('modalDur').textContent = p.duration;
-    document.getElementById('modalScope').textContent = p.scope;
-    setupBeforeAfter(document.getElementById('modalBa'), p.before, p.after);
-    modalGallery.innerHTML = p.gallery.map((src,i)=>`<div class="gallery-thumb" data-i="${i}"><img src="${src}" alt="${p.title} photo ${i+1}" loading="lazy"></div>`).join('');
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeProject(){
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.getElementById('modalCloseBtn').addEventListener('click', closeProject);
-  modal.addEventListener('click', e=>{ if(e.target === modal) closeProject(); });
-  modalGallery.addEventListener('click', e=>{
-    const thumb = e.target.closest('.gallery-thumb');
-    if(thumb) openLightbox(currentProject.gallery, Number(thumb.dataset.i));
-  });
-
   /* -------- fullscreen lightbox -------- */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxCounter = document.getElementById('lightboxCounter');
-  let lbImages = [], lbIndex = 0;
+  const lightboxJobLink = document.getElementById('lightboxJobLink');
+  let lbImages = [], lbJobIds = [], lbIndex = 0;
 
-  function openLightbox(images, index){
-    lbImages = images; lbIndex = index;
+  function openLightbox(images, index, jobIds){
+    lbImages = images; lbIndex = index; lbJobIds = jobIds || [];
     updateLightbox();
     lightbox.classList.add('open');
   }
   function updateLightbox(){
     lightboxImg.src = lbImages[lbIndex];
     lightboxCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+    const jid = lbJobIds[lbIndex];
+    lightboxJobLink.style.display = jid ? 'flex' : 'none';
+    lightboxJobLink.onclick = jid ? ()=>{ closeLightbox(); location.hash = 'full-jobs/' + jid; } : null;
   }
   function lbNext(){ lbIndex = (lbIndex + 1) % lbImages.length; updateLightbox(); }
   function lbPrev(){ lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; updateLightbox(); }
@@ -690,27 +512,136 @@
       if(e.key === 'Escape') closeLightbox();
       if(e.key === 'ArrowRight') lbNext();
       if(e.key === 'ArrowLeft') lbPrev();
-    } else if(modal.classList.contains('open') && e.key === 'Escape'){
-      closeProject();
     }
   });
 
-  /* -------- init -------- */
-  renderCounts();
-  renderSpotlight();
-
-  (function initFilterFromHash(){
-    const hash = location.hash.replace('#','');
-    const valid = Object.keys(CATEGORY_LABELS);
-    activeFilter = valid.includes(hash) ? hash : 'all';
-    document.querySelectorAll('.filter-pill').forEach(b=>{
-      b.classList.toggle('on', b.dataset.filter === activeFilter);
+  /* -------- views -------- */
+  function renderCategoryView(cat){
+    const pool = categoryPool(cat);
+    contentEl.innerHTML = `
+      <div class="content-head rv in">
+        <h2>${CATEGORY_LABELS[cat]}</h2>
+        <p>${pool.length} photo${pool.length !== 1 ? 's' : ''} from completed ${CATEGORY_LABELS[cat].toLowerCase()} projects</p>
+      </div>
+      <div class="masonry" id="masonryGrid"></div>
+    `;
+    const grid = document.getElementById('masonryGrid');
+    grid.innerHTML = pool.map((p,i)=>`
+      <div class="masonry-tile" style="aspect-ratio:${ratioFor(i)}" data-i="${i}">
+        <img src="${p.src}" alt="${p.caption}" loading="lazy">
+        <div class="mt-overlay">
+          ${p.jobId ? '<span class="mt-job-badge">Full job available</span>' : ''}
+          <span class="mt-caption">${p.caption}</span>
+        </div>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.masonry-tile').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const i = Number(el.dataset.i);
+        openLightbox(pool.map(p=>p.src), i, pool.map(p=>p.jobId));
+      });
     });
-  })();
-  renderGrid();
+  }
+
+  function renderFullJobsView(){
+    contentEl.innerHTML = `
+      <div class="content-head rv in">
+        <h2>Full Jobs</h2>
+        <p>${JOBS.length} complete project${JOBS.length !== 1 ? 's' : ''} — before/after slider and full photo set for each</p>
+      </div>
+      <div class="collections-grid" id="collectionsGrid"></div>
+    `;
+    const grid = document.getElementById('collectionsGrid');
+    grid.innerHTML = JOBS.map(j=>`
+      <a class="collection-tile" href="#full-jobs/${j.id}">
+        <img src="${jobAfter(j)}" alt="${j.title}" loading="lazy">
+        <span class="ct-cat">${CATEGORY_LABELS[j.category]}</span>
+        <span class="ct-title">${j.title}</span>
+      </a>
+    `).join('');
+  }
+
+  function renderJobDetailView(id){
+    const j = JOBS.find(x=>x.id===id);
+    if(!j){ location.hash = 'full-jobs'; return; }
+    contentEl.innerHTML = `
+      <div class="job-back" id="jobBack"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Full Jobs</div>
+      <div class="job-head rv in">
+        <div class="job-tag">${CATEGORY_LABELS[j.category]}</div>
+        <h2>${j.title}</h2>
+        <div class="job-meta">
+          <div><b>${j.location}</b><span>Location</span></div>
+          <div><b>${j.duration}</b><span>Duration</span></div>
+          <div><b>${j.scope}</b><span>Scope</span></div>
+        </div>
+        <p class="job-desc">${j.description}</p>
+      </div>
+      <div class="job-ba-wrap">
+        <div class="ba" id="jobBa">
+          <div class="ba-after"></div>
+          <div class="ba-before"></div>
+          <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg></div></div>
+          <span class="ba-label before">Before</span>
+          <span class="ba-label after">After</span>
+        </div>
+      </div>
+      <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>&nbsp; Drag to compare before &amp; after</p>
+      <div class="job-gallery-head">Full Photo Gallery</div>
+      <div class="job-gallery" id="jobGallery"></div>
+    `;
+    setupBeforeAfter(document.getElementById('jobBa'), jobBefore(j), jobAfter(j));
+    const gallery = jobGallery(j);
+    const gEl = document.getElementById('jobGallery');
+    gEl.innerHTML = gallery.map((src,i)=>`<div class="gthumb" data-i="${i}"><img src="${src}" alt="${j.title} photo ${i+1}" loading="lazy"></div>`).join('');
+    gEl.querySelectorAll('.gthumb').forEach(el=>{
+      el.addEventListener('click', ()=> openLightbox(gallery, Number(el.dataset.i), []));
+    });
+    document.getElementById('jobBack').addEventListener('click', ()=>{ location.hash = 'full-jobs'; });
+    window.scrollTo({ top: contentEl.getBoundingClientRect().top + window.scrollY - 100, behavior:'smooth' });
+  }
+
+  /* -------- routing -------- */
+  function parseHash(){
+    const h = decodeURIComponent(location.hash.replace('#',''));
+    if(!h) return { view:'category', cat:'kitchens' };
+    if(h === 'full-jobs') return { view:'full-jobs' };
+    if(h.indexOf('full-jobs/') === 0) return { view:'job-detail', id:h.slice('full-jobs/'.length) };
+    if(CATEGORY_LABELS[h]) return { view:'category', cat:h };
+    return { view:'category', cat:'kitchens' };
+  }
+
+  function updateSidebarActive(route){
+    document.querySelectorAll('.side-item').forEach(el=>{
+      const key = el.dataset.route;
+      let active = false;
+      if(route.view === 'category') active = key === route.cat;
+      else if(route.view === 'full-jobs' || route.view === 'job-detail') active = key === 'full-jobs';
+      el.classList.toggle('on', active);
+    });
+  }
+
+  function route(){
+    const r = parseHash();
+    updateSidebarActive(r);
+    if(r.view === 'category') renderCategoryView(r.cat);
+    else if(r.view === 'full-jobs') renderFullJobsView();
+    else if(r.view === 'job-detail') renderJobDetailView(r.id);
+  }
+
+  function renderSidebarCounts(){
+    document.getElementById('cntKitchens').textContent = categoryPool('kitchens').length;
+    document.getElementById('cntBathrooms').textContent = categoryPool('bathrooms').length;
+    document.getElementById('cntBasements').textContent = categoryPool('basements').length;
+    document.getElementById('cntOther').textContent = categoryPool('other').length;
+    document.getElementById('cntFullJobs').textContent = JOBS.length;
+  }
+
+  renderSidebarCounts();
+  window.addEventListener('hashchange', route);
+  route();
 
   const io = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
-  document.querySelectorAll('.trust-strip .rv, .spotlight .rv, .cta-band .rv').forEach(x=>io.observe(x));
+  document.querySelectorAll('.trust-strip .rv, .cta-band .rv').forEach(x=>io.observe(x));
 
   document.documentElement.style.setProperty('--header-h', document.getElementById('siteHeader').offsetHeight + 'px');
   window.addEventListener('resize', ()=>{
