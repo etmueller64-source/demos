@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Lifestyles Home Creations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1E1C1B;
+    --surface:#2A2725;
+    --ink:#F3EFE6;
+    --ink-soft:#C9C2B4;
+    --red:#8B1F1F;
+    --red-deep:#6B1616;
+    --gold:#C9A227;
+    --gold-soft:#E4C866;
+    --line:rgba(243,239,230,0.12);
+    --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Playfair Display',serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Playfair Display',serif;font-weight:700;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
+  .eyebrow{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 32px;border-radius:2px;font-size:13.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;transition:all .22s ease;border:none;cursor:pointer;}
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:var(--red-deep);}
+  .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);background:transparent;}
+  .btn-gold:hover{background:var(--gold);color:var(--bg);}
+
+  /* -------- sticky roll-up nav -------- */
+  nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
+  nav.main.hide{transform:translateY(-100%);}
+
+  /* -------- top utility bar -------- */
+  .util-bar{background:var(--red);padding:9px 0;}
+  .util-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,0.92);}
+  .util-row a{display:inline-flex;align-items:center;gap:6px;}
+  .util-links{display:flex;gap:26px;}
+  @media(max-width:760px){ .util-row{flex-direction:column;gap:6px;text-align:center;} }
+  @media(max-width:700px){ .util-links{display:none;} .util-bar{padding:7px 0;} }
+
+  /* -------- header -------- */
+  header{
+    position:relative;
+    background:
+      linear-gradient(180deg, rgba(20,17,15,0.32), rgba(20,17,15,0.58)),
+      url("images/header-hardwood.jpg");
+    background-repeat:no-repeat, repeat-x;
+    background-position:center, left center;
+    background-size:cover, auto 100%;
+  }
+  .header-row{display:flex;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px;gap:16px;}
+  .site-logo{height:84px;width:auto;display:block;}
+  .header-row .btn-primary{margin-left:auto;}
+  .nav-toggle{display:none;}
+  .brand{display:flex;flex-direction:column;}
+  .brand .name{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:30px;color:var(--gold-soft);}
+  .brand .sub{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px;}
+  .brand .tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--gold);margin-top:4px;}
+
+  nav.main{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  nav.main .wrap{display:flex;gap:2px;}
+  nav.main a{padding:16px 22px;font-family:'Playfair Display',serif;font-size:16px;letter-spacing:0.04em;text-transform:uppercase;font-weight:700;color:var(--ink-soft);border-bottom:2px solid transparent;transition:all .2s;}
+  nav.main a:hover,nav.main a.on{color:var(--gold-soft);border-bottom-color:var(--gold);}
+  @media(max-width:900px){ nav.main .wrap{overflow-x:auto;} nav.main a{padding:14px 16px;white-space:nowrap;} }
+
+  @media(max-width:700px){
+    header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
+    header.hide{transform:translateY(-100%);}
+    nav.main{top:var(--header-h, 80px);}
+    nav.main.hide{transform:translateY(calc(-100% - var(--header-h, 80px)));}
+
+    .header-row{padding-top:12px;padding-bottom:12px;gap:10px;flex-wrap:wrap;row-gap:10px;}
+    .site-logo{height:44px;}
+    .header-row .btn-primary{padding:9px 13px;font-size:10.5px;}
+
+    .nav-toggle{
+      display:flex;flex-direction:column;justify-content:center;
+      gap:4px;flex:none;padding:4px 2px;
+      background:none;border:none;cursor:pointer;
+    }
+    .nav-toggle span{display:block;height:1px;width:20px;background:var(--gold-soft);}
+
+    nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
+    nav.main.open .wrap{display:flex;}
+    nav.main a{width:100%;box-sizing:border-box;padding:15px 6vw;border-bottom:1px solid var(--line);border-left:3px solid transparent;white-space:normal;}
+    nav.main a:hover,nav.main a.on{border-bottom-color:var(--line);border-left-color:var(--gold);background:rgba(255,255,255,0.03);}
+  }
+
+  section{padding:88px 0;}
+  .section-head{max-width:600px;margin:0 auto 48px;text-align:center;}
+  .section-head h2{font-size:clamp(28px,3.6vw,38px);}
+  .section-head p{color:var(--ink-soft);margin-top:12px;}
+  .section-badge{display:inline-block;background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:7px 18px;border-radius:999px;}
+  .section-rule{width:56px;height:3px;background:var(--gold);margin:22px auto 0;border-radius:2px;}
+
+  /* -------- CTA band -------- */
+  .cta-band{background:linear-gradient(160deg,var(--red),var(--red-deep));text-align:center;padding:90px 0;}
+  .cta-band h2{color:#fff;}
+  .cta-band p{color:rgba(255,255,255,0.82);max-width:480px;margin:14px auto 28px;}
+
+  footer{background:var(--bg);border-top:1px solid var(--line);padding:56px 0 0;}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px;padding-bottom:40px;}
+  .foot-grid h4{font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+  .foot-grid a{display:block;color:var(--ink-soft);font-size:14px;margin-bottom:10px;}
+  .foot-grid a:hover{color:var(--gold-soft);}
+  .foot-bottom{border-top:1px solid var(--line);padding:20px 0;text-align:center;font-size:12.5px;color:var(--ink-soft);}
+  @media(max-width:760px){ .foot-grid{grid-template-columns:1fr;} }
+
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}
+  .rv.in{opacity:1;transform:none;}
+
+  /* ===================================================================
+     PORTFOLIO PAGE — everything below is new for this page
+     =================================================================== */
+
+  /* -------- page banner -------- */
+  .page-banner{
+    position:relative;text-align:center;padding:110px 0 86px;
+    background:
+      linear-gradient(180deg, rgba(20,17,15,0.62), rgba(20,17,15,0.82)),
+      url("images/portfolio-banner.jpg");
+    background-size:cover;background-position:center;
+  }
+  .page-banner h1{font-size:clamp(36px,5.4vw,58px);margin-top:16px;}
+  .page-banner p{color:var(--ink-soft);max-width:560px;margin:16px auto 0;font-size:16px;}
+  .crumbs{font-size:12.5px;letter-spacing:0.05em;color:var(--ink-soft);}
+  .crumbs a{color:var(--gold-soft);}
+  .crumbs .sep{margin:0 8px;color:var(--ink-soft);opacity:.5;}
+
+  /* -------- stats strip (reuses trust-strip visual language) -------- */
+  .trust-strip{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding-top:46px;padding-bottom:46px;text-align:center;}
+  .trust-item{display:flex;flex-direction:column;align-items:center;}
+  .trust-icon{position:relative;width:52px;height:52px;margin-bottom:16px;}
+  .trust-icon svg{width:100%;height:100%;stroke:var(--gold-soft);fill:none;stroke-width:1.5;}
+  .trust-item b{display:block;font-family:'Playfair Display',serif;color:var(--gold-soft);font-size:22px;margin-bottom:4px;letter-spacing:0.02em;}
+  .trust-item span{font-size:12.5px;color:var(--ink-soft);letter-spacing:0.04em;}
+  @media(max-width:760px){ .trust-row{grid-template-columns:repeat(2,1fr);row-gap:36px;} }
+
+  /* -------- before/after slider (shared component) -------- */
+  .ba{position:relative;width:100%;height:100%;overflow:hidden;touch-action:none;cursor:ew-resize;user-select:none;background:var(--bg);}
+  .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none;}
+  .ba-before{position:absolute;inset:0;overflow:hidden;}
+  .ba-divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(255,255,255,0.9);box-shadow:0 0 0 1px rgba(0,0,0,0.15);pointer-events:none;}
+  .ba-handle{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,0.4);pointer-events:none;}
+  .ba-handle svg{width:20px;height:20px;stroke:var(--bg);stroke-width:2;fill:none;}
+  .ba-label{position:absolute;bottom:14px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;background:rgba(20,17,15,0.55);padding:6px 13px;border-radius:999px;pointer-events:none;}
+  .ba-label.before{left:14px;} .ba-label.after{right:14px;}
+  .ba-hint{text-align:center;font-size:11.5px;letter-spacing:0.05em;color:var(--ink-soft);margin-top:12px;}
+  .ba-hint svg{width:13px;height:13px;vertical-align:-2px;stroke:var(--gold-soft);fill:none;stroke-width:2;}
+
+  /* -------- featured spotlight -------- */
+  .spotlight{padding:90px 0 40px;}
+  .spotlight-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:52px;align-items:center;}
+  .spotlight-copy .tag{display:inline-block;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin-bottom:16px;}
+  .spotlight-copy h2{font-size:clamp(26px,3.2vw,36px);margin-top:2px;}
+  .spotlight-copy p{color:var(--ink-soft);margin-top:14px;font-size:15.5px;}
+  .spotlight-meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px;}
+  .spotlight-meta div{display:flex;flex-direction:column;}
+  .spotlight-meta b{color:var(--ink);font-size:14px;}
+  .spotlight-meta span{color:var(--ink-soft);font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;margin-top:2px;}
+  .spotlight-copy .btn{margin-top:26px;}
+  .spotlight-ba-wrap{aspect-ratio:5/4;border-radius:10px;overflow:hidden;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,0.4);}
+  @media(max-width:900px){ .spotlight-grid{grid-template-columns:1fr;} .spotlight-ba-wrap{order:-1;} }
+
+  /* -------- filter bar -------- */
+  .filter-bar{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;}
+  .filter-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;}
+  .filter-pill{padding:10px 20px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink-soft);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;cursor:pointer;background:transparent;transition:all .2s;display:inline-flex;align-items:center;gap:9px;}
+  .filter-pill .count{background:rgba(243,239,230,0.1);padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;}
+  .filter-pill:hover{border-color:var(--gold);color:var(--gold-soft);}
+  .filter-pill.on{background:var(--gold);border-color:var(--gold);color:var(--bg);}
+  .filter-pill.on .count{background:rgba(20,17,15,0.2);color:var(--bg);}
+
+  /* -------- project grid -------- */
+  .proj-section{padding:64px 0 96px;}
+  .proj-meta-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:30px;flex-wrap:wrap;gap:10px;}
+  .proj-meta-row h2{font-size:21px;}
+  .proj-meta-row span{color:var(--ink-soft);font-size:13px;letter-spacing:0.03em;}
+  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  @media(max-width:980px){ .proj-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .proj-grid{grid-template-columns:1fr;} }
+  .proj-card{cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease;}
+  .proj-card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(0,0,0,0.35);}
+  .proj-photo{position:relative;aspect-ratio:4/3;overflow:hidden;}
+  .proj-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+  .proj-card:hover .proj-photo img{transform:scale(1.07);}
+  .proj-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 38%,rgba(20,17,15,0.9) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
+  .proj-cat-tag{align-self:flex-start;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;}
+  .proj-ba-badge{position:absolute;top:14px;right:14px;background:rgba(20,17,15,0.6);backdrop-filter:blur(4px);color:#fff;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);display:flex;align-items:center;gap:5px;}
+  .proj-ba-badge svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2;}
+  .proj-view{color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;opacity:0;transform:translateY(6px);transition:all .25s ease;margin-top:10px;}
+  .proj-view svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;}
+  .proj-card:hover .proj-view{opacity:1;transform:none;}
+  .proj-info{padding:18px 20px 20px;}
+  .proj-info h3{font-size:17px;color:var(--ink);margin-bottom:6px;}
+  .proj-info p{font-size:13px;color:var(--ink-soft);}
+  .proj-load-more{text-align:center;margin-top:44px;}
+  .proj-empty{text-align:center;color:var(--ink-soft);padding:40px 0;font-size:14.5px;}
+
+  /* -------- project modal -------- */
+  .modal-overlay{position:fixed;inset:0;background:rgba(10,8,7,0.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;justify-content:center;padding:5vh 20px;z-index:100;opacity:0;pointer-events:none;transition:opacity .3s ease;overflow-y:auto;}
+  .modal-overlay.open{opacity:1;pointer-events:auto;}
+  .modal-panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;max-width:960px;width:100%;height:fit-content;margin:auto 0;box-shadow:0 30px 80px rgba(0,0,0,0.5);transform:translateY(24px) scale(0.98);transition:transform .3s ease;}
+  .modal-overlay.open .modal-panel{transform:none;}
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:28px 30px 0;}
+  .modal-tag{display:inline-block;background:var(--gold);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;margin-bottom:12px;}
+  .modal-title h3{font-size:clamp(22px,3vw,28px);}
+  .modal-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;}
+  .modal-meta div{display:flex;flex-direction:column;}
+  .modal-meta b{color:var(--ink);font-size:13.5px;}
+  .modal-meta span{color:var(--ink-soft);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;margin-top:2px;}
+  .modal-close-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;}
+  .modal-close-btn:hover{border-color:var(--gold);color:var(--gold-soft);}
+  .modal-close-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+  .modal-body-pad{padding:22px 30px 32px;}
+  .modal-ba-wrap{aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1px solid var(--line);}
+  .modal-gallery-head{margin-top:32px;margin-bottom:16px;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .modal-gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+  @media(max-width:700px){ .modal-gallery{grid-template-columns:repeat(3,1fr);} .modal-meta{gap:16px;} }
+  .gallery-thumb{aspect-ratio:1/1;border-radius:6px;overflow:hidden;cursor:zoom-in;border:1px solid var(--line);}
+  .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
+  .gallery-thumb:hover img{transform:scale(1.08);}
+
+  /* -------- fullscreen lightbox -------- */
+  .lightbox{position:fixed;inset:0;background:rgba(8,6,5,0.96);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .lightbox.open{opacity:1;pointer-events:auto;}
+  .lightbox-stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+  .lightbox-stage img{max-width:88vw;max-height:80vh;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .lightbox-close,.lightbox-arrow{position:absolute;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .lightbox-close{top:22px;right:22px;width:42px;height:42px;}
+  .lightbox-close svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
+  .lightbox-arrow{top:50%;transform:translateY(-50%);width:48px;height:48px;}
+  .lightbox-arrow svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;}
+  .lightbox-arrow.prev{left:16px;} .lightbox-arrow.next{right:16px;}
+  .lightbox-counter{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.85);font-size:13px;letter-spacing:0.04em;background:rgba(255,255,255,0.08);padding:6px 14px;border-radius:999px;}
+  @media(max-width:640px){ .lightbox-arrow{width:38px;height:38px;} .lightbox-close{width:36px;height:36px;} }
+</style>
+</head>
+<body>
+
+<div class="util-bar">
+  <div class="wrap util-row">
+    <div class="util-links">
+      <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
+      <a href="tel:4168172929">416-817-2929</a>
+    </div>
+    <div>We Are Fully Licensed &amp; Insured</div>
+  </div>
+</div>
+
+<header id="siteHeader">
+  <div class="wrap header-row">
+    <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
+    <a class="btn btn-primary" href="#estimate">Free Estimate</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<nav class="main" id="mainNav">
+  <div class="wrap" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Services</a>
+    <a href="portfolio.html" class="on">Portfolio</a>
+    <a href="#">Community</a>
+    <a href="#">Testimonials</a>
+    <a href="#">Contact Us</a>
+  </div>
+</nav>
+
+<div class="page-banner">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a><span class="sep">/</span>Portfolio</div>
+    <h1>Our Portfolio</h1>
+    <p>Every project tells a story. Browse our work by room, step inside a full project gallery, and drag the slider to see each transformation for yourself.</p>
+  </div>
+</div>
+
+<div class="trust-strip">
+  <div class="wrap trust-row rv">
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M8 4v4"/><path d="M16 4v4"/></svg></div>
+      <b>150+</b><span>Projects Completed</span>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/></svg></div>
+      <b>18</b><span>Years in Business</span>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+      <b>4</b><span>Renovation Specialties</span>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C.7 7.7 2 4 5.5 4c2 0 3.5 1.2 4.5 2.7C11 5.2 12.5 4 14.5 4 18 4 19.3 7.7 21.5 11 19 15.6 12 20 12 20z"/></svg></div>
+      <b>100%</b><span>Client Satisfaction</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FEATURED SPOTLIGHT ============ -->
+<section class="spotlight">
+  <div class="wrap spotlight-grid rv">
+    <div class="spotlight-copy">
+      <span class="tag">Featured Project</span>
+      <h2 id="spotlightTitle">Loading…</h2>
+      <p id="spotlightDesc"></p>
+      <div class="spotlight-meta">
+        <div><b id="spotlightLoc">—</b><span>Location</span></div>
+        <div><b id="spotlightDur">—</b><span>Duration</span></div>
+        <div><b id="spotlightScope">—</b><span>Scope</span></div>
+      </div>
+      <a class="btn btn-gold" href="javascript:void(0)" id="spotlightBtn">View Full Project</a>
+    </div>
+    <div class="spotlight-ba-wrap">
+      <div class="ba" id="spotlightBa" data-before="" data-after="">
+        <div class="ba-after"></div>
+        <div class="ba-before"></div>
+        <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg></div></div>
+        <span class="ba-label before">Before</span>
+        <span class="ba-label after">After</span>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="max-width:600px;">
+    <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>&nbsp; Drag the handle to compare before &amp; after</p>
+  </div>
+</section>
+
+<!-- ============ FILTER BAR ============ -->
+<div class="filter-bar">
+  <div class="wrap filter-row" id="filterRow">
+    <button class="filter-pill" data-filter="all">All Projects <span class="count" id="countAll">0</span></button>
+    <button class="filter-pill" data-filter="kitchens">Kitchens <span class="count" id="countKitchens">0</span></button>
+    <button class="filter-pill" data-filter="bathrooms">Bathrooms <span class="count" id="countBathrooms">0</span></button>
+    <button class="filter-pill" data-filter="basements">Basements <span class="count" id="countBasements">0</span></button>
+    <button class="filter-pill" data-filter="other">Other Projects <span class="count" id="countOther">0</span></button>
+  </div>
+</div>
+
+<!-- ============ PROJECT GRID ============ -->
+<section class="proj-section">
+  <div class="wrap">
+    <div class="proj-meta-row">
+      <h2 id="gridTitle">All Projects</h2>
+      <span id="gridCount"></span>
+    </div>
+    <div class="proj-grid" id="projGrid"></div>
+    <div class="proj-load-more" id="loadMoreWrap" style="display:none;">
+      <button class="btn btn-gold" id="loadMoreBtn">Load More Projects</button>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap rv">
+    <h2>Ready to start your project?</h2>
+    <p>Tell us about your space, and let's bring your home improvement dreams to life.</p>
+    <a class="btn btn-gold" style="border-color:#fff;color:#fff;" href="index.html#estimate">Get Your Free Estimate</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <img src="images/logo.png" alt="Lifestyles Home Creations" style="height:48px;width:auto;display:block;margin-bottom:4px;">
+      <p style="color:var(--ink-soft);font-size:14px;margin-top:14px;">Your Comfort is Our Happiness! Fully licensed and insured home renovations.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="index.html">Home</a>
+      <a href="#">About Us</a>
+      <a href="#">Services</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="#">Testimonials</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="tel:4168172929">416-817-2929</a>
+      <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+  <div class="foot-bottom">Copyright &copy; 2026 Lifestyles Home Creations Inc. All Rights Reserved.</div>
+</footer>
+
+<!-- ============ PROJECT MODAL ============ -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-panel" id="modalPanel">
+    <div class="modal-head">
+      <div class="modal-title">
+        <div class="modal-tag" id="modalTag">Category</div>
+        <h3 id="modalTitleText">Project Title</h3>
+        <div class="modal-meta">
+          <div><b id="modalLoc">—</b><span>Location</span></div>
+          <div><b id="modalDur">—</b><span>Duration</span></div>
+          <div><b id="modalScope">—</b><span>Scope</span></div>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body-pad">
+      <div class="modal-ba-wrap">
+        <div class="ba" id="modalBa">
+          <div class="ba-after"></div>
+          <div class="ba-before"></div>
+          <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg></div></div>
+          <span class="ba-label before">Before</span>
+          <span class="ba-label after">After</span>
+        </div>
+      </div>
+      <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>&nbsp; Drag to compare before &amp; after</p>
+      <div class="modal-gallery-head">Full Project Gallery</div>
+      <div class="modal-gallery" id="modalGallery"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FULLSCREEN LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-stage">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <button class="lightbox-arrow prev" id="lightboxPrev" aria-label="Previous"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <img id="lightboxImg" src="" alt="">
+    <button class="lightbox-arrow next" id="lightboxNext" aria-label="Next"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+  </div>
+</div>
+
+<script>
+  /* ===================================================================
+     PROJECT DATA
+     Swap the image paths below for your real photos once they're ready —
+     the folder/filename pattern is images/portfolio/{project-id}-*.jpg
+     =================================================================== */
+  const CATEGORY_LABELS = { kitchens:'Kitchens', bathrooms:'Bathrooms', basements:'Basements', other:'Other Projects' };
+
+  const PROJECTS = [
+    { id:'modern-farmhouse-kitchen', category:'kitchens', title:'Modern Farmhouse Kitchen', location:'Newmarket, ON', duration:'5 Weeks', scope:'Full Renovation',
+      description:'A dated, closed-off kitchen opened up into a bright farmhouse-style hub with custom shaker cabinetry, a quartz waterfall island, and warm brass fixtures throughout.',
+      before:'images/portfolio/modern-farmhouse-kitchen-before.jpg', after:'images/portfolio/modern-farmhouse-kitchen-after.jpg',
+      gallery:['images/portfolio/modern-farmhouse-kitchen-before.jpg','images/portfolio/modern-farmhouse-kitchen-after.jpg','images/portfolio/modern-farmhouse-kitchen-detail-1.jpg','images/portfolio/modern-farmhouse-kitchen-detail-2.jpg','images/portfolio/modern-farmhouse-kitchen-detail-3.jpg'] },
+    { id:'sleek-galley-kitchen', category:'kitchens', title:'Sleek Galley Kitchen Remodel', location:'Aurora, ON', duration:'4 Weeks', scope:'Full Renovation',
+      description:'A tight galley layout re-engineered for storage and flow, with two-tone cabinetry, a full-height pantry wall, and under-cabinet lighting that makes the narrow footprint feel wide open.',
+      before:'images/portfolio/sleek-galley-kitchen-before.jpg', after:'images/portfolio/sleek-galley-kitchen-after.jpg',
+      gallery:['images/portfolio/sleek-galley-kitchen-before.jpg','images/portfolio/sleek-galley-kitchen-after.jpg','images/portfolio/sleek-galley-kitchen-detail-1.jpg','images/portfolio/sleek-galley-kitchen-detail-2.jpg','images/portfolio/sleek-galley-kitchen-detail-3.jpg'] },
+    { id:'open-concept-kitchen', category:'kitchens', title:'Open-Concept Kitchen &amp; Island', location:'King City, ON', duration:'7 Weeks', scope:'Design + Build',
+      description:'We removed a load-bearing wall to merge the kitchen with the living space, anchored by an 11-foot island built for both cooking and entertaining.',
+      before:'images/portfolio/open-concept-kitchen-before.jpg', after:'images/portfolio/open-concept-kitchen-after.jpg',
+      gallery:['images/portfolio/open-concept-kitchen-before.jpg','images/portfolio/open-concept-kitchen-after.jpg','images/portfolio/open-concept-kitchen-detail-1.jpg','images/portfolio/open-concept-kitchen-detail-2.jpg','images/portfolio/open-concept-kitchen-detail-3.jpg'] },
+
+    { id:'spa-inspired-ensuite', category:'bathrooms', title:'Spa-Inspired Ensuite', location:'Newmarket, ON', duration:'3 Weeks', scope:'Full Renovation',
+      description:'A cramped ensuite transformed into a spa-like retreat with a freestanding soaker tub, curbless glass shower, and heated porcelain tile floors.',
+      before:'images/portfolio/spa-inspired-ensuite-before.jpg', after:'images/portfolio/spa-inspired-ensuite-after.jpg',
+      gallery:['images/portfolio/spa-inspired-ensuite-before.jpg','images/portfolio/spa-inspired-ensuite-after.jpg','images/portfolio/spa-inspired-ensuite-detail-1.jpg','images/portfolio/spa-inspired-ensuite-detail-2.jpg','images/portfolio/spa-inspired-ensuite-detail-3.jpg'] },
+    { id:'heritage-bathroom-refresh', category:'bathrooms', title:'Heritage Bathroom Refresh', location:'Richmond Hill, ON', duration:'2 Weeks', scope:'Refresh &amp; Update',
+      description:'Working within a century-home footprint, we modernized the fixtures and tile while preserving the original character of the space.',
+      before:'images/portfolio/heritage-bathroom-refresh-before.jpg', after:'images/portfolio/heritage-bathroom-refresh-after.jpg',
+      gallery:['images/portfolio/heritage-bathroom-refresh-before.jpg','images/portfolio/heritage-bathroom-refresh-after.jpg','images/portfolio/heritage-bathroom-refresh-detail-1.jpg','images/portfolio/heritage-bathroom-refresh-detail-2.jpg'] },
+    { id:'walk-in-shower-remodel', category:'bathrooms', title:'Walk-In Shower Remodel', location:'Vaughan, ON', duration:'3 Weeks', scope:'Full Renovation',
+      description:'A tub-shower combo gave way to an oversized walk-in shower with a linear drain, floor-to-ceiling large-format tile, and a built-in bench.',
+      before:'images/portfolio/walk-in-shower-remodel-before.jpg', after:'images/portfolio/walk-in-shower-remodel-after.jpg',
+      gallery:['images/portfolio/walk-in-shower-remodel-before.jpg','images/portfolio/walk-in-shower-remodel-after.jpg','images/portfolio/walk-in-shower-remodel-detail-1.jpg','images/portfolio/walk-in-shower-remodel-detail-2.jpg','images/portfolio/walk-in-shower-remodel-detail-3.jpg'] },
+
+    { id:'basement-rec-room', category:'basements', title:'Basement Rec Room &amp; Wet Bar', location:'Newmarket, ON', duration:'6 Weeks', scope:'Full Basement Finish',
+      description:'An unfinished basement became a full entertaining space, complete with a custom wet bar, built-in media wall, and a dedicated games area.',
+      before:'images/portfolio/basement-rec-room-before.jpg', after:'images/portfolio/basement-rec-room-after.jpg',
+      gallery:['images/portfolio/basement-rec-room-before.jpg','images/portfolio/basement-rec-room-after.jpg','images/portfolio/basement-rec-room-detail-1.jpg','images/portfolio/basement-rec-room-detail-2.jpg','images/portfolio/basement-rec-room-detail-3.jpg','images/portfolio/basement-rec-room-detail-4.jpg'] },
+    { id:'basement-in-law-suite', category:'basements', title:'Basement In-Law Suite', location:'Markham, ON', duration:'8 Weeks', scope:'Design + Build',
+      description:'A full secondary suite with its own kitchenette, bedroom, bathroom, and separate entrance — built to legal-suite standard for multi-generational living.',
+      before:'images/portfolio/basement-in-law-suite-before.jpg', after:'images/portfolio/basement-in-law-suite-after.jpg',
+      gallery:['images/portfolio/basement-in-law-suite-before.jpg','images/portfolio/basement-in-law-suite-after.jpg','images/portfolio/basement-in-law-suite-detail-1.jpg','images/portfolio/basement-in-law-suite-detail-2.jpg','images/portfolio/basement-in-law-suite-detail-3.jpg'] },
+    { id:'basement-home-theatre', category:'basements', title:'Basement Home Theatre', location:'East Gwillimbury, ON', duration:'5 Weeks', scope:'Full Basement Finish',
+      description:'Acoustic insulation, tiered flooring, and a dedicated projector wall turned an empty basement into a true home theatre.',
+      before:'images/portfolio/basement-home-theatre-before.jpg', after:'images/portfolio/basement-home-theatre-after.jpg',
+      gallery:['images/portfolio/basement-home-theatre-before.jpg','images/portfolio/basement-home-theatre-after.jpg','images/portfolio/basement-home-theatre-detail-1.jpg','images/portfolio/basement-home-theatre-detail-2.jpg'] },
+
+    { id:'backyard-deck-build', category:'other', title:'Backyard Deck &amp; Pergola', location:'Newmarket, ON', duration:'3 Weeks', scope:'Outdoor Living',
+      description:'A composite deck with a cedar pergola and built-in seating, designed to extend the living space straight into the backyard.',
+      before:'images/portfolio/backyard-deck-build-before.jpg', after:'images/portfolio/backyard-deck-build-after.jpg',
+      gallery:['images/portfolio/backyard-deck-build-before.jpg','images/portfolio/backyard-deck-build-after.jpg','images/portfolio/backyard-deck-build-detail-1.jpg','images/portfolio/backyard-deck-build-detail-2.jpg'] },
+    { id:'whole-home-flooring', category:'other', title:'Whole-Home Hardwood Flooring', location:'Aurora, ON', duration:'2 Weeks', scope:'Flooring',
+      description:'Wall-to-wall carpet replaced with wide-plank engineered hardwood across the main and upper floors, including custom staircase treads.',
+      before:'images/portfolio/whole-home-flooring-before.jpg', after:'images/portfolio/whole-home-flooring-after.jpg',
+      gallery:['images/portfolio/whole-home-flooring-before.jpg','images/portfolio/whole-home-flooring-after.jpg','images/portfolio/whole-home-flooring-detail-1.jpg'] },
+    { id:'attic-loft-conversion', category:'other', title:'Attic Loft Conversion', location:'Bradford, ON', duration:'6 Weeks', scope:'Design + Build',
+      description:'An unused attic was converted into a bright loft bedroom with a dormer addition, skylights, and a compact ensuite.',
+      before:'images/portfolio/attic-loft-conversion-before.jpg', after:'images/portfolio/attic-loft-conversion-after.jpg',
+      gallery:['images/portfolio/attic-loft-conversion-before.jpg','images/portfolio/attic-loft-conversion-after.jpg','images/portfolio/attic-loft-conversion-detail-1.jpg','images/portfolio/attic-loft-conversion-detail-2.jpg','images/portfolio/attic-loft-conversion-detail-3.jpg'] }
+  ];
+
+  const FEATURED_ID = 'basement-rec-room';
+  const PAGE_SIZE = 6;
+  let activeFilter = 'all';
+  let visibleCount = PAGE_SIZE;
+  let currentProject = null;
+
+  /* -------- before/after slider (shared, works for any .ba element) -------- */
+  function setupBeforeAfter(container, beforeSrc, afterSrc){
+    if(!container) return;
+    container.querySelector('.ba-after').innerHTML = `<img src="${afterSrc}" alt="After">`;
+    container.querySelector('.ba-before').innerHTML = `<img src="${beforeSrc}" alt="Before">`;
+    const beforeWrap = container.querySelector('.ba-before');
+    const divider = container.querySelector('.ba-divider');
+    const handle = container.querySelector('.ba-handle');
+
+    function setPos(pct){
+      pct = Math.max(0, Math.min(100, pct));
+      beforeWrap.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      divider.style.left = pct + '%';
+    }
+    function posFromEvent(e){
+      const rect = container.getBoundingClientRect();
+      const clientX = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+      return ((clientX - rect.left) / rect.width) * 100;
+    }
+    let dragging = false;
+    container.addEventListener('pointerdown', e=>{
+      dragging = true;
+      container.setPointerCapture(e.pointerId);
+      setPos(posFromEvent(e));
+    });
+    container.addEventListener('pointermove', e=>{ if(dragging) setPos(posFromEvent(e)); });
+    container.addEventListener('pointerup', ()=> dragging = false);
+    container.addEventListener('pointercancel', ()=> dragging = false);
+
+    handle.parentElement.setAttribute('tabindex','0');
+    handle.parentElement.setAttribute('role','slider');
+    handle.parentElement.setAttribute('aria-label','Drag to compare before and after photos');
+    handle.parentElement.addEventListener('keydown', e=>{
+      const current = parseFloat(divider.style.left) || 50;
+      if(e.key === 'ArrowLeft'){ setPos(current - 5); e.preventDefault(); }
+      if(e.key === 'ArrowRight'){ setPos(current + 5); e.preventDefault(); }
+    });
+
+    setPos(50);
+  }
+
+  /* -------- featured spotlight -------- */
+  function renderSpotlight(){
+    const p = PROJECTS.find(x=>x.id===FEATURED_ID);
+    if(!p) return;
+    document.getElementById('spotlightTitle').textContent = p.title;
+    document.getElementById('spotlightDesc').textContent = p.description;
+    document.getElementById('spotlightLoc').textContent = p.location;
+    document.getElementById('spotlightDur').textContent = p.duration;
+    document.getElementById('spotlightScope').textContent = p.scope;
+    document.getElementById('spotlightBtn').addEventListener('click', ()=> openProject(p.id));
+    setupBeforeAfter(document.getElementById('spotlightBa'), p.before, p.after);
+  }
+
+  /* -------- filter pill counts -------- */
+  function renderCounts(){
+    document.getElementById('countAll').textContent = PROJECTS.length;
+    document.getElementById('countKitchens').textContent = PROJECTS.filter(p=>p.category==='kitchens').length;
+    document.getElementById('countBathrooms').textContent = PROJECTS.filter(p=>p.category==='bathrooms').length;
+    document.getElementById('countBasements').textContent = PROJECTS.filter(p=>p.category==='basements').length;
+    document.getElementById('countOther').textContent = PROJECTS.filter(p=>p.category==='other').length;
+  }
+
+  /* -------- grid rendering -------- */
+  function currentList(){
+    return activeFilter === 'all' ? PROJECTS : PROJECTS.filter(p=>p.category===activeFilter);
+  }
+  function cardHTML(p){
+    return `<div class="proj-card rv" data-id="${p.id}">
+      <div class="proj-photo">
+        <img src="${p.after}" alt="${p.title}" loading="lazy">
+        <div class="proj-ba-badge"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>Before/After</div>
+        <div class="proj-overlay">
+          <span class="proj-cat-tag">${CATEGORY_LABELS[p.category]}</span>
+          <span class="proj-view">View Project <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </div>
+      </div>
+      <div class="proj-info">
+        <h3>${p.title}</h3>
+        <p>${p.location} &middot; ${p.scope}</p>
+      </div>
+    </div>`;
+  }
+  function renderGrid(){
+    const list = currentList();
+    const shown = list.slice(0, visibleCount);
+    const grid = document.getElementById('projGrid');
+    grid.innerHTML = shown.length ? shown.map(cardHTML).join('') : `<div class="proj-empty">No projects in this category yet — check back soon.</div>`;
+
+    [...grid.querySelectorAll('.proj-card')].forEach((card, i)=>{
+      setTimeout(()=> card.classList.add('in'), 40 * i);
+    });
+
+    document.getElementById('gridTitle').textContent = activeFilter === 'all' ? 'All Projects' : CATEGORY_LABELS[activeFilter];
+    document.getElementById('gridCount').textContent = `${list.length} project${list.length !== 1 ? 's' : ''}`;
+    document.getElementById('loadMoreWrap').style.display = visibleCount < list.length ? 'block' : 'none';
+  }
+
+  document.getElementById('loadMoreBtn').addEventListener('click', ()=>{
+    visibleCount += PAGE_SIZE;
+    renderGrid();
+  });
+
+  document.getElementById('projGrid').addEventListener('click', e=>{
+    const card = e.target.closest('.proj-card');
+    if(card) openProject(card.dataset.id);
+  });
+
+  document.querySelectorAll('.filter-pill').forEach(pill=>{
+    pill.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('on'));
+      pill.classList.add('on');
+      activeFilter = pill.dataset.filter;
+      visibleCount = PAGE_SIZE;
+      history.replaceState(null, '', activeFilter === 'all' ? location.pathname : `#${activeFilter}`);
+      renderGrid();
+    });
+  });
+
+  /* -------- project modal -------- */
+  const modal = document.getElementById('projectModal');
+  const modalGallery = document.getElementById('modalGallery');
+
+  function openProject(id){
+    const p = PROJECTS.find(x=>x.id===id);
+    if(!p) return;
+    currentProject = p;
+    document.getElementById('modalTag').textContent = CATEGORY_LABELS[p.category];
+    document.getElementById('modalTitleText').textContent = p.title;
+    document.getElementById('modalLoc').textContent = p.location;
+    document.getElementById('modalDur').textContent = p.duration;
+    document.getElementById('modalScope').textContent = p.scope;
+    setupBeforeAfter(document.getElementById('modalBa'), p.before, p.after);
+    modalGallery.innerHTML = p.gallery.map((src,i)=>`<div class="gallery-thumb" data-i="${i}"><img src="${src}" alt="${p.title} photo ${i+1}" loading="lazy"></div>`).join('');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeProject(){
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modalCloseBtn').addEventListener('click', closeProject);
+  modal.addEventListener('click', e=>{ if(e.target === modal) closeProject(); });
+  modalGallery.addEventListener('click', e=>{
+    const thumb = e.target.closest('.gallery-thumb');
+    if(thumb) openLightbox(currentProject.gallery, Number(thumb.dataset.i));
+  });
+
+  /* -------- fullscreen lightbox -------- */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCounter = document.getElementById('lightboxCounter');
+  let lbImages = [], lbIndex = 0;
+
+  function openLightbox(images, index){
+    lbImages = images; lbIndex = index;
+    updateLightbox();
+    lightbox.classList.add('open');
+  }
+  function updateLightbox(){
+    lightboxImg.src = lbImages[lbIndex];
+    lightboxCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  }
+  function lbNext(){ lbIndex = (lbIndex + 1) % lbImages.length; updateLightbox(); }
+  function lbPrev(){ lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; updateLightbox(); }
+  function closeLightbox(){ lightbox.classList.remove('open'); }
+
+  document.getElementById('lightboxNext').addEventListener('click', lbNext);
+  document.getElementById('lightboxPrev').addEventListener('click', lbPrev);
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e=>{ if(e.target === lightbox) closeLightbox(); });
+
+  let lbTouchStartX = null;
+  lightboxImg.addEventListener('pointerdown', e=>{ lbTouchStartX = e.clientX; });
+  lightboxImg.addEventListener('pointerup', e=>{
+    if(lbTouchStartX === null) return;
+    const delta = e.clientX - lbTouchStartX;
+    if(Math.abs(delta) > 50){ delta > 0 ? lbPrev() : lbNext(); }
+    lbTouchStartX = null;
+  });
+
+  document.addEventListener('keydown', e=>{
+    if(lightbox.classList.contains('open')){
+      if(e.key === 'Escape') closeLightbox();
+      if(e.key === 'ArrowRight') lbNext();
+      if(e.key === 'ArrowLeft') lbPrev();
+    } else if(modal.classList.contains('open') && e.key === 'Escape'){
+      closeProject();
+    }
+  });
+
+  /* -------- init -------- */
+  renderCounts();
+  renderSpotlight();
+
+  (function initFilterFromHash(){
+    const hash = location.hash.replace('#','');
+    const valid = Object.keys(CATEGORY_LABELS);
+    activeFilter = valid.includes(hash) ? hash : 'all';
+    document.querySelectorAll('.filter-pill').forEach(b=>{
+      b.classList.toggle('on', b.dataset.filter === activeFilter);
+    });
+  })();
+  renderGrid();
+
+  const io = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.trust-strip .rv, .spotlight .rv, .cta-band .rv').forEach(x=>io.observe(x));
+
+  document.documentElement.style.setProperty('--header-h', document.getElementById('siteHeader').offsetHeight + 'px');
+  window.addEventListener('resize', ()=>{
+    document.documentElement.style.setProperty('--header-h', document.getElementById('siteHeader').offsetHeight + 'px');
+  });
+
+  (function(){
+    const toggle = document.getElementById('navToggle');
+    const nav = document.getElementById('mainNav');
+    if (!toggle || !nav) return;
+    toggle.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    nav.querySelectorAll('#navLinks a').forEach(a=>{
+      a.addEventListener('click', ()=>{
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', (e)=>{
+      if (nav.classList.contains('open') && !nav.contains(e.target)) {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
+  (function(){
+    const targets = [document.getElementById('siteHeader'), document.getElementById('mainNav')].filter(Boolean);
+    if (!targets.length) return;
+    let lastY = window.scrollY;
+    let ticking = false;
+    function onScroll(){
+      const y = window.scrollY;
+      if (y < 80) {
+        targets.forEach(t=>t.classList.remove('hide'));
+      } else if (y > lastY + 4) {
+        targets.forEach(t=>t.classList.add('hide'));
+      } else if (y < lastY - 4) {
+        targets.forEach(t=>t.classList.remove('hide'));
+      }
+      lastY = y;
+      ticking = false;
+    }
+    window.addEventListener('scroll', ()=>{
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    });
+  })();
+</script>
+
+</body>
+</html>
