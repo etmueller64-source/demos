@@ -34,6 +34,46 @@
   .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);background:transparent;}
   .btn-gold:hover{background:var(--gold);color:var(--bg);}
 
+  /* -------- 20th anniversary ribbon -------- */
+  .anniv-ribbon{background:linear-gradient(90deg,var(--gold-soft),var(--gold));color:var(--bg);}
+  .anniv-ribbon .wrap{display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 32px;font-size:12.5px;font-weight:700;letter-spacing:0.03em;text-align:center;flex-wrap:wrap;}
+  .anniv-ribbon svg{width:14px;height:14px;stroke:var(--bg);fill:none;stroke-width:2;flex:none;}
+  .anniv-ribbon a{text-decoration:underline;text-underline-offset:2px;}
+
+  /* -------- nav "Home" dropdown -------- */
+  .nav-drop{position:relative;}
+  .nav-drop-trigger{display:flex;align-items:stretch;}
+  .nav-drop-trigger a{padding-right:8px;}
+  .care-btn{background:none;border:none;color:var(--ink-soft);padding:0 22px 0 4px;display:flex;align-items:center;cursor:pointer;}
+  .care-btn:hover{color:var(--gold-soft);}
+  .nav-drop .care{width:9px;height:9px;stroke:currentColor;fill:none;stroke-width:2.5;transition:transform .2s;}
+  .nav-drop-menu{position:absolute;top:100%;left:0;min-width:210px;background:var(--surface);border:1px solid var(--line);border-radius:0 0 6px 6px;box-shadow:0 18px 36px rgba(0,0,0,0.4);padding:6px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s ease;z-index:50;}
+  .nav-drop-menu a{display:block;padding:12px 16px;font-size:14px;text-transform:none;letter-spacing:0.01em;font-weight:600;border-bottom:none;color:var(--ink-soft);border-radius:4px;}
+  .nav-drop-menu a:hover{background:rgba(201,162,39,0.12);color:var(--gold-soft);}
+  .nav-drop:hover .nav-drop-menu,.nav-drop.open .nav-drop-menu{opacity:1;visibility:visible;transform:translateY(0);}
+  .nav-drop:hover .care,.nav-drop.open .care{transform:rotate(180deg);}
+  @media(max-width:900px){ .nav-drop-menu{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;background:transparent;display:none;padding:0 0 0 18px;} .nav-drop.open .nav-drop-menu{display:block;} .nav-drop-trigger{width:100%;} .nav-drop-trigger a{flex:1;padding-right:16px;} .care-btn{padding:15px 6vw;border-bottom:1px solid var(--line);} }
+  @media(max-width:700px){ .nav-drop-menu{padding:0;} .nav-drop-menu a{padding:13px 6vw 13px 10vw;border-bottom:1px solid var(--line);} }
+
+  /* -------- video showcase -------- */
+  .video-section{background:var(--surface);border-bottom:1px solid var(--line);}
+  .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .video-card{position:relative;display:block;aspect-ratio:16/9;border-radius:10px;overflow:hidden;cursor:pointer;background:var(--bg);border:1px solid var(--line);box-shadow:0 14px 30px rgba(0,0,0,0.28);transition:transform .25s ease,box-shadow .25s ease;}
+  .video-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+  .video-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .video-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 40%,rgba(20,17,15,0.85) 100%);}
+  .video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(243,239,230,0.94);display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .2s ease;}
+  .video-card:hover .video-play{transform:translate(-50%,-50%) scale(1.08);}
+  .video-play svg{width:22px;height:22px;fill:var(--bg);stroke:none;margin-left:3px;}
+  .video-title{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;font-size:14px;font-weight:600;color:#fff;}
+  @media(max-width:860px){ .video-grid{grid-template-columns:1fr;} }
+  .video-modal{position:fixed;inset:0;background:rgba(10,9,8,0.92);z-index:200;display:none;align-items:center;justify-content:center;padding:5vh 4vw;}
+  .video-modal.open{display:flex;}
+  .video-modal-inner{position:relative;width:100%;max-width:960px;aspect-ratio:16/9;background:#000;}
+  .video-modal-inner iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+  .video-modal-close{position:absolute;top:-44px;right:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .video-modal-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+
   nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
   nav.main.hide{transform:translateY(-100%);}
 
@@ -231,6 +271,14 @@
 </head>
 <body>
 
+<div class="anniv-ribbon">
+  <div class="wrap">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg>
+    Celebrating 20 Years of Craftsmanship — 2006–2026
+    <a href="index.html#anniversary">See our story</a>
+  </div>
+</div>
+
 <div class="util-bar">
   <div class="wrap util-row">
     <div class="util-links">
@@ -244,7 +292,7 @@
 <header id="siteHeader">
   <div class="wrap header-row">
     <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
-    <a class="btn btn-primary" href="#estimate">Free Estimate</a>
+    <a class="btn btn-primary" href="contact.html">Free Estimate</a>
     <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
@@ -252,13 +300,20 @@
 </header>
 <nav class="main" id="mainNav">
   <div class="wrap" id="navLinks">
-    <a href="index.html">Home</a>
-    <a href="#">About Us</a>
-    <a href="#">Services</a>
+    <div class="nav-drop" id="homeDrop">
+      <span class="nav-drop-trigger">
+        <a href="index.html">Home</a>
+        <button type="button" class="care-btn" id="homeDropToggle" aria-label="Toggle Home menu" aria-expanded="false"><svg class="care" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </span>
+      <div class="nav-drop-menu">
+        <a href="index.html#about">About Us</a>
+        <a href="index.html#testimonials">Testimonials</a>
+      </div>
+    </div>
+    <a href="services.html">Services</a>
     <a href="portfolio.html" class="on">Portfolio</a>
-    <a href="#">Community</a>
-    <a href="#">Testimonials</a>
-    <a href="#">Contact Us</a>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact Us</a>
   </div>
 </nav>
 
@@ -278,7 +333,7 @@
     </div>
     <div class="trust-item">
       <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/></svg></div>
-      <b>18</b><span>Years in Business</span>
+      <b>20</b><span>Years in Business</span>
     </div>
     <div class="trust-item">
       <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
@@ -288,6 +343,38 @@
       <div class="trust-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9C.7 7.7 2 4 5.5 4c2 0 3.5 1.2 4.5 2.7C11 5.2 12.5 4 14.5 4 18 4 19.3 7.7 21.5 11 19 15.6 12 20 12 20z"/></svg></div>
       <b>100%</b><span>Client Satisfaction</span>
     </div>
+  </div>
+</div>
+
+<section class="video-section">
+  <div class="wrap section-head rv" style="max-width:640px;margin:0 auto 46px;text-align:center;">
+    <span class="section-badge">See It In Action</span>
+    <h2 style="margin-top:18px;font-size:clamp(26px,3.4vw,34px);">Real client project walkthroughs</h2>
+    <p style="color:var(--ink-soft);margin-top:12px;">No stock footage — these are actual Lifestyles Home Creations projects, in our clients' own words.</p>
+  </div>
+  <div class="wrap video-grid rv">
+    <div class="video-card" data-video="Jnws7_i38qM" data-title="Karen&#8217;s Basement">
+      <img src="https://img.youtube.com/vi/Jnws7_i38qM/hqdefault.jpg" alt="Karen's Basement project video" loading="lazy">
+      <div class="video-play"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg></div>
+      <div class="video-title">Karen&rsquo;s Basement</div>
+    </div>
+    <div class="video-card" data-video="zoSl9wD4kMQ" data-title="Satyha&#8217;s Basement">
+      <img src="https://img.youtube.com/vi/zoSl9wD4kMQ/hqdefault.jpg" alt="Satyha's Basement project video" loading="lazy">
+      <div class="video-play"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg></div>
+      <div class="video-title">Satyha&rsquo;s Basement</div>
+    </div>
+    <div class="video-card" data-video="SKrx9zqv4K4" data-title="George&#8217;s Basement">
+      <img src="https://img.youtube.com/vi/SKrx9zqv4K4/hqdefault.jpg" alt="George's Basement project video" loading="lazy">
+      <div class="video-play"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg></div>
+      <div class="video-title">George&rsquo;s Basement</div>
+    </div>
+  </div>
+</section>
+
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" id="videoModalClose" aria-label="Close video"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <iframe id="videoModalFrame" src="" title="Project video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
 </div>
 
@@ -325,17 +412,18 @@
     </div>
     <div>
       <h4>Explore</h4>
-      <a href="index.html">Home</a>
-      <a href="#">About Us</a>
-      <a href="#">Services</a>
+      <a href="index.html#about">About Us</a>
+      <a href="services.html">Services</a>
       <a href="portfolio.html">Portfolio</a>
-      <a href="#">Testimonials</a>
+      <a href="community.html">Community</a>
+      <a href="index.html#testimonials">Testimonials</a>
+      <a href="contact.html">Contact Us</a>
     </div>
     <div>
       <h4>Contact</h4>
       <a href="tel:4168172929">416-817-2929</a>
       <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
-      <a href="#">Facebook</a>
+      <a href="https://www.facebook.com/pages/Lifestyles-Home-Creations-Inc/323501164428271" target="_blank" rel="noopener">Facebook</a>
     </div>
   </div>
   <div class="foot-bottom">Copyright &copy; 2026 Lifestyles Home Creations Inc. All Rights Reserved.</div>
@@ -642,6 +730,53 @@
     document.getElementById('cntOther').textContent = categoryPool('other').length;
     document.getElementById('cntFullJobs').textContent = JOBS.length;
   }
+
+  /* -------- video showcase modal -------- */
+  (function(){
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoModalFrame');
+    const closeBtn = document.getElementById('videoModalClose');
+    if(!modal) return;
+    function open(id){
+      frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+      modal.classList.add('open');
+    }
+    function close(){
+      modal.classList.remove('open');
+      frame.src = '';
+    }
+    document.querySelectorAll('.video-card').forEach(card=>{
+      card.addEventListener('click', ()=> open(card.dataset.video));
+    });
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', e=>{ if(e.target === modal) close(); });
+    document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && modal.classList.contains('open')) close(); });
+  })();
+
+  /* -------- "Home" nav dropdown (About Us / Testimonials) -------- */
+  (function(){
+    const drop = document.getElementById('homeDrop');
+    const toggle = document.getElementById('homeDropToggle');
+    if (!drop || !toggle) return;
+    toggle.addEventListener('click', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = drop.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e)=>{
+      if (drop.classList.contains('open') && !drop.contains(e.target)) {
+        drop.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    drop.querySelectorAll('.nav-drop-menu a').forEach(a=>{
+      a.addEventListener('click', ()=>{
+        drop.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
 
   renderSidebarCounts();
   window.addEventListener('hashchange', route);
