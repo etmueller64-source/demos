@@ -143,7 +143,7 @@
   .ba-handle{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,0.4);pointer-events:none;}
   .ba-handle svg{width:20px;height:20px;stroke:var(--bg);stroke-width:2;fill:none;}
   .ba-label{position:absolute;bottom:14px;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;background:rgba(20,17,15,0.55);padding:6px 13px;border-radius:999px;pointer-events:none;}
-  .ba-label.before{left:14px;} .ba-label.after{right:14px;}
+  .ba-label.pos-left{left:14px;} .ba-label.pos-right{right:14px;}
   .ba-hint{text-align:center;font-size:11.5px;letter-spacing:0.05em;color:var(--ink-soft);margin-top:12px;}
   .ba-hint svg{width:13px;height:13px;vertical-align:-2px;stroke:var(--gold-soft);fill:none;stroke-width:2;}
 
@@ -431,18 +431,23 @@
 
   const contentEl = document.getElementById('portfolioContent');
 
-  /* -------- before/after slider (shared) -------- */
+  /* -------- before/after slider (shared) --------
+     The "before" photo sits as the full-size static background.
+     The "after" photo sits in the wipe layer on top, clipped to
+     the left edge; swiping/dragging right grows that clipped
+     region, progressively revealing the after photo over the
+     before photo underneath. */
   function setupBeforeAfter(container, beforeSrc, afterSrc){
     if(!container) return;
-    container.querySelector('.ba-after').innerHTML = `<img src="${afterSrc}" alt="After">`;
-    container.querySelector('.ba-before').innerHTML = `<img src="${beforeSrc}" alt="Before">`;
-    const beforeWrap = container.querySelector('.ba-before');
+    container.querySelector('.ba-after').innerHTML = `<img src="${beforeSrc}" alt="Before">`;
+    container.querySelector('.ba-before').innerHTML = `<img src="${afterSrc}" alt="After">`;
+    const wipeWrap = container.querySelector('.ba-before');
     const divider = container.querySelector('.ba-divider');
     const handle = container.querySelector('.ba-handle');
 
     function setPos(pct){
       pct = Math.max(0, Math.min(100, pct));
-      beforeWrap.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      wipeWrap.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
       divider.style.left = pct + '%';
     }
     function posFromEvent(e){
@@ -462,14 +467,14 @@
 
     handle.parentElement.setAttribute('tabindex','0');
     handle.parentElement.setAttribute('role','slider');
-    handle.parentElement.setAttribute('aria-label','Drag to compare before and after photos');
+    handle.parentElement.setAttribute('aria-label','Swipe right to reveal the after photo');
     handle.parentElement.addEventListener('keydown', e=>{
-      const current = parseFloat(divider.style.left) || 50;
+      const current = parseFloat(divider.style.left) || 0;
       if(e.key === 'ArrowLeft'){ setPos(current - 5); e.preventDefault(); }
       if(e.key === 'ArrowRight'){ setPos(current + 5); e.preventDefault(); }
     });
 
-    setPos(50);
+    setPos(0);
   }
 
   /* -------- fullscreen lightbox -------- */
@@ -582,12 +587,12 @@
         <div class="ba" id="jobBa">
           <div class="ba-after"></div>
           <div class="ba-before"></div>
-          <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg></div></div>
-          <span class="ba-label before">Before</span>
-          <span class="ba-label after">After</span>
+          <div class="ba-divider"><div class="ba-handle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 4 17 12 10 20"/></svg></div></div>
+          <span class="ba-label pos-left">After</span>
+          <span class="ba-label pos-right">Before</span>
         </div>
       </div>
-      <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 4 2 12 8 20"/><polyline points="16 4 22 12 16 20"/></svg>&nbsp; Drag to compare before &amp; after</p>
+      <p class="ba-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="12 5 19 12 12 19"/></svg>&nbsp; Swipe right to reveal the after photo</p>
       <div class="job-gallery-head">Full Photo Gallery</div>
       <div class="job-gallery" id="jobGallery"></div>
     `;
