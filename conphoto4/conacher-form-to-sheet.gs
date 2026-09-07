@@ -1,11 +1,8 @@
 /**
  * Conacher Photography — Form → "Website Data" sheet bridge
  * ============================================================
- * Install this as an installable "On form submit" trigger on the FORM
- * itself (Form editor → ⋮ → Script editor), not the spreadsheet. It needs
- * to be an installable trigger (Triggers → + Add Trigger → onFormSubmit →
- * From form → On form submit) rather than the simple built-in trigger,
- * because setting Drive file permissions requires full authorization.
+ * This script must live on the FORM (Form editor → ⋮ menu → Script editor),
+ * not the spreadsheet — see the wiring steps below for why.
  *
  * What it does on every submission:
  *   1. Reads "What are you editing?" to figure out which of the 4 branches
@@ -20,10 +17,9 @@
  *      column shape every page's JS already expects:
  *      Timestamp | Page | Section | Name | Label | Cover Photo | Album Photos | Story
  *
- * "Adding to Carousel Group" isn't built out in the Form yet (per Eric) —
- * the branch below is a stub that just logs and exits cleanly so a
- * submission there never throws. Fill in ADD_TO_CAROUSEL_TITLES once that
- * section exists.
+ * "Adding to Carousel Group" isn't built out in the Form yet — that branch
+ * below just logs and exits cleanly so a submission there never throws.
+ * Mirror the ROUTE_NEW_CAROUSEL block once it exists.
  */
 
 // ---- Sheet destination ----------------------------------------------------
@@ -32,19 +28,19 @@ const DATA_SHEET_NAME = 'Website Data';
 // ---- Exact question titles, copied from the Form ---------------------------
 const Q_ROUTER = 'What are you editing?';
 
-const Q_COLLECTION_NAME   = 'Whats the name of the collection?';
-const Q_COLLECTION_STORY  = 'A few words on the photo (location, setting, etc..)';
-const Q_COLLECTION_COVER  = 'Cover Photo';           // shared title, disambiguated by section below
-const Q_COLLECTION_PHOTOS = 'Photos in the collection';
+const Q_COLLECTION_NAME     = 'Whats the name of the collection?';
+const Q_COLLECTION_STORY    = 'A few words on the photo (location, setting, etc..)';
+const Q_COLLECTION_COVER    = 'Cover Photo';           // shared title, disambiguated by branch below
+const Q_COLLECTION_PHOTOS   = 'Photos in the collection';
 const Q_COLLECTION_OVERFLOW = 'If more than 10 photos';
 
 const Q_CAROUSEL_NAME   = 'Name';
 const Q_CAROUSEL_COVER  = 'Cover Photo';
 const Q_CAROUSEL_PHOTOS = 'Photos in the group';
 
-const Q_GENRE_WHICH     = 'Which genre?';
-const Q_GENRE_PHOTOS    = 'Upload Photos';
-const Q_GENRE_OVERFLOW  = 'If more than 10 photos';
+const Q_GENRE_WHICH    = 'Which genre?';
+const Q_GENRE_PHOTOS   = 'Upload Photos';
+const Q_GENRE_OVERFLOW = 'If more than 10 photos';
 
 // Router option values as they appear in the dropdown.
 const ROUTE_NEW_COLLECTION = 'New collection';
@@ -52,20 +48,36 @@ const ROUTE_NEW_CAROUSEL   = 'New Carousel Group';
 const ROUTE_ADD_CAROUSEL   = 'Adding to Carousel Group'; // not built out yet
 const ROUTE_ADD_GENRE      = 'Adding to Genre';
 
+// ---- Resolves the linked response spreadsheet, regardless of container ----
+// SpreadsheetApp.getActiveSpreadsheet() ONLY works in a script bound to a
+// Sheet. This script is bound to the Form, so that call would return
+// nothing here — going through the Form's destination ID works no matter
+// which container the script lives in.
+function getDataSpreadsheet() {
+  const form = FormApp.getActiveForm();
+  if (!form) {
+    throw new Error('This script isn\'t bound to a Form. Open it from the FORM editor (⋮ menu → Script editor), not from the Sheet.');
+  }
+  const destId = form.getDestinationId();
+  if (!destId) {
+    throw new Error('This Form has no linked response Spreadsheet yet. In the Form, go to Responses → click the green Sheets icon → link/create one, then try again.');
+  }
+  return SpreadsheetApp.openById(destId);
+}
+
 /**
- * Manual test helper — run THIS from the editor's function picker (not
- * onFormSubmit itself) to test the script without submitting a real
- * response every time. It grabs the most recent actual response from the
- * linked Form and runs it through onFormSubmit exactly like a real
- * trigger would, so e.response is a real object instead of undefined.
+ * Manual test helper — run THIS from the function picker (▶ dropdown at
+ * the top of the editor), not onFormSubmit itself, to test without
+ * submitting a real response every time. It grabs your most recent real
+ * response and runs it through the exact same code path.
  *
- * (Running onFormSubmit directly with ▶ Run will always throw "Cannot
- * read properties of undefined (reading 'response')" — Apps Script
- * doesn't invent a fake event object for you; only an actual submission,
- * via the installed trigger, does that.)
+ * (Running onFormSubmit directly always throws "Cannot read properties of
+ * undefined (reading 'response')" — Apps Script doesn't invent a fake
+ * event object; only a real submission via the installed trigger does.)
  */
 function testWithLatestResponse() {
-  const form = FormApp.getActiveForm(); // only works if this script is bound to the Form itself
+  const form = FormApp.getActiveForm();
+  if (!form) { Logger.log('Not bound to a Form — open this script from the Form editor, not the Sheet.'); return; }
   const responses = form.getResponses();
   if (!responses.length) { Logger.log('No responses on this form yet — submit one first.'); return; }
   const latest = responses[responses.length - 1];
@@ -91,6 +103,8 @@ function onFormSubmit(e) {
 
     const route = getText(Q_ROUTER);
     const timestamp = e.response.getTimestamp();
+
+    Logger.log('Routing on: "' + route + '"');
 
     let row = null; // {page, section, name, label, cover, album, story}
 
@@ -141,11 +155,12 @@ function onFormSubmit(e) {
       };
 
     } else {
-      Logger.log('Unrecognized "What are you editing?" value: ' + route);
+      Logger.log('Unrecognized "What are you editing?" value: "' + route + '" — check it matches ROUTE_* exactly (including capitalization).');
       return;
     }
 
     appendRow(timestamp, row);
+    Logger.log('Row appended OK: ' + JSON.stringify(row));
 
   } catch (err) {
     Logger.log('onFormSubmit error: ' + err.message + '\n' + err.stack);
@@ -157,9 +172,9 @@ function onFormSubmit(e) {
 
 // ---- Writes one normalized row into the Website Data tab -------------------
 function appendRow(timestamp, row) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getDataSpreadsheet();
   const sheet = ss.getSheetByName(DATA_SHEET_NAME);
-  if (!sheet) throw new Error('No sheet named "' + DATA_SHEET_NAME + '" found — create it first with the header row.');
+  if (!sheet) throw new Error('No tab named "' + DATA_SHEET_NAME + '" found in the response spreadsheet — run runSetup() once to create it.');
 
   // Column order must match the header row already on the sheet:
   // Timestamp | Page | Section | Name | Label | Cover Photo | Album Photos | Story
@@ -193,17 +208,20 @@ function driveFileToPublicUrl(fileId) {
 }
 
 /**
- * One-time setup helper — run this once manually (▶ in the Script editor,
- * with runSetup selected) to create the Website Data tab with the correct
- * header row if it doesn't already exist. Safe to run again later; it
- * won't duplicate the tab or touch existing rows.
+ * One-time setup helper — run this once manually (pick runSetup in the
+ * function dropdown, then ▶ Run) to create the Website Data tab with the
+ * correct header row if it doesn't exist yet. Safe to run again later —
+ * it won't duplicate the tab or touch existing rows.
  */
 function runSetup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = getDataSpreadsheet();
   let sheet = ss.getSheetByName(DATA_SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(DATA_SHEET_NAME);
     sheet.appendRow(['Timestamp', 'Page', 'Section', 'Name', 'Label', 'Cover Photo', 'Album Photos', 'Story']);
     sheet.setFrozenRows(1);
+    Logger.log('Created "' + DATA_SHEET_NAME + '" tab with header row.');
+  } else {
+    Logger.log('"' + DATA_SHEET_NAME + '" tab already exists — nothing to do.');
   }
 }
