@@ -120,6 +120,9 @@
   .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C9C2B4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:14px;}
   .contact-form .btn{width:100%;justify-content:center;margin-top:4px;}
   .form-note{font-size:12px;color:var(--ink-soft);margin-top:14px;text-align:center;}
+  /* Honeypot: present in the DOM (so simple bots that fill every field
+     get caught) but hidden from real visitors and screen readers. */
+  .hp-field{position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden;}
   @media(max-width:640px){ .form-row{grid-template-columns:1fr;} }
 
   .form-success{display:none;text-align:center;padding:50px 10px;}
@@ -222,7 +225,9 @@
       <div id="estimateFormWrap">
         <h2>Request a Free Estimate</h2>
         <p>Fields marked <span style="color:var(--gold-soft);">*</span> are required.</p>
-        <form id="estimateForm">
+        <form id="estimateForm" name="estimate" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" data-netlify-recaptcha="true">
+          <input type="hidden" name="form-name" value="estimate">
+          <p class="hp-field" aria-hidden="true"><label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
           <div class="form-row">
             <div class="form-group">
               <label>Full Name <span class="req">*</span></label>
@@ -289,6 +294,7 @@
               <textarea name="message" required placeholder="Room size, what you'd like to change, any inspiration photos you have in mind…"></textarea>
             </div>
           </div>
+          <div data-netlify-recaptcha="true" style="margin-bottom:20px;"></div>
           <button type="submit" class="btn btn-primary">Send My Request</button>
           <p class="form-note">We typically reply within one business day.</p>
         </form>
@@ -421,19 +427,42 @@
     });
   })();
 
-  // NOTE: this form is front-end only for now — it validates and shows a
-  // confirmation, but does not actually send the data anywhere yet.
-  // Wire this up to a backend (e.g. Google Apps Script, matching the
-  // agency's usual pattern) before this goes live.
+  // Netlify Forms: this form has data-netlify="true" plus a matching
+  // hidden form-name field, so Netlify's build bot registers it and
+  // handles submissions automatically once this site is deployed on
+  // Netlify — no custom backend needed. The honeypot field (bot-field)
+  // and data-netlify-recaptcha widget above give Netlify's spam
+  // filtering something to check before a submission is accepted.
+  // NOTE: this form-handling only activates on Netlify's own
+  // infrastructure — it will not work if this site is hosted on
+  // GitHub Pages, Cloudflare Pages, or opened as a local file.
   (function(){
     const form = document.getElementById('estimateForm');
     const formWrap = document.getElementById('estimateFormWrap');
     const success = document.getElementById('formSuccess');
     if (!form) return;
+
+    function encode(data){
+      return Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
+    }
+
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
-      formWrap.style.display = 'none';
-      success.classList.add('show');
+      const data = Object.fromEntries(new FormData(form).entries());
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode(data)
+      })
+        .then(()=>{
+          formWrap.style.display = 'none';
+          success.classList.add('show');
+        })
+        .catch(()=>{
+          alert("Something went wrong sending your request. Please try again, or call us directly at 416-817-2929.");
+        });
     });
   })();
 

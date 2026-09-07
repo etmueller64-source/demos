@@ -112,34 +112,45 @@
   .community-intro p{color:var(--ink-soft);margin-top:14px;font-size:15.5px;}
   @media(max-width:860px){ .community-intro{grid-template-columns:1fr;gap:28px;} .community-intro img{order:-1;} }
 
-  /* -------- cause cards -------- */
-  .cause-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
-  .cause-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 14px 30px rgba(0,0,0,0.22);}
-  .cause-card img{aspect-ratio:16/10;object-fit:cover;width:100%;}
-  .cause-card-body{padding:26px 28px 30px;}
-  .cause-card-body .eyebrow{display:block;margin-bottom:8px;}
-  .cause-card-body h3{font-size:20px;color:var(--gold-soft);}
-  .cause-card-body p{color:var(--ink-soft);font-size:14.5px;margin-top:10px;}
-  @media(max-width:860px){ .cause-grid{grid-template-columns:1fr;} }
+  /* -------- story grid (landing cards) -------- */
+  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .story-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 14px 30px rgba(0,0,0,0.22);transition:transform .25s ease,box-shadow .25s ease;}
+  .story-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+  .story-card img{aspect-ratio:16/10;object-fit:cover;width:100%;}
+  .story-card-body{padding:26px 28px 28px;}
+  .story-card-body .eyebrow{display:block;margin-bottom:8px;}
+  .story-card-body h3{font-size:20px;color:var(--gold-soft);}
+  .story-card-body p{color:var(--ink-soft);font-size:14.5px;margin-top:10px;}
+  .story-read-more{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:12.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--gold-soft);}
+  .story-read-more svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.4;transition:transform .2s ease;}
+  .story-card:hover .story-read-more svg{transform:translateX(3px);}
+  @media(max-width:860px){ .story-grid{grid-template-columns:1fr;} }
 
-  /* -------- video showcase (shared pattern) -------- */
-  .video-section{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-  .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
-  .video-card{position:relative;display:block;aspect-ratio:16/9;border-radius:10px;overflow:hidden;cursor:pointer;background:var(--bg);border:1px solid var(--line);box-shadow:0 14px 30px rgba(0,0,0,0.28);transition:transform .25s ease,box-shadow .25s ease;}
-  .video-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
-  .video-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-  .video-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,15,0) 40%,rgba(20,17,15,0.85) 100%);}
-  .video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(243,239,230,0.94);display:flex;align-items:center;justify-content:center;z-index:2;transition:transform .2s ease;}
-  .video-card:hover .video-play{transform:translate(-50%,-50%) scale(1.08);}
-  .video-play svg{width:22px;height:22px;fill:var(--bg);stroke:none;margin-left:3px;}
-  .video-title{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;font-size:14px;font-weight:600;color:#fff;}
+  /* -------- story detail view -------- */
+  .story-back{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--gold-soft);cursor:pointer;margin-bottom:28px;}
+  .story-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.4;}
+  .story-hero{width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:10px;box-shadow:0 20px 44px rgba(0,0,0,0.3);margin-top:22px;}
+  .story-detail-body{max-width:760px;margin:34px auto 0;}
+  .story-detail-body p{color:var(--ink-soft);font-size:15.5px;margin-top:16px;}
+  .story-detail-body p:first-child{margin-top:0;}
+
+  /* -------- inline video embeds (story detail page) -------- */
+  .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:38px;}
+  .video-embed{border-radius:10px;overflow:hidden;border:1px solid var(--line);box-shadow:0 14px 30px rgba(0,0,0,0.28);background:var(--bg);}
+  .video-embed .frame-wrap{position:relative;aspect-ratio:16/9;}
+  .video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+  .video-embed span{display:block;padding:12px 14px;font-size:13.5px;font-weight:600;color:var(--ink);}
   @media(max-width:860px){ .video-grid{grid-template-columns:1fr;} }
-  .video-modal{position:fixed;inset:0;background:rgba(10,9,8,0.92);z-index:200;display:none;align-items:center;justify-content:center;padding:5vh 4vw;}
-  .video-modal.open{display:flex;}
-  .video-modal-inner{position:relative;width:100%;max-width:960px;aspect-ratio:16/9;background:#000;}
-  .video-modal-inner iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-  .video-modal-close{position:absolute;top:-44px;right:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-  .video-modal-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+
+  /* -------- "more stories" cross-links at bottom of a detail page -------- */
+  .more-stories{margin-top:64px;padding-top:44px;border-top:1px solid var(--line);}
+  .more-stories-head{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:20px;text-align:center;}
+  .more-stories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .more-story-card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:transform .2s ease;}
+  .more-story-card:hover{transform:translateY(-3px);}
+  .more-story-card img{aspect-ratio:16/10;object-fit:cover;width:100%;}
+  .more-story-card span{display:block;padding:14px 16px;font-size:13.5px;font-weight:600;color:var(--ink);}
+  @media(max-width:860px){ .more-stories-grid{grid-template-columns:1fr;} }
 
   .cta-band{background:linear-gradient(160deg,var(--red),var(--red-deep));text-align:center;padding:90px 0;}
   .cta-band h2{color:#fff;}
@@ -226,57 +237,13 @@
 </section>
 
 <section style="padding-top:0;">
-  <div class="wrap cause-grid rv">
-    <div class="cause-card">
-      <img src="images/community-aysc.jpg" alt="Aurora Youth Soccer Club sponsorship">
-      <div class="cause-card-body">
-        <span class="eyebrow">Local Sports</span>
-        <h3>Proud Sponsor of AYSC &amp; the Aurora Jays</h3>
-        <p>We're a proud sponsor of the Aurora Youth Soccer Club and the Aurora Jays. There's nothing better than watching the next generation develop teamwork skills, get some exercise, and just have fun playing the game.</p>
-      </div>
-    </div>
-    <div class="cause-card">
-      <img src="images/community-global.jpg" alt="Shipping containers of donated goods">
-      <div class="cause-card-body">
-        <span class="eyebrow">Global Giving</span>
-        <h3>Helping Communities Overseas</h3>
-        <p>Beyond our own backyard, we've sent full containers of clothing, tools, and food to support communities in poverty-stricken areas around the world — because a home improvement company with the means to help has a reason to.</p>
-      </div>
-    </div>
+  <div class="wrap section-head rv" style="margin-bottom:40px;">
+    <span class="section-badge">Our Stories</span>
+    <h2 style="margin-top:18px;">Twenty years of giving back</h2>
+    <p>Click into any story below for the full picture — photos, videos, and details on how it started.</p>
   </div>
+  <div class="wrap" id="storyContent"></div>
 </section>
-
-<section class="video-section">
-  <div class="wrap section-head rv">
-    <span class="section-badge">Hurricane Sandy Relief</span>
-    <h2 style="margin-top:18px;font-size:clamp(26px,3.4vw,34px);">Rebuilding homes in Staten Island</h2>
-    <p>In October 2012, Hurricane Sandy devastated communities across Staten Island. One member of our team spent two full months on the ground helping rebuild homes for families who had lost almost everything. These are their stories, in their own words.</p>
-  </div>
-  <div class="wrap video-grid rv">
-    <div class="video-card" data-video="HwtWEQbIxmI" data-title="Thea's Story">
-      <img src="https://img.youtube.com/vi/HwtWEQbIxmI/hqdefault.jpg" alt="Thea's Story — Hurricane Sandy relief" loading="lazy">
-      <div class="video-play"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg></div>
-      <div class="video-title">Thea&rsquo;s Story</div>
-    </div>
-    <div class="video-card" data-video="LFzv_DDm-G4" data-title="Pat's Story">
-      <img src="https://img.youtube.com/vi/LFzv_DDm-G4/hqdefault.jpg" alt="Pat's Story — Hurricane Sandy relief" loading="lazy">
-      <div class="video-play"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg></div>
-      <div class="video-title">Pat&rsquo;s Story</div>
-    </div>
-    <div class="video-card" data-video="UfVVURKqix0" data-title="Carl's Story">
-      <img src="https://img.youtube.com/vi/UfVVURKqix0/hqdefault.jpg" alt="Carl's Story — Hurricane Sandy relief" loading="lazy">
-      <div class="video-play"><svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20"/></svg></div>
-      <div class="video-title">Carl&rsquo;s Story</div>
-    </div>
-  </div>
-</section>
-
-<div class="video-modal" id="videoModal">
-  <div class="video-modal-inner">
-    <button class="video-modal-close" id="videoModalClose" aria-label="Close video"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    <iframe id="videoModalFrame" src="" title="Community video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
 
 <div class="cta-band">
   <div class="wrap rv">
@@ -371,28 +338,142 @@
     });
   })();
 
-  (function(){
-    const modal = document.getElementById('videoModal');
-    const frame = document.getElementById('videoModalFrame');
-    const closeBtn = document.getElementById('videoModalClose');
-    if(!modal) return;
-    function open(id){
-      frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-      modal.classList.add('open');
+  /* ===================================================================
+     COMMUNITY STORIES — data + hash-routed grid/detail views, following
+     the same pattern as the Full Jobs router in portfolio.html.
+     =================================================================== */
+  const STORIES = [
+    {
+      id:'christmas-outreach',
+      tag:'Giving Back',
+      title:'Christmas Day Outreach',
+      image:'images/community-giving.jpg',
+      summary:'Every Christmas Day for more than two decades, our team packs and delivers gift bags to Toronto\u2019s homeless and shelters.',
+      body:[
+        'It started small — a handful of gift bags dropped off at a shelter one Christmas morning — and it just never stopped. More than 20 years later, delivering food, clothing, blankets, hats, socks, and gloves to homeless individuals and shelters across Toronto every Christmas Day is as much a part of our year as any renovation.',
+        'It\u2019s not a marketing campaign. Nobody\u2019s taking photos for social media on Christmas morning. It\u2019s just something our team believes in, year after year, whether business is booming or slow.',
+        'We\u2019ve been thanked over the years by organizations including the Salvation Army for showing up reliably, without being asked twice. That kind of relationship matters more to us than any award.'
+      ]
+    },
+    {
+      id:'aysc-aurora-jays',
+      tag:'Local Sports',
+      title:'Sponsor of AYSC & the Aurora Jays',
+      image:'images/community-aysc.jpg',
+      summary:'We\u2019re a proud sponsor of the Aurora Youth Soccer Club and the Aurora Jays, backing local kids on and off the field.',
+      body:[
+        'We\u2019re a proud sponsor of the Aurora Youth Soccer Club (AYSC) and the Aurora Jays baseball club — two organizations that keep hundreds of local kids active, engaged, and part of a team every season.',
+        'There\u2019s nothing better than watching the next generation develop teamwork skills, get some exercise, and just have fun playing the game. Supporting local sports is an easy decision for us: these are the same streets and neighbourhoods where we\u2019ve built our business for 20 years.',
+        'From jerseys to equipment to simply being there on game day, it\u2019s a small way of saying thank you to the community that\u2019s supported Lifestyles Home Creations since 2006.'
+      ]
+    },
+    {
+      id:'hurricane-sandy',
+      tag:'Disaster Relief',
+      title:'Hurricane Sandy Relief',
+      image:'https://img.youtube.com/vi/HwtWEQbIxmI/hqdefault.jpg',
+      summary:'In 2012, a member of our team spent two months in Staten Island helping rebuild homes after Hurricane Sandy.',
+      body:[
+        'In October 2012, Hurricane Sandy tore through communities across the northeastern United States, and Staten Island was hit especially hard — entire neighbourhoods lost power, homes, and in some cases, everything.',
+        'One member of our team packed up and spent two full months on the ground in Staten Island, working alongside local crews to rebuild homes for families who had lost almost everything. It wasn\u2019t a renovation job in the usual sense — there was no client, no invoice, no timeline. Just people who needed help.',
+        'Below are three of the families\u2019 own stories, told in their own words. They\u2019re not easy to watch, but they\u2019re exactly why we went.'
+      ],
+      videos:[
+        { id:'HwtWEQbIxmI', title:'Thea\u2019s Story' },
+        { id:'LFzv_DDm-G4', title:'Pat\u2019s Story' },
+        { id:'UfVVURKqix0', title:'Carl\u2019s Story' }
+      ]
+    },
+    {
+      id:'global-giving',
+      tag:'Global Giving',
+      title:'Helping Communities Overseas',
+      image:'images/community-global.jpg',
+      summary:'We\u2019ve sent full containers of clothing, tools, and food to support communities in poverty-stricken areas overseas.',
+      body:[
+        'Beyond our own backyard, we\u2019ve sent full shipping containers of clothing, tools, and food to support communities in poverty-stricken areas around the world.',
+        'It\u2019s a simple idea: a home improvement company that spends its days making homes better has a responsibility to help where there isn\u2019t a home to improve at all. Every container is packed by our own team, using the same care we\u2019d put into any project.',
+        'We don\u2019t do this for recognition — most of these shipments go out quietly, without a press release. But twenty years in, it\u2019s become as much a part of our identity as any kitchen or basement we\u2019ve built.'
+      ]
     }
-    function close(){
-      modal.classList.remove('open');
-      frame.src = '';
-    }
-    document.querySelectorAll('.video-card').forEach(card=>{
-      card.addEventListener('click', ()=> open(card.dataset.video));
-    });
-    closeBtn.addEventListener('click', close);
-    modal.addEventListener('click', e=>{ if(e.target === modal) close(); });
-    document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && modal.classList.contains('open')) close(); });
-  })();
+  ];
+
+  const contentEl = document.getElementById('storyContent');
+
+  function renderGrid(){
+    if(!contentEl) return;
+    contentEl.innerHTML = `
+      <div class="story-grid">
+        ${STORIES.map(s => `
+          <a class="story-card" href="#story/${s.id}">
+            <img src="${s.image}" alt="${s.title}">
+            <div class="story-card-body">
+              <span class="eyebrow">${s.tag}</span>
+              <h3>${s.title}</h3>
+              <p>${s.summary}</p>
+              <span class="story-read-more">Read the Story <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderDetail(id){
+    const s = STORIES.find(x => x.id === id);
+    if(!s){ location.hash = ''; return; }
+    const others = STORIES.filter(x => x.id !== id);
+    contentEl.innerHTML = `
+      <div class="story-back" id="storyBack"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Community</div>
+      <span class="eyebrow">${s.tag}</span>
+      <h2 style="margin-top:10px;font-size:clamp(28px,3.6vw,40px);">${s.title}</h2>
+      <img class="story-hero" src="${s.image}" alt="${s.title}">
+      <div class="story-detail-body">
+        ${s.body.map(p => `<p>${p}</p>`).join('')}
+      </div>
+      ${s.videos ? `
+        <div class="video-grid">
+          ${s.videos.map(v => `
+            <div class="video-embed">
+              <div class="frame-wrap"><iframe src="https://www.youtube.com/embed/${v.id}?rel=0" title="${v.title}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+              <span>${v.title}</span>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      <div class="more-stories">
+        <div class="more-stories-head">More Stories</div>
+        <div class="more-stories-grid">
+          ${others.map(o => `
+            <a class="more-story-card" href="#story/${o.id}">
+              <img src="${o.image}" alt="${o.title}">
+              <span>${o.title}</span>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    document.getElementById('storyBack').addEventListener('click', ()=>{ location.hash = ''; });
+    window.scrollTo({ top: contentEl.getBoundingClientRect().top + window.scrollY - 100, behavior:'smooth' });
+  }
+
+  function parseHash(){
+    const h = decodeURIComponent(location.hash.replace('#',''));
+    if(h.indexOf('story/') === 0) return { view:'detail', id:h.slice('story/'.length) };
+    return { view:'grid' };
+  }
+
+  function route(){
+    const r = parseHash();
+    if(r.view === 'detail') renderDetail(r.id);
+    else renderGrid();
+  }
+
+  window.addEventListener('hashchange', route);
+  route();
 
   (function(){
+
     const targets = [document.getElementById('siteHeader'), document.getElementById('mainNav')].filter(Boolean);
     if (!targets.length) return;
     let lastY = window.scrollY;

@@ -290,15 +290,26 @@
   @media(max-width:480px){ .anniv-timeline{grid-template-columns:1fr;} }
 
   /* -------- Testimonials (home page section) -------- */
-  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
-  .testi-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:30px 28px;display:flex;flex-direction:column;box-shadow:0 14px 30px rgba(0,0,0,0.22);}
+  .testi-carousel{position:relative;}
+  .testi-track{display:flex;gap:26px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 4px 8px;}
+  .testi-track::-webkit-scrollbar{display:none;}
+  .testi-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:30px 28px;display:flex;flex-direction:column;box-shadow:0 14px 30px rgba(0,0,0,0.22);flex:0 0 calc(33.333% - 17.4px);scroll-snap-align:start;}
+  @media(max-width:860px){ .testi-card{flex:0 0 100%;} }
+  .testi-arrow{position:absolute;top:38%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--gold-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;box-shadow:0 10px 24px rgba(0,0,0,0.32);}
+  .testi-arrow:hover{background:var(--gold);color:var(--bg);}
+  .testi-arrow.prev{left:-22px;} .testi-arrow.next{right:-22px;}
+  .testi-arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+  @media(max-width:1280px){ .testi-arrow.prev{left:6px;} .testi-arrow.next{right:6px;} }
+  @media(max-width:600px){ .testi-arrow{width:36px;height:36px;} .testi-arrow.prev{left:-4px;} .testi-arrow.next{right:-4px;} }
+  .testi-dots{display:flex;justify-content:center;gap:8px;margin-top:30px;}
+  .testi-dot{width:8px;height:8px;border-radius:50%;background:var(--line);cursor:pointer;border:none;padding:0;transition:all .2s;}
+  .testi-dot.active{background:var(--gold-soft);width:22px;border-radius:4px;}
   .testi-quote-mark{font-family:'Playfair Display',serif;font-size:52px;color:var(--gold);line-height:0.6;height:34px;}
   .testi-card p.quote{color:var(--ink-soft);font-size:14.5px;margin-top:6px;flex:1;}
   .testi-stars{display:flex;gap:3px;margin-top:18px;}
   .testi-stars svg{width:14px;height:14px;fill:var(--gold-soft);stroke:none;}
   .testi-name{margin-top:14px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink);font-size:14.5px;}
   .testi-name span{display:block;font-family:inherit;font-weight:400;font-style:italic;color:var(--ink-soft);font-size:12px;margin-top:2px;}
-  @media(max-width:860px){ .testi-grid{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
@@ -506,7 +517,10 @@
     <p>Twenty years of referrals and repeat clients — here's a small sample of the feedback that keeps us going.</p>
     <div class="section-rule"></div>
   </div>
-  <div class="wrap testi-grid rv">
+  <div class="wrap rv" style="position:relative;">
+    <div class="testi-carousel">
+      <button class="testi-arrow prev" id="testiPrev" aria-label="Previous testimonials"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="testi-track" id="testiTrack">
     <div class="testi-card">
       <div class="testi-quote-mark">&ldquo;</div>
       <p class="quote">Our unfinished basement became a luxurious, practical space the whole family actually uses. Quotes and estimates were spot on — we highly recommend them.</p>
@@ -555,6 +569,10 @@
       </div>
       <div class="testi-name">Jen &amp; Steve<span>Kitchen Renovation</span></div>
     </div>
+      </div>
+      <button class="testi-arrow next" id="testiNext" aria-label="Next testimonials"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+    <div class="testi-dots" id="testiDots"></div>
   </div>
 </section>
 
@@ -592,6 +610,71 @@
 </footer>
 
 <script>
+  // Testimonials carousel: native scroll-snap track driven by arrow
+  // buttons + dots, with a gentle autoplay that pauses on hover. Using
+  // scroll-snap (rather than a transform-based slider) means the
+  // responsive 3-visible-desktop / 1-visible-mobile layout falls out of
+  // plain CSS instead of needing JS breakpoint math.
+  (function(){
+    const track = document.getElementById('testiTrack');
+    const prevBtn = document.getElementById('testiPrev');
+    const nextBtn = document.getElementById('testiNext');
+    const dotsWrap = document.getElementById('testiDots');
+    if(!track) return;
+    const cards = [...track.children];
+
+    function visibleCount(){ return window.innerWidth <= 860 ? 1 : 3; }
+    function pageCount(){ return Math.ceil(cards.length / visibleCount()); }
+    function stepWidth(){
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      return cards[0].getBoundingClientRect().width + gap;
+    }
+    function currentPage(){
+      return Math.round(track.scrollLeft / (stepWidth() * visibleCount())) || 0;
+    }
+    function goToPage(i){
+      track.scrollTo({ left: i * stepWidth() * visibleCount(), behavior:'smooth' });
+    }
+    function step(dir){
+      const pages = pageCount();
+      let p = currentPage() + dir;
+      if(p < 0) p = pages - 1;
+      if(p > pages - 1) p = 0;
+      goToPage(p);
+    }
+    function buildDots(){
+      dotsWrap.innerHTML = '';
+      for(let i=0;i<pageCount();i++){
+        const d = document.createElement('button');
+        d.className = 'testi-dot';
+        d.type = 'button';
+        d.setAttribute('aria-label', 'Go to testimonials page ' + (i+1));
+        d.addEventListener('click', ()=> goToPage(i));
+        dotsWrap.appendChild(d);
+      }
+      updateDots();
+    }
+    function updateDots(){
+      const p = currentPage();
+      [...dotsWrap.children].forEach((d,i)=> d.classList.toggle('active', i===p));
+    }
+
+    prevBtn.addEventListener('click', ()=> step(-1));
+    nextBtn.addEventListener('click', ()=> step(1));
+    track.addEventListener('scroll', ()=>{
+      clearTimeout(track._dotTimer);
+      track._dotTimer = setTimeout(updateDots, 90);
+    });
+    window.addEventListener('resize', buildDots);
+    buildDots();
+
+    let timer;
+    function restart(){ clearInterval(timer); timer = setInterval(()=> step(1), 6000); }
+    track.addEventListener('mouseenter', ()=> clearInterval(timer));
+    track.addEventListener('mouseleave', restart);
+    restart();
+  })();
+
   function initSlider(root){
     const slides = [...root.querySelectorAll('.hero-slide')];
     const dots = [...root.querySelectorAll('.hero-dot')];
