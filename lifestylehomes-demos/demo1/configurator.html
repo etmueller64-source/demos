@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Your Space — Lifestyles Home Creations Inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root{
+    --bg:#1E1C1B;
+    --surface:#2A2725;
+    --ink:#F3EFE6;
+    --ink-soft:#C9C2B4;
+    --red:#8F0000;
+    --red-deep:#6B0000;
+    --gold:#CCBC1A;
+    --gold-soft:#DDCF53;
+    --line:rgba(243,239,230,0.12);
+    --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Playfair Display',serif;line-height:1.65;}
+  h1,h2,h3{font-family:'Playfair Display',serif;font-weight:700;line-height:1.15;margin:0;color:var(--ink);}
+  p{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 32px;}
+  .eyebrow{font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 32px;border-radius:2px;font-size:13.5px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;transition:all .22s ease;border:none;cursor:pointer;}
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:var(--red-deep);}
+  .btn-gold{border:1.5px solid var(--gold);color:var(--gold-soft);background:transparent;}
+  .btn-gold:hover{background:var(--gold);color:var(--bg);}
+
+  /* -------- 20th anniversary ribbon -------- */
+  .anniv-ribbon{background:linear-gradient(90deg,var(--gold-soft),var(--gold));color:var(--bg);}
+  .anniv-ribbon .wrap{display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 32px;font-size:12.5px;font-weight:700;letter-spacing:0.03em;text-align:center;flex-wrap:wrap;}
+  .anniv-ribbon svg{width:14px;height:14px;stroke:var(--bg);fill:none;stroke-width:2;flex:none;}
+  .anniv-ribbon a{text-decoration:underline;text-underline-offset:2px;}
+
+  /* -------- nav "Home" dropdown -------- */
+  .nav-drop{position:relative;}
+  .nav-drop-trigger{display:flex;align-items:stretch;}
+  .nav-drop-trigger a{padding-right:8px;}
+  .care-btn{background:none;border:none;color:var(--ink-soft);padding:0 22px 0 4px;display:flex;align-items:center;cursor:pointer;}
+  .care-btn:hover{color:var(--gold-soft);}
+  .nav-drop .care{width:9px;height:9px;stroke:currentColor;fill:none;stroke-width:2.5;transition:transform .2s;}
+  .nav-drop-menu{position:absolute;top:100%;left:0;min-width:210px;background:var(--surface);border:1px solid var(--line);border-radius:0 0 6px 6px;box-shadow:0 18px 36px rgba(0,0,0,0.4);padding:6px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s ease;z-index:50;}
+  .nav-drop-menu a{display:block;padding:12px 16px;font-size:14px;text-transform:none;letter-spacing:0.01em;font-weight:600;border-bottom:none;color:var(--ink-soft);border-radius:4px;}
+  .nav-drop-menu a:hover{background:rgba(201,162,39,0.12);color:var(--gold-soft);}
+  .nav-drop:hover .nav-drop-menu,.nav-drop.open .nav-drop-menu{opacity:1;visibility:visible;transform:translateY(0);}
+  .nav-drop:hover .care,.nav-drop.open .care{transform:rotate(180deg);}
+  @media(max-width:900px){ .nav-drop-menu{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;background:transparent;display:none;padding:0 0 0 18px;} .nav-drop.open .nav-drop-menu{display:block;} .nav-drop-trigger{width:100%;} .nav-drop-trigger a{flex:1;padding-right:16px;} .care-btn{padding:15px 6vw;border-bottom:1px solid var(--line);} }
+  @media(max-width:700px){ .nav-drop-menu{padding:0;} .nav-drop-menu a{padding:13px 6vw 13px 10vw;border-bottom:1px solid var(--line);} }
+
+  nav.main{position:sticky;top:0;z-index:40;transition:transform .35s ease;}
+  nav.main.hide{transform:translateY(-100%);}
+
+  .util-bar{background:var(--red);padding:9px 0;}
+  .util-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(255,255,255,0.92);}
+  .util-row a{display:inline-flex;align-items:center;gap:6px;}
+  .util-links{display:flex;gap:26px;}
+  @media(max-width:760px){ .util-row{flex-direction:column;gap:6px;text-align:center;} }
+  @media(max-width:700px){ .util-links{display:none;} .util-bar{padding:7px 0;} }
+
+  header{position:relative;background:linear-gradient(180deg, rgba(20,17,15,0.32), rgba(20,17,15,0.58)),url("images/header-hardwood.jpg");background-repeat:no-repeat, repeat-x;background-position:center, left center;background-size:cover, auto 100%;}
+  .header-row{display:flex;align-items:center;justify-content:space-between;padding-top:22px;padding-bottom:22px;gap:16px;}
+  .site-logo{height:84px;width:auto;display:block;}
+  .header-row .btn-primary{margin-left:auto;}
+  .nav-toggle{display:none;}
+
+  nav.main{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  nav.main .wrap{display:flex;gap:2px;}
+  nav.main a{padding:16px 22px;font-family:'Playfair Display',serif;font-size:16px;letter-spacing:0.04em;text-transform:uppercase;font-weight:700;color:var(--ink-soft);border-bottom:2px solid transparent;transition:all .2s;}
+  nav.main a:hover,nav.main a.on{color:var(--gold-soft);border-bottom-color:var(--gold);}
+  @media(max-width:900px){ nav.main .wrap{overflow-x:auto;} nav.main a{padding:14px 16px;white-space:nowrap;} }
+
+  @media(max-width:700px){
+    header{position:sticky;top:0;z-index:41;transition:transform .35s ease;}
+    header.hide{transform:translateY(-100%);}
+    nav.main{top:var(--header-h, 80px);}
+    nav.main.hide{transform:translateY(calc(-100% - var(--header-h, 80px)));}
+    .header-row{padding-top:12px;padding-bottom:12px;gap:10px;flex-wrap:wrap;row-gap:10px;}
+    .site-logo{height:44px;}
+    .header-row .btn-primary{padding:9px 13px;font-size:10.5px;}
+    .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:4px;flex:none;padding:4px 2px;background:none;border:none;cursor:pointer;}
+    .nav-toggle span{display:block;height:1px;width:20px;background:var(--gold-soft);}
+    nav.main .wrap{display:none;flex-direction:column;gap:0;overflow-x:visible;max-width:none;padding:0;}
+    nav.main.open .wrap{display:flex;}
+    nav.main a{width:100%;box-sizing:border-box;padding:15px 6vw;border-bottom:1px solid var(--line);border-left:3px solid transparent;white-space:normal;}
+    nav.main a:hover,nav.main a.on{border-bottom-color:var(--line);border-left-color:var(--gold);background:rgba(255,255,255,0.03);}
+  }
+
+  section{padding:88px 0;}
+  .section-badge{display:inline-block;background:var(--gold);color:var(--bg);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:7px 18px;border-radius:999px;}
+
+  .page-banner{position:relative;text-align:center;padding:100px 0 70px;background:linear-gradient(180deg, rgba(20,17,15,0.62), rgba(20,17,15,0.82)),url("images/configurator-banner.jpg");background-size:cover;background-position:center;}
+  .page-banner h1{font-size:clamp(34px,5vw,52px);margin-top:16px;}
+  .page-banner p{color:var(--ink-soft);max-width:600px;margin:16px auto 0;font-size:16px;}
+  .crumbs{font-size:12.5px;letter-spacing:0.05em;color:var(--ink-soft);}
+  .crumbs a{color:var(--gold-soft);}
+  .crumbs .sep{margin:0 8px;color:var(--ink-soft);opacity:.5;}
+  .preview-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(201,162,39,0.14);border:1px solid rgba(228,200,102,0.4);color:var(--gold-soft);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:7px 16px;border-radius:999px;margin-top:22px;}
+  .preview-tag svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.4;}
+
+  /* -------- configurator layout -------- */
+  .config-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:48px;align-items:start;}
+  .config-stage{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;box-shadow:0 20px 44px rgba(0,0,0,0.32);}
+  .stage-canvas-wrap{position:relative;width:100%;aspect-ratio:8/7;border-radius:4px;overflow:hidden;background:#0F0D0C;cursor:grab;}
+  .stage-canvas-wrap.dragging{cursor:grabbing;}
+  .stage-canvas-wrap canvas{display:block;width:100%;height:100%;}
+  .stage-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:12.5px;letter-spacing:0.05em;text-transform:uppercase;}
+  .stage-hint{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;font-size:12px;color:var(--ink-soft);}
+  .stage-hint svg{width:13px;height:13px;stroke:var(--gold-soft);fill:none;stroke-width:2;}
+  .config-caption{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:0 4px;}
+  .config-caption span{font-size:12.5px;color:var(--ink-soft);}
+  .config-caption b{color:var(--gold-soft);font-weight:700;}
+
+  .config-panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:30px;}
+  .config-group{margin-bottom:30px;}
+  .config-group:last-of-type{margin-bottom:0;}
+  .config-group-label{font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px;display:block;}
+  .swatch-row{display:flex;flex-wrap:wrap;gap:10px;}
+  .swatch{display:flex;align-items:center;gap:9px;padding:9px 14px 9px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;transition:all .18s ease;}
+  .swatch:hover{border-color:var(--gold);}
+  .swatch.active{border-color:var(--gold);background:rgba(201,162,39,0.1);}
+  .swatch-chip{width:22px;height:22px;border-radius:50%;flex:none;border:1px solid rgba(255,255,255,0.18);}
+  .swatch-label{font-size:13px;color:var(--ink);white-space:nowrap;}
+  .config-panel .btn{width:100%;justify-content:center;margin-top:34px;}
+  .config-note{font-size:12px;color:var(--ink-soft);margin-top:16px;text-align:center;}
+  @media(max-width:960px){ .config-grid{grid-template-columns:1fr;} }
+
+  footer{background:var(--bg);border-top:1px solid var(--line);padding:56px 0 0;}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px;padding-bottom:40px;}
+  .foot-grid h4{font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+  .foot-grid a{display:block;color:var(--ink-soft);font-size:14px;margin-bottom:10px;}
+  .foot-grid a:hover{color:var(--gold-soft);}
+  .foot-bottom{border-top:1px solid var(--line);padding:20px 0;text-align:center;font-size:12.5px;color:var(--ink-soft);}
+  @media(max-width:760px){ .foot-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="anniv-ribbon">
+  <div class="wrap">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg>
+    Celebrating 20 Years of Craftsmanship — 2006–2026
+    <a href="index.html#anniversary">See our story</a>
+  </div>
+</div>
+
+<div class="util-bar">
+  <div class="wrap util-row">
+    <div class="util-links">
+      <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
+      <a href="tel:4168172929">416-817-2929</a>
+    </div>
+    <div>We Are Fully Licensed &amp; Insured</div>
+  </div>
+</div>
+
+<header id="siteHeader">
+  <div class="wrap header-row">
+    <img class="site-logo" src="images/logo.png" alt="Lifestyles Home Creations">
+    <a class="btn btn-primary" href="contact.html">Free Estimate</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<nav class="main" id="mainNav">
+  <div class="wrap" id="navLinks">
+    <div class="nav-drop" id="homeDrop">
+      <span class="nav-drop-trigger">
+        <a href="index.html">Home</a>
+        <button type="button" class="care-btn" id="homeDropToggle" aria-label="Toggle Home menu" aria-expanded="false"><svg class="care" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </span>
+      <div class="nav-drop-menu">
+        <a href="index.html#about">About Us</a>
+        <a href="index.html#testimonials">Testimonials</a>
+      </div>
+    </div>
+    <a href="services.html">Services</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+</nav>
+
+<div class="page-banner">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a><span class="sep">/</span>Design Your Space</div>
+    <h1>Design Your Space</h1>
+    <p>A basement family room, three finishes at a time. Mix and match wall, floor, and lighting to get a feel for your options — then bring it to a real consultation.</p>
+    <div class="preview-tag"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Early concept preview</div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap config-grid">
+
+    <div>
+      <div class="config-stage">
+        <div class="stage-canvas-wrap" id="stageCanvasWrap">
+          <div class="stage-loading" id="stageLoading">Loading 3D preview…</div>
+        </div>
+      </div>
+      <p class="stage-hint"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 12c0-3 4-5 9-5s9 2 9 5-4 5-9 5-9-2-9-5z"/></svg>Drag to look around &middot; Scroll to zoom</p>
+      <div class="config-caption">
+        <span>Basement Family Room &amp; Media Wall</span>
+        <b id="configSummary">Warm White · Light Oak · Warm &amp; Cozy</b>
+      </div>
+    </div>
+
+    <div class="config-panel">
+      <div class="config-group">
+        <span class="config-group-label">Wall Finish</span>
+        <div class="swatch-row" data-group="wall">
+          <button class="swatch active" data-value="warmWhite" data-label="Warm White"><span class="swatch-chip" style="background:#EDE6D8;"></span><span class="swatch-label">Warm White</span></button>
+          <button class="swatch" data-value="shiplap" data-label="Shiplap"><span class="swatch-chip" style="background:#DCD3C0;"></span><span class="swatch-label">Shiplap</span></button>
+          <button class="swatch" data-value="charcoal" data-label="Charcoal Accent"><span class="swatch-chip" style="background:#3A3532;"></span><span class="swatch-label">Charcoal Accent</span></button>
+          <button class="swatch" data-value="woodPanel" data-label="Wood Paneling"><span class="swatch-chip" style="background:#8B5E3C;"></span><span class="swatch-label">Wood Paneling</span></button>
+        </div>
+      </div>
+      <div class="config-group">
+        <span class="config-group-label">Flooring</span>
+        <div class="swatch-row" data-group="floor">
+          <button class="swatch active" data-value="oak" data-label="Light Oak"><span class="swatch-chip" style="background:#D9C6A3;"></span><span class="swatch-label">Light Oak</span></button>
+          <button class="swatch" data-value="walnut" data-label="Dark Walnut"><span class="swatch-chip" style="background:#5A4634;"></span><span class="swatch-label">Dark Walnut</span></button>
+          <button class="swatch" data-value="vinyl" data-label="Grey Vinyl Plank"><span class="swatch-chip" style="background:#B7B3AC;"></span><span class="swatch-label">Grey Vinyl Plank</span></button>
+          <button class="swatch" data-value="tile" data-label="Porcelain Tile"><span class="swatch-chip" style="background:#E7E4DD;"></span><span class="swatch-label">Porcelain Tile</span></button>
+        </div>
+      </div>
+      <div class="config-group">
+        <span class="config-group-label">Lighting Mood</span>
+        <div class="swatch-row" data-group="mood">
+          <button class="swatch active" data-value="cozy" data-label="Warm &amp; Cozy"><span class="swatch-chip" style="background:#E4C866;"></span><span class="swatch-label">Warm &amp; Cozy</span></button>
+          <button class="swatch" data-value="modern" data-label="Bright &amp; Modern"><span class="swatch-chip" style="background:#F3EFE6;"></span><span class="swatch-label">Bright &amp; Modern</span></button>
+          <button class="swatch" data-value="dramatic" data-label="Moody &amp; Dramatic"><span class="swatch-chip" style="background:#4A3F2E;"></span><span class="swatch-label">Moody &amp; Dramatic</span></button>
+        </div>
+      </div>
+      <div class="config-group">
+        <span class="config-group-label">Furniture Color</span>
+        <div class="swatch-row" data-group="furniture">
+          <button class="swatch active" data-value="#2A2725" data-label="Charcoal Grey"><span class="swatch-chip" style="background:#2A2725;"></span><span class="swatch-label">Charcoal Grey</span></button>
+          <button class="swatch" data-value="#D9D2C2" data-label="Warm Ivory"><span class="swatch-chip" style="background:#D9D2C2;"></span><span class="swatch-label">Warm Ivory</span></button>
+          <button class="swatch" data-value="#6B1616" data-label="Deep Red"><span class="swatch-chip" style="background:#6B1616;"></span><span class="swatch-label">Deep Red</span></button>
+          <button class="swatch" data-value="#1F3A5F" data-label="Navy Blue"><span class="swatch-chip" style="background:#1F3A5F;"></span><span class="swatch-label">Navy Blue</span></button>
+        </div>
+      </div>
+      <a class="btn btn-primary" href="contact.html">Get a Real Quote for This Look</a>
+      <p class="config-note">A simplified preview — real material samples and full measurements come with your in-home consultation.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <img src="images/logo.png" alt="Lifestyles Home Creations" style="height:48px;width:auto;display:block;margin-bottom:4px;">
+      <p style="color:var(--ink-soft);font-size:14px;margin-top:14px;">Your Comfort is Our Happiness! Fully licensed and insured home renovations.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="index.html#about">About Us</a>
+      <a href="services.html">Services</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="community.html">Community</a>
+      <a href="index.html#testimonials">Testimonials</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="tel:4168172929">416-817-2929</a>
+      <a href="mailto:info@lifestyleshome.com">info@lifestyleshome.com</a>
+      <a href="https://www.facebook.com/pages/Lifestyles-Home-Creations-Inc/323501164428271" target="_blank" rel="noopener">Facebook</a>
+    </div>
+  </div>
+  <div class="foot-bottom">Copyright &copy; 2026 Lifestyles Home Creations Inc. All Rights Reserved.</div>
+</footer>
+
+<script>
+  /* ===================================================================
+     3D room configurator — Three.js r128, loaded via classic <script>
+     (no build step, matches the rest of this static site). Orbit is
+     hand-rolled with pointer events rather than THREE.OrbitControls,
+     since that addon isn't published as a standalone file for r128 on
+     a plain CDN — a few dozen lines of spherical-coordinate math is
+     more reliable than depending on it being reachable at runtime.
+     =================================================================== */
+  const summary = document.getElementById('configSummary');
+  const state = { wall:'Warm White', floor:'Light Oak', mood:'Warm & Cozy', moodKey:'cozy', furniture:'Charcoal Grey' };
+  function updateSummary(){
+    summary.textContent = `${state.wall} \u00B7 ${state.floor} \u00B7 ${state.mood} \u00B7 ${state.furniture}`;
+  }
+
+  (function(){
+    const wrap = document.getElementById('stageCanvasWrap');
+    const loadingEl = document.getElementById('stageLoading');
+    if (!wrap || typeof THREE === 'undefined') { if(loadingEl) loadingEl.textContent = '3D preview unavailable — check your connection.'; return; }
+
+    /* -------- renderer / scene / camera -------- */
+    const renderer = new THREE.WebGLRenderer({ antialias:true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    wrap.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f0d0c);
+    scene.fog = new THREE.Fog(0x0f0d0c, 14, 22);
+
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+
+    /* -------- room dimensions -------- */
+    const W = 8, H = 5, D = 6;              // width, height, depth
+    const half = { w:W/2, h:H/2, d:D/2 };
+
+    /* -------- canvas-drawn material textures -------- */
+    function makeTexture(draw, size=256, repeat=[1,1]){
+      const c = document.createElement('canvas');
+      c.width = size; c.height = size;
+      draw(c.getContext('2d'), size);
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(repeat[0], repeat[1]);
+      tex.encoding = THREE.sRGBEncoding;
+      tex.needsUpdate = true;
+      return tex;
+    }
+    function fillRect(ctx,x,y,w,h,color){ ctx.fillStyle = color; ctx.fillRect(x,y,w,h); }
+    function hLine(ctx,x,y,w,color,lw){ ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+w,y); ctx.stroke(); }
+    function vLine(ctx,x,y,h,color,lw){ ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y+h); ctx.stroke(); }
+
+    const WALL_TEXTURES = {
+      warmWhite: () => makeTexture((ctx,s)=>{ fillRect(ctx,0,0,s,s,'#EDE6D8'); }, 128, [2,1]),
+      shiplap:   () => makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#DCD3C0');
+        for(let y=0; y<s; y+=32) hLine(ctx,0,y+31,s,'#C2B89E',2);
+      }, 256, [3,2]),
+      charcoal:  () => makeTexture((ctx,s)=>{ fillRect(ctx,0,0,s,s,'#3A3532'); }, 128, [2,1]),
+      woodPanel: () => makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#8B5E3C');
+        for(let x=0; x<s; x+=48) vLine(ctx,x+46,0,s,'#6E4A2E',3);
+      }, 256, [3,1])
+    };
+    const FLOOR_TEXTURES = {
+      oak:    () => makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#D9C6A3');
+        for(let y=0; y<s; y+=32){ hLine(ctx,0,y+31,s,'#C7B189',1.5); vLine(ctx,(y/32%2?16:0)+64,y,32,'#C7B189',1); vLine(ctx,(y/32%2?16:0)+192,y,32,'#C7B189',1); }
+      }, 256, [4,5]),
+      walnut: () => makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#5A4634');
+        for(let y=0; y<s; y+=32){ hLine(ctx,0,y+31,s,'#473627',1.5); vLine(ctx,(y/32%2?16:0)+64,y,32,'#473627',1); vLine(ctx,(y/32%2?16:0)+192,y,32,'#473627',1); }
+      }, 256, [4,5]),
+      vinyl:  () => makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#B7B3AC');
+        for(let y=0; y<s; y+=32){ hLine(ctx,0,y+31,s,'#A19C93',1.2); vLine(ctx,(y/32%2?16:0)+64,y,32,'#A19C93',1); vLine(ctx,(y/32%2?16:0)+192,y,32,'#A19C93',1); }
+      }, 256, [4,5]),
+      tile:   () => makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#E7E4DD');
+        for(let i=0;i<=4;i++){ hLine(ctx,0,i*(s/4),s,'#CFCBC0',2); vLine(ctx,i*(s/4),0,s,'#CFCBC0',2); }
+      }, 256, [5,6])
+    };
+    function stoneTexture(){
+      return makeTexture((ctx,s)=>{
+        fillRect(ctx,0,0,s,s,'#DAD3C6');
+        const tones = ['#C7BEAC','#E3DCD0','#D2CABC'];
+        let seed = 7;
+        function rnd(){ seed = (seed*9301+49297) % 233280; return seed/233280; }
+        for(let y=0;y<s;y+=34){
+          let x=0;
+          while(x<s){
+            const w = 24 + rnd()*36;
+            ctx.fillStyle = tones[Math.floor(rnd()*tones.length)];
+            ctx.fillRect(x+1,y+1,w-2,32);
+            x += w;
+          }
+        }
+      }, 256, [3,2]);
+    }
+
+    /* -------- materials -------- */
+    const wallMat = new THREE.MeshStandardMaterial({ map: WALL_TEXTURES.warmWhite(), roughness:0.9 });
+    const floorMat = new THREE.MeshStandardMaterial({ map: FLOOR_TEXTURES.oak(), roughness:0.7 });
+    const sideWallMat = new THREE.MeshStandardMaterial({ color:0xEDE6D8, roughness:0.95 });
+    const ceilingMat = new THREE.MeshStandardMaterial({ color:0xEFE9DC, roughness:0.95 });
+    const stoneMat = new THREE.MeshStandardMaterial({ map: stoneTexture(), roughness:0.85 });
+    const cabinetMat = new THREE.MeshStandardMaterial({ color:0x241E1A, roughness:0.55, metalness:0.1 });
+    const cabinetTrimMat = new THREE.MeshStandardMaterial({ color:0x332B26, roughness:0.5 });
+    const tvBodyMat = new THREE.MeshStandardMaterial({ color:0x0C0B09, roughness:0.4 });
+    const tvScreenMat = new THREE.MeshStandardMaterial({ color:0x1c2733, emissive:0x2a3d52, emissiveIntensity:0.6, roughness:0.3 });
+    const fireplaceBoxMat = new THREE.MeshStandardMaterial({ color:0x0C0B09, roughness:0.6 });
+    const flameMat = new THREE.MeshStandardMaterial({ color:0xFF7A33, emissive:0xFF6A22, emissiveIntensity:1.4 });
+    const sofaMat = new THREE.MeshStandardMaterial({ color:0x2A2725, roughness:0.85 });
+
+    /* -------- geometry: room shell -------- */
+    const backWall = new THREE.Mesh(new THREE.PlaneGeometry(W, H), wallMat);
+    backWall.position.set(0, 0, -half.d);
+    backWall.receiveShadow = true;
+    scene.add(backWall);
+
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D), floorMat);
+    floor.rotation.x = -Math.PI/2;
+    floor.position.set(0, -half.h, 0);
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(W, D), ceilingMat);
+    ceiling.rotation.x = Math.PI/2;
+    ceiling.position.set(0, half.h, 0);
+    scene.add(ceiling);
+
+    const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(D, H), sideWallMat);
+    leftWall.rotation.y = Math.PI/2;
+    leftWall.position.set(-half.w, 0, 0);
+    leftWall.receiveShadow = true;
+    scene.add(leftWall);
+
+    const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(D, H), sideWallMat);
+    rightWall.rotation.y = -Math.PI/2;
+    rightWall.position.set(half.w, 0, 0);
+    rightWall.receiveShadow = true;
+    scene.add(rightWall);
+
+    /* -------- stone fireplace nook + built-ins (fixed) -------- */
+    const nook = new THREE.Mesh(new THREE.BoxGeometry(3, H-0.3, 0.16), stoneMat);
+    nook.position.set(0, 0, -half.d+0.08);
+    nook.castShadow = true; nook.receiveShadow = true;
+    scene.add(nook);
+
+    function addCabinet(x){
+      const g = new THREE.Group();
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.1, 2.5, 0.6), cabinetMat);
+      body.position.set(0, -0.85, 0);
+      body.castShadow = true; body.receiveShadow = true;
+      g.add(body);
+      const panel = new THREE.Mesh(new THREE.BoxGeometry(1.85, 0.55, 0.02), cabinetTrimMat);
+      panel.position.set(0, -0.15, 0.31);
+      g.add(panel);
+      for(let i=-1;i<=1;i+=2){
+        const knob = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), new THREE.MeshStandardMaterial({ color: i<0?0xCCBC1A:0x8F0000, metalness:0.6, roughness:0.3 }));
+        knob.position.set(i*0.35, -0.65, 0.32);
+        g.add(knob);
+      }
+      g.position.set(x, 0, -half.d+0.34);
+      return g;
+    }
+    scene.add(addCabinet(-2.55));
+    scene.add(addCabinet(2.55));
+
+    /* -------- TV -------- */
+    const tvBody = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.95, 0.08), tvBodyMat);
+    tvBody.position.set(0, 1.05, -half.d+0.17);
+    scene.add(tvBody);
+    const tvScreen = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.8), tvScreenMat);
+    tvScreen.position.set(0, 1.05, -half.d+0.215);
+    scene.add(tvScreen);
+
+    /* -------- fireplace opening + flame -------- */
+    const fireBox = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.85, 0.1), fireplaceBoxMat);
+    fireBox.position.set(0, -0.75, -half.d+0.18);
+    scene.add(fireBox);
+    const flame = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.32, 0.06), flameMat);
+    flame.position.set(0, -0.85, -half.d+0.22);
+    scene.add(flame);
+    const fireLight = new THREE.PointLight(0xFF7A33, 1.2, 4.5, 2);
+    fireLight.position.set(0, -0.7, -half.d+0.8);
+    scene.add(fireLight);
+
+    /* -------- sofas (stylized, low-poly) -------- */
+    function addSofa(x){
+      const floorY = -half.h;
+      const g = new THREE.Group();
+      const seatH = 0.55;
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(2.1, seatH, 0.95), sofaMat);
+      seat.position.set(0, floorY + seatH/2, 0);
+      seat.castShadow = true; seat.receiveShadow = true;
+      g.add(seat);
+      const backH = 0.85;
+      const back = new THREE.Mesh(new THREE.BoxGeometry(2.1, backH, 0.28), sofaMat);
+      back.position.set(0, floorY + backH/2, -0.34);
+      back.castShadow = true;
+      g.add(back);
+      const armH = 0.7;
+      [-0.95, 0.95].forEach(ax=>{
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(0.22, armH, 0.95), sofaMat);
+        arm.position.set(ax, floorY + armH/2, 0);
+        arm.castShadow = true;
+        g.add(arm);
+      });
+      g.position.set(x, 0, half.d-1.3);
+      return g;
+    }
+    scene.add(addSofa(-2.55));
+    scene.add(addSofa(2.55));
+
+    /* -------- ceiling lights (real dynamic light sources) -------- */
+    const lightXs = [-2.7, -0.9, 0.9, 2.7];
+    const ceilingLights = lightXs.map(x=>{
+      const fixture = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.04, 16), new THREE.MeshStandardMaterial({ color:0x1a1815 }));
+      fixture.position.set(x, half.h-0.03, -0.6);
+      scene.add(fixture);
+      const light = new THREE.PointLight(0xFFE9AE, 0.9, 9, 2);
+      light.position.set(x, half.h-0.15, -0.6);
+      light.castShadow = true;
+      light.shadow.mapSize.set(512,512);
+      scene.add(light);
+      return light;
+    });
+
+    const ambient = new THREE.AmbientLight(0xFFF3DE, 0.32);
+    scene.add(ambient);
+    const fill = new THREE.DirectionalLight(0xFFFFFF, 0.18);
+    fill.position.set(3, 4, 6);
+    scene.add(fill);
+
+    /* -------- mood presets: real light color/intensity, not an overlay -------- */
+    const MOODS = {
+      cozy:     { lightColor:0xFFE9AE, lightIntensity:0.95, ambientColor:0xFFEBC2, ambientIntensity:0.34, fireIntensity:1.2 },
+      modern:   { lightColor:0xFFFFFF, lightIntensity:1.25, ambientColor:0xF4F1EA, ambientIntensity:0.55, fireIntensity:0.7 },
+      dramatic: { lightColor:0xFFB066, lightIntensity:0.45, ambientColor:0x2A2320, ambientIntensity:0.14, fireIntensity:1.7 }
+    };
+    function applyMood(key){
+      const m = MOODS[key];
+      ceilingLights.forEach(l=>{ l.color.setHex(m.lightColor); l.intensity = m.lightIntensity; });
+      ambient.color.setHex(m.ambientColor);
+      ambient.intensity = m.ambientIntensity;
+      fireLight.intensity = m.fireIntensity;
+    }
+    applyMood('cozy');
+
+    /* -------- swatch wiring -------- */
+    document.querySelectorAll('.swatch-row').forEach(row=>{
+      const group = row.dataset.group;
+      row.querySelectorAll('.swatch').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          row.querySelectorAll('.swatch').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          const value = btn.dataset.value;
+          const label = btn.dataset.label;
+          if(group === 'wall'){ if(wallMat.map) wallMat.map.dispose(); wallMat.map = WALL_TEXTURES[value](); wallMat.needsUpdate = true; state.wall = label; }
+          if(group === 'floor'){ if(floorMat.map) floorMat.map.dispose(); floorMat.map = FLOOR_TEXTURES[value](); floorMat.needsUpdate = true; state.floor = label; }
+          if(group === 'mood'){ applyMood(value); state.mood = label; state.moodKey = value; }
+          if(group === 'furniture'){ sofaMat.color.set(value); state.furniture = label; }
+          updateSummary();
+        });
+      });
+    });
+    updateSummary();
+
+    /* -------- hand-rolled orbit + zoom (no OrbitControls dependency) -------- */
+    let theta = 0, phi = 1.48, radius = 8.6;
+    const target = new THREE.Vector3(0, -0.3, -0.5);
+    function updateCamera(){
+      camera.position.x = target.x + radius * Math.sin(phi) * Math.sin(theta);
+      camera.position.y = target.y + radius * Math.cos(phi);
+      camera.position.z = target.z + radius * Math.sin(phi) * Math.cos(theta);
+      camera.lookAt(target);
+    }
+    updateCamera();
+
+    let dragging = false, lastX = 0, lastY = 0;
+    function pointerDown(x,y){ dragging = true; lastX = x; lastY = y; wrap.classList.add('dragging'); }
+    function pointerMove(x,y){
+      if(!dragging) return;
+      const dx = x - lastX, dy = y - lastY;
+      lastX = x; lastY = y;
+      theta -= dx * 0.006;
+      theta = Math.max(-0.62, Math.min(0.62, theta));
+      phi -= dy * 0.005;
+      phi = Math.max(1.15, Math.min(1.62, phi));
+      updateCamera();
+    }
+    function pointerUp(){ dragging = false; wrap.classList.remove('dragging'); }
+
+    renderer.domElement.addEventListener('pointerdown', e=>{ pointerDown(e.clientX, e.clientY); renderer.domElement.setPointerCapture(e.pointerId); });
+    renderer.domElement.addEventListener('pointermove', e=> pointerMove(e.clientX, e.clientY));
+    renderer.domElement.addEventListener('pointerup', pointerUp);
+    renderer.domElement.addEventListener('pointercancel', pointerUp);
+    renderer.domElement.addEventListener('wheel', e=>{
+      e.preventDefault();
+      radius = Math.max(6.5, Math.min(11, radius + e.deltaY * 0.006));
+      updateCamera();
+    }, { passive:false });
+
+    /* -------- resize -------- */
+    function resize(){
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      if(!w || !h) return;
+      camera.aspect = w/h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+    window.addEventListener('resize', resize);
+
+    /* -------- render loop with a subtle fireplace flicker -------- */
+    if(loadingEl) loadingEl.remove();
+    let t = 0;
+    function animate(){
+      requestAnimationFrame(animate);
+      t += 0.02;
+      const baseFire = MOODS[state.moodKey].fireIntensity;
+      fireLight.intensity = baseFire * (0.85 + Math.sin(t*3)*0.08 + Math.sin(t*7)*0.05);
+      renderer.render(scene, camera);
+    }
+    resize();
+    animate();
+  })();
+
+
+  (function(){
+    const header = document.getElementById('siteHeader');
+    if (!header) return;
+    function update(){ document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px'); }
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('load', update);
+  })();
+
+  (function(){
+    const toggle = document.getElementById('navToggle');
+    const nav = document.getElementById('mainNav');
+    if (!toggle || !nav) return;
+    toggle.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    nav.querySelectorAll('#navLinks a').forEach(a=>{
+      a.addEventListener('click', ()=>{
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', (e)=>{
+      if (nav.classList.contains('open') && !nav.contains(e.target)) {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
+  (function(){
+    const drop = document.getElementById('homeDrop');
+    const dtoggle = document.getElementById('homeDropToggle');
+    if (!drop || !dtoggle) return;
+    dtoggle.addEventListener('click', (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = drop.classList.toggle('open');
+      dtoggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e)=>{
+      if (drop.classList.contains('open') && !drop.contains(e.target)) {
+        drop.classList.remove('open');
+        dtoggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    drop.querySelectorAll('.nav-drop-menu a').forEach(a=>{
+      a.addEventListener('click', ()=>{
+        drop.classList.remove('open');
+        dtoggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+
+  (function(){
+    const targets = [document.getElementById('siteHeader'), document.getElementById('mainNav')].filter(Boolean);
+    if (!targets.length) return;
+    let lastY = window.scrollY;
+    let ticking = false;
+    function onScroll(){
+      const y = window.scrollY;
+      if (y < 80) { targets.forEach(t=>t.classList.remove('hide')); }
+      else if (y > lastY + 4) { targets.forEach(t=>t.classList.add('hide')); }
+      else if (y < lastY - 4) { targets.forEach(t=>t.classList.remove('hide')); }
+      lastY = y;
+      ticking = false;
+    }
+    window.addEventListener('scroll', ()=>{
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    });
+  })();
+</script>
+
+</body>
+</html>
