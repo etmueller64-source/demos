@@ -52,6 +52,26 @@ const ROUTE_NEW_CAROUSEL   = 'New Carousel Group';
 const ROUTE_ADD_CAROUSEL   = 'Adding to Carousel Group'; // not built out yet
 const ROUTE_ADD_GENRE      = 'Adding to Genre';
 
+/**
+ * Manual test helper — run THIS from the editor's function picker (not
+ * onFormSubmit itself) to test the script without submitting a real
+ * response every time. It grabs the most recent actual response from the
+ * linked Form and runs it through onFormSubmit exactly like a real
+ * trigger would, so e.response is a real object instead of undefined.
+ *
+ * (Running onFormSubmit directly with ▶ Run will always throw "Cannot
+ * read properties of undefined (reading 'response')" — Apps Script
+ * doesn't invent a fake event object for you; only an actual submission,
+ * via the installed trigger, does that.)
+ */
+function testWithLatestResponse() {
+  const form = FormApp.getActiveForm(); // only works if this script is bound to the Form itself
+  const responses = form.getResponses();
+  if (!responses.length) { Logger.log('No responses on this form yet — submit one first.'); return; }
+  const latest = responses[responses.length - 1];
+  onFormSubmit({ response: latest });
+}
+
 function onFormSubmit(e) {
   try {
     const itemResponses = e.response.getItemResponses();
