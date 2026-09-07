@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Conacher Photography — Family, Nature &amp; Event Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF6EF; --cream-deep:#EFE6D3;
+    --ink:#2C2822; --ink-soft:#75695C;
+    --rose:#C9748C; --rose-deep:#A65670;
+    --amber:#C08A34; --amber-deep:#9C6D26;
+    --white:#FFFFFF;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'Jost',sans-serif;font-size:17px;line-height:1.7;overflow-x:hidden;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--ink);line-height:1.14;letter-spacing:-0.005em;}
+  em{font-style:italic;color:var(--rose);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 40px;}
+  .label{font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose);}
+
+  .concept-banner{background:var(--ink);color:var(--cream);text-align:center;font-size:12px;letter-spacing:0.06em;padding:9px 16px;}
+  .concept-banner b{color:var(--amber);}
+
+  /* header, Jen-Short-inspired: clean, logo left, dropdown services */
+  header{position:sticky;top:0;z-index:90;background:rgba(250,246,239,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-deep);transition:transform .32s ease;}
+  /* Slides fully out of view on scroll-down, back in on scroll-up - so it stops permanently eating screen space meant for photos, per feedback. */
+  header.nav-hidden{transform:translateY(-100%);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto;padding:20px 40px;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-logo{height:52px;width:auto;display:block;}
+  .brand-logo.foot-logo{height:64px;}
+  nav.links{display:flex;align-items:center;gap:34px;}
+  nav.links > a{font-size:13px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink);padding:8px 0;position:relative;}
+  nav.links > a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);transform:scaleX(0);transition:transform .25s ease;transform-origin:left;}
+  nav.links > a:hover::after,nav.links > a.current::after{transform:scaleX(1);}
+  .has-drop{position:relative;}
+  .dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);background:var(--white);border:1px solid var(--cream-deep);box-shadow:0 18px 40px rgba(44,40,34,0.12);min-width:205px;padding:10px 0;opacity:0;visibility:hidden;transition:opacity .2s ease,transform .2s ease,visibility .2s ease;}
+  .has-drop:hover .dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+  .dropdown a{display:block;padding:10px 22px;font-size:13.5px;color:var(--ink-soft);white-space:nowrap;}
+  .dropdown a:hover{color:var(--rose);background:var(--cream);}
+  .nav-cta{font-size:12.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--rose);color:var(--rose);padding:11px 22px;border-radius:2px;transition:all .2s ease;}
+  .nav-cta:hover{background:var(--rose);color:var(--cream);}
+
+  /* side dot nav (only used on Home & Portfolio) */
+  #dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:16px;}
+  #dots a{width:9px;height:9px;border-radius:50%;border:1px solid rgba(44,40,34,0.28);transition:all .3s ease;position:relative;display:block;}
+  #dots a.on{background:var(--amber);border-color:var(--amber);transform:scale(1.3);}
+  #dots a .tip{position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);opacity:0;transition:opacity .2s;pointer-events:none;background:var(--cream);padding:3px 8px;border-radius:2px;}
+  #dots a:hover .tip{opacity:1;}
+  @media (max-width:1100px){ #dots{display:none;} }
+
+  section{padding:96px 0;}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 52px;}
+  .sec-head .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .sec-head .label::before,.sec-head .label::after{content:"";width:26px;height:1px;background:var(--amber);}
+  .sec-head h2{font-size:clamp(30px,4vw,44px);margin-bottom:14px;}
+  .sec-head p{color:var(--ink-soft);font-size:17px;}
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+  .rv.in{opacity:1;transform:none;}
+  .rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.2s;}.rv.d3{transition-delay:.3s;}
+
+  .btn{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:15px 30px;border-radius:2px;transition:all .22s ease;cursor:pointer;}
+  .btn-rose{background:var(--rose);color:var(--cream);border:1px solid var(--rose);}
+  .btn-rose:hover{background:var(--rose-deep);}
+  .btn-line{border:1px solid var(--ink);color:var(--ink);}
+  .btn-line:hover{border-color:var(--rose);color:var(--rose);}
+
+  footer{border-top:1px solid var(--cream-deep);padding:56px 0 40px;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .foot-links{display:flex;gap:26px;flex-wrap:wrap;}
+  .foot-links a{font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);transition:color .2s;}
+  .foot-links a:hover{color:var(--rose);}
+  .foot-bottom{margin-top:30px;padding-top:22px;border-top:1px solid var(--cream-deep);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;letter-spacing:0.05em;color:var(--ink-soft);}
+
+  @media (max-width:900px){
+    nav.links{display:none;}
+    section{padding:70px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.001s !important;animation-duration:.001s !important;}
+    .rv{opacity:1;transform:none;}
+  }
+
+  /* ---------- reusable arrow-navigated carousel (manual only, no auto-rotate) ---------- */
+  .carousel{position:relative;}
+  .carousel-viewport{overflow:hidden;}
+  .carousel-track{display:flex;gap:16px;transition:transform .45s cubic-bezier(.2,.65,.25,1),opacity .3s ease;will-change:transform;}
+  .car-btn{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:46px;height:46px;border-radius:50%;background:var(--white);border:1px solid var(--cream-deep);
+    display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--ink);
+    cursor:pointer;box-shadow:0 10px 24px rgba(44,40,34,0.14);transition:all .2s ease;
+  }
+  .car-btn:hover{border-color:var(--rose);color:var(--rose);}
+  .car-btn:disabled{opacity:0.35;cursor:default;box-shadow:none;}
+  .car-btn:disabled:hover{border-color:var(--cream-deep);color:var(--ink);}
+  .car-prev{left:-23px;}
+  .car-next{right:-23px;}
+  @media (max-width:900px){
+    .car-prev{left:6px;} .car-next{right:6px;}
+  }
+
+  /* ---------- shared page-hero pattern: text beside a photo slot, used on every subpage ---------- */
+  .page-hero{padding:64px 0 60px;}
+  .page-hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;}
+  .page-hero-copy{text-align:left;}
+  .page-hero-copy .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:20px;}
+  .page-hero-copy .label::before,.page-hero-copy .label::after{content:"";width:28px;height:1px;background:var(--amber);}
+  .page-hero-copy h1{font-size:clamp(32px,4.6vw,52px);margin-bottom:16px;}
+  .page-hero-copy p{color:var(--ink-soft);font-size:16.5px;max-width:460px;}
+
+  @media (max-width:900px){
+    .page-hero-grid{grid-template-columns:1fr;}
+    .page-hero-copy{text-align:center;}
+    .page-hero-copy .label{justify-content:center;}
+    .page-hero-copy p{margin-left:auto;margin-right:auto;}
+  }
+
+  /* ---------- lightbox: click any carousel/album photo to browse the full album ---------- */
+  #lightbox{position:fixed;inset:0;background:rgba(30,25,20,0.94);z-index:400;display:none;align-items:center;justify-content:center;padding:40px;}
+  #lightbox.open{display:flex;}
+  #lightbox img{max-width:min(1100px,90vw);max-height:80vh;border-radius:2px;box-shadow:0 30px 70px rgba(0,0,0,0.5);object-fit:contain;background:#00000022;}
+  #lightbox .lb-close{position:absolute;top:26px;right:32px;color:var(--cream);font-size:30px;background:none;border:none;cursor:pointer;line-height:1;}
+  #lightbox .lb-arrow{position:absolute;top:50%;transform:translateY(-50%);color:var(--cream);font-size:30px;background:none;border:none;cursor:pointer;padding:14px;opacity:0.85;transition:opacity .2s;}
+  #lightbox .lb-arrow:hover{opacity:1;}
+  #lightbox .lb-prev{left:14px;} #lightbox .lb-next{right:14px;}
+  #lightbox .lb-count{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:var(--cream);font-size:13px;letter-spacing:0.08em;font-family:'Jost',sans-serif;}
+  .ph[data-album],.genre[data-genre-link]{cursor:pointer;}
+
+  .hero{padding:60px 0 0;position:relative;background-size:cover;background-position:center;transition:background-image .3s ease;}
+  .hero-inner{position:relative;z-index:2;}
+  .hero-inner{text-align:center;max-width:820px;margin:0 auto;padding:0 40px;}
+  .hero .label{display:inline-flex;align-items:center;gap:14px;margin-bottom:24px;}
+  .hero .label::before,.hero .label::after{content:"";width:30px;height:1px;background:var(--amber);}
+  .hero h1{font-size:clamp(38px,6.6vw,70px);margin-bottom:20px;}
+  .hero p.sub{color:var(--ink-soft);font-size:18.5px;max-width:520px;margin:0 auto 34px;}
+  .hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:56px;}
+
+  .photo-strip-wrap{max-width:1180px;margin:0 auto;padding:0 56px;}
+  .photo-strip .carousel-viewport{padding:16px 0;overflow:hidden;} /* breathing room so the rescaled centre photo isn't clipped */
+  .photo-strip .carousel-track{align-items:center;}
+  /* each slide takes exactly the width its own photo renders at — no forced crop, no uniform box */
+  .photo-strip .carousel-item{flex:0 0 auto;}
+  .ph{
+    height:340px; /* the one constant every photo shares — width follows the photo's own proportions */
+    position:relative;overflow:hidden;border-radius:var(--radius);
+    box-shadow:0 18px 38px rgba(44,40,34,0.14);
+    transform:scale(0.94);transform-origin:center;
+    transition:transform .4s ease,box-shadow .4s ease;
+  }
+  .ph img{height:100%;width:auto;display:block;}
+  .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(44,40,34,0.45) 100%);}
+  /* the item centred in the visible window gets a small, subtle rescale forward — JS assigns this.
+     No opacity change here on purpose — fading between two opacity values against the page's light
+     background made the photo look like it was clearing up from a blurry, half-loaded state, which
+     read as a loading flash even though the photo was always fully loaded. */
+  .ph.is-center{transform:scale(1.04);box-shadow:0 26px 50px rgba(44,40,34,0.2);z-index:2;}
+  .ph-cap{position:absolute;left:14px;bottom:12px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.9);z-index:2;}
+  @media (max-width:900px){
+    .ph{height:240px;transform:scale(1);}
+  }
+  @media (min-width:901px) and (max-width:1180px){ .photo-strip .carousel-item{flex:0 0 calc(50% - 8px);} }
+
+  .statement{text-align:center;background:var(--cream-deep);}
+  .statement p{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(22px,2.8vw,30px);line-height:1.55;max-width:820px;margin:0 auto;color:var(--ink);}
+  .statement .sig{margin-top:24px;font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);}
+
+  .genre-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .genre{border-radius:var(--radius);height:220px;position:relative;overflow:hidden;transition:transform .3s ease;}
+  .genre:hover{transform:translateY(-5px);}
+  .genre::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(44,40,34,0.6) 100%);}
+  .genre-cap{position:absolute;left:18px;bottom:16px;z-index:2;color:var(--white);font-family:'Fraunces',serif;font-weight:600;font-size:19px;}
+
+  .testi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+  .testi{background:var(--white);border:1px solid var(--cream-deep);border-radius:var(--radius);padding:32px 30px;}
+  @media (max-width:900px){ .testi-grid{grid-template-columns:1fr;} }
+  .testi .q{font-family:'Fraunces',serif;font-style:italic;font-size:26px;color:var(--amber);display:block;margin-bottom:12px;line-height:0.6;}
+  .testi p{font-size:15px;color:var(--ink-soft);margin-bottom:16px;}
+  .testi .who{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--rose);font-weight:600;}
+
+  .cta-band{text-align:center;background:var(--ink);color:var(--cream);border-radius:var(--radius);max-width:1180px;margin:0 auto;padding:70px 50px;}
+  .cta-band h2{color:var(--cream);font-size:clamp(28px,4vw,42px);margin-bottom:16px;}
+  .cta-band p{color:#DDE3D9;max-width:460px;margin:0 auto 30px;}
+  .cta-band .btn-line{border-color:var(--cream);color:var(--cream);}
+  .cta-band .btn-line:hover{background:var(--cream);color:var(--rose);}
+
+  @media (max-width:900px){
+    .photo-strip{grid-template-columns:1fr;gap:16px;}
+    .ph1,.ph2,.ph3{height:260px;margin-bottom:0;}
+    .genre-grid{grid-template-columns:1fr 1fr;}
+    .testi-grid{grid-template-columns:1fr;}
+  }
+
+</style>
+</head>
+<body>
+
+<div class="concept-banner">CONCEPT REDESIGN — prepared for Conacher Photography · <b>real pricing, testimonials &amp; contact info preserved</b> · print pricing &amp; sample photos are placeholders</div>
+
+<header>
+  <div class="nav-row">
+    <a class="brand" href="index.html">
+      <img src="logo.png" alt="Deb Conacher Photography" class="brand-logo">
+    </a>
+    <nav class="links">
+      <a class="current" href="index.html">Home</a>
+      <div class="has-drop">
+        <a class="" href="portfolio.html">Portfolio</a>
+        <div class="dropdown">
+          <a href="portfolio.html#nature">Nature</a>
+          <a href="portfolio.html#landscapes">Landscapes</a>
+          <a href="portfolio.html#portraits">Portraits</a>
+          <a href="portfolio.html#family">Family</a>
+          <a href="portfolio.html#engagement">Engagement</a>
+          <a href="portfolio.html#groups">Groups</a>
+          <a href="portfolio.html#events">Events</a>
+          <a href="portfolio.html#maternity">Maternity</a>
+          <a href="portfolio.html#pets">Pets</a>
+          <a href="portfolio.html#sports">Sports</a>
+          <a href="portfolio.html#collections" style="font-weight:600;">Collections</a>
+          <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
+        </div>
+      </div>
+      <a class="" href="services.html">Services</a>
+      <a class="" href="about.html">About</a>
+      <a class="" href="contact.html">Contact</a>
+    </nav>
+    <a class="nav-cta" href="contact.html">Book a Session</a>
+  </div>
+</header>
+<div id="dots"><a href="#d-hero" data-sec="d-hero"><span class="tip">Welcome</span></a><a href="#d-statement" data-sec="d-statement"><span class="tip">Our Story</span></a><a href="#d-genres" data-sec="d-genres"><span class="tip">Genres</span></a><a href="#d-testimonials" data-sec="d-testimonials"><span class="tip">Reviews</span></a><a href="#d-cta" data-sec="d-cta"><span class="tip">Book</span></a></div>
+
+<div class="hero" id="d-hero">
+  <div class="hero-inner">
+    <span class="label">Newmarket &amp; the GTA</span>
+    <h1>Capturing nature, people,<br><em>and life around us.</em></h1>
+    <p class="sub">Candid, unhurried portraiture and nature photography — family sessions, milestones, events, and fine-art prints of the outdoors.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-rose" href="contact.html">Book a Session</a>
+      <a class="btn btn-line" href="portfolio.html">View Portfolio</a>
+    </div>
+  </div>
+  <div class="photo-strip-wrap">
+    <div class="carousel photo-strip" id="homeCarousel">
+      <button class="car-btn car-prev" aria-label="Previous photos">&#8592;</button>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-item ph" style="width:420px;background:linear-gradient(155deg,#C9A768,#9C6D26);display:flex;align-items:center;justify-content:center;">
+            <span class="ph-cap" style="position:static;color:var(--ink-soft);font-size:12px;padding:0 24px;text-align:center;">Connect the Google Sheet to show live photos here.</span>
+          </div>
+        </div>
+      </div>
+      <button class="car-btn car-next" aria-label="Next photos">&#8594;</button>
+    </div>
+  </div>
+</div>
+
+<section class="statement" id="d-statement" style="margin-top:70px;">
+  <div class="wrap rv">
+    <p>&ldquo;Capturing nature, people, life and spaces around us, is my way of storing its beauty in the form of art. Each type of photography I venture in has a personal element and passion for me which is shown in my work and to my clients.&rdquo;</p>
+    <div class="sig">— Debbie Conacher, Photographer</div>
+  </div>
+</section>
+
+<section id="d-genres">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Explore by Genre</span>
+      <h2>A little bit of everything</h2>
+      <p>From family portraits to fine-art nature prints — see the full range in the portfolio.</p>
+    </div>
+    <div class="genre-grid rv d1" id="featuredGrid">
+      <a class="genre" href="print.html" style="background:linear-gradient(155deg,#B98B4E,#8A5F26);"><span class="genre-cap">Prints for Purchase</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="d-testimonials" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Kind Words</span>
+      <h2>What clients had to say</h2>
+    </div>
+    <div class="testi-grid rv d1">
+      <div class="testi">
+        <span class="q">&ldquo;</span>
+        <p>Debbie was amazing taking our family portraits in Sheppard's Bush. She offered up great ideas and the pictures came out fantastic. We still get compliments about them.</p>
+        <div class="who">Scott &amp; Michelle Hannen</div>
+      </div>
+      <div class="testi">
+        <span class="q">&ldquo;</span>
+        <p>Deb is extremely talented and professional, easy to connect with, and super responsive. Patient and helpful even with our two (not always cooperative!) dogs. If you need professional photos or just some fun shots, she's the best.</p>
+        <div class="who">Jen &amp; Ian Fricker</div>
+      </div>
+      <div class="testi">
+        <span class="q">&ldquo;</span>
+        <p>Debbie is a wonderful person and a talented photographer. Her bubbly personality leads to genuine smiles, and her eye knows just how to capture them.</p>
+        <div class="who">Kennedy Smye</div>
+      </div>
+      <div class="testi">
+        <span class="q">&ldquo;</span>
+        <p>The shoot was fun and easy going, with candid shots and some posed ones. Debbie was very patient — even with our crazy dog! Her love for her craft comes through in every picture.</p>
+        <div class="who">Julie &amp; Tom Mueller</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="d-cta" style="padding-top:0;">
+  <div class="wrap">
+    <div class="cta-band rv">
+      <h2>Let's capture something beautiful.</h2>
+      <p>Family portraits, milestones, events, or a fine-art print for your wall — reach out and let's talk.</p>
+      <a class="btn btn-line" href="contact.html">Book a Free Phone Consult</a>
+    </div>
+  </div>
+</section>
+
+<div id="lightbox">
+  <button class="lb-close" aria-label="Close">&times;</button>
+  <button class="lb-arrow lb-prev" aria-label="Previous photo">&#8592;</button>
+  <img id="lbImage" src="" alt="">
+  <button class="lb-arrow lb-next" aria-label="Next photo">&#8594;</button>
+  <span class="lb-count" id="lbCount"></span>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="brand">
+        <img src="logo.png" alt="Deb Conacher Photography" class="brand-logo foot-logo">
+      </div>
+      <div class="foot-links">
+        <a href="index.html">Home</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="https://www.instagram.com/conacherphotography/">@conacherphotography ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Conacher Photography — concept redesign</span>
+      <span>Servicing Newmarket, Bradford, Keswick, Aurora, Richmond Hill, King City &amp; the GTA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Collapsing header on scroll: slides fully out of view scrolling down
+  // (so it stops permanently blocking the top third of every photo-heavy
+  // page), slides back in immediately scrolling up (so navigation is never
+  // more than one upward scroll away). Stays visible near the very top so
+  // it doesn't flicker in and out right at the start of the page.
+  (function(){
+    const header = document.querySelector('header');
+    if(!header) return;
+    const filterBar = document.querySelector('.filter-bar'); // only exists on the Portfolio page
+    const SHOW_NEAR_TOP = 120;
+    let lastY = window.scrollY, hidden = false, ticking = false;
+    function setHidden(state){
+      if(state === hidden) return;
+      hidden = state;
+      header.classList.toggle('nav-hidden', hidden);
+      if(filterBar) filterBar.classList.toggle('nav-hidden', hidden);
+    }
+    function onScroll(){
+      const y = Math.max(0, window.scrollY);
+      if(y <= SHOW_NEAR_TOP) setHidden(false);
+      else if(y > lastY) setHidden(true);   // scrolling down
+      else if(y < lastY) setHidden(false);  // scrolling up
+      lastY = y;
+      ticking = false;
+    }
+    addEventListener('scroll', ()=>{
+      if(!ticking){ requestAnimationFrame(onScroll); ticking = true; }
+    }, {passive:true});
+  })();
+
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14});
+  document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+
+  // Variable-width filmstrip carousel that always shows real photos peeking
+  // on both edges — never an empty side, no matter which album is centered.
+  //
+  // How: the real album list gets tripled (copy, copy, copy) so there's
+  // always a full spare set of real photos to slide into on either side.
+  // Every tile — original or a repeated copy — opens the correct lightbox
+  // album, because clicks are resolved through a shared lookup function
+  // (onCarouselTileClick) keyed by album index, rather than a listener
+  // attached to one specific element. That's what makes repeated copies
+  // fully functional instead of the dead-clicks bug from before.
+  //
+  // Navigation always slides to a physically adjacent slide (smooth, never
+  // a jump). Only once you've drifted several slides toward either edge of
+  // the tripled buffer does it invisibly snap back to the equivalent
+  // position in the middle copy — imperceptible, since that position shows
+  // the exact same photo.
+  let onCarouselTileClick = null; // renderHome() points this at the real lightbox opener
+
+  function initFilmstripCarousel(root){
+    if(!root) return;
+    const viewport = root.querySelector('.carousel-viewport');
+    const track = root.querySelector('.carousel-track');
+    const realItems = [...track.querySelectorAll('.carousel-item')];
+    let prevBtn = root.querySelector('.car-prev');
+    let nextBtn = root.querySelector('.car-next');
+    if(!viewport || !track || !realItems.length || !prevBtn || !nextBtn) return;
+
+    const N = realItems.length;
+
+    // This can legitimately run more than once (e.g. once on placeholder content,
+    // then again once real photos load) — replace the buttons with fresh clones
+    // so any previously-bound click listeners are stripped, not stacked.
+    const freshPrev = prevBtn.cloneNode(true); prevBtn.replaceWith(freshPrev); prevBtn = freshPrev;
+    const freshNext = nextBtn.cloneNode(true); nextBtn.replaceWith(freshNext); nextBtn = freshNext;
+
+    if(N <= 1){
+      // Nothing to loop or pad — just show the single item, no nav needed.
+      track.style.transform = 'translateX(0px)';
+      realItems.forEach(it=>it.classList.add('is-center'));
+      return;
+    }
+
+    // Triple the real list. With the 4-5+ albums we recommend, this is always
+    // wider than any realistic screen, so both edges stay filled at all times.
+    track.innerHTML = '';
+    for(let copy=0; copy<3; copy++){
+      realItems.forEach(it=> track.appendChild(it.cloneNode(true)));
+    }
+    const all = () => [...track.children];
+
+    // Every copy shares the same cached photo URL as the original, but each
+    // is still its own separate <img> element — the browser still needs a
+    // moment to decode it into something paintable the first time THAT
+    // specific element is shown, even though the bytes are already cached.
+    // That decode gap is what caused the flash right at a wrap/recenter, the
+    // first time a repeated copy came into view. Decoding every copy up
+    // front (usually only a few ms since it's all cached) removes that gap
+    // for every copy, not just the ones visible on the very first frame.
+    const allImgs = [...track.querySelectorAll('img')];
+    const decodeAll = Promise.all(allImgs.map(img =>
+      (img.decode ? img.decode().catch(()=>{}) : Promise.resolve())
+    ));
+
+    let pos = N; // physical index into the tripled track — always moves to a true neighbour
+    const realIndexAt = p => ((p % N) + N) % N;
+
+    function gapPx(){ return parseFloat(getComputedStyle(track).gap) || 16; }
+    function offsetForPos(p){
+      const items = all();
+      let x = 0;
+      // offsetWidth (not getBoundingClientRect) on purpose: the coverflow
+      // scale() transform makes items visually bigger/smaller than the space
+      // the browser actually reserves for them in the row. getBoundingClientRect
+      // reflects that visual size, which threw the centering math off by a
+      // compounding amount across every item before the target. offsetWidth
+      // always reflects true layout size regardless of any transform applied.
+      for(let k=0;k<p;k++) x += items[k].offsetWidth + gapPx();
+      const w = items[p].offsetWidth;
+      return -(x - (viewport.clientWidth - w) / 2);
+    }
+    function goTo(p, animate){
+      track.style.transition = animate ? '' : 'none';
+      const items = all();
+      // Match each photo's own transition to the same instant/animated mode as
+      // the track. Without this, an instant (recenter) position snap still let
+      // each photo's own scale change animate on its own normal timing —
+      // landing at the right spot, then visibly shrinking and re-growing a
+      // moment later as that separate animation caught up.
+      items.forEach(it => { it.style.transition = animate ? '' : 'none'; });
+      track.style.transform = 'translateX(' + offsetForPos(p) + 'px)';
+      items.forEach((it,k)=> it.classList.toggle('is-center', k === p));
+    }
+    function cycleWidthPx(){
+      // Width of exactly one full lap through the real album list — the
+      // exact distance at which the tripled strip repeats itself, so
+      // shifting the reference frame by this much can never change what's
+      // actually on screen.
+      const items = all();
+      let w = 0;
+      for(let k=0;k<N;k++) w += items[k].offsetWidth + gapPx();
+      return w;
+    }
+    function currentTranslateXPx(){
+      const t = getComputedStyle(track).transform;
+      if(!t || t === 'none') return 0;
+      const m = new DOMMatrixReadOnly(t);
+      return m.m41;
+    }
+    function shiftReferenceFrame(deltaPx){
+      // Re-express whatever is CURRENTLY on screen — whether at rest or
+      // mid-slide — under the new pos numbering, with zero visible change:
+      // read the actual current position, nudge it by exactly one lap, and
+      // re-apply instantly. Reading offsetHeight between the two writes
+      // forces the browser to commit that instant frame rather than
+      // folding it into the next animation.
+      const cur = currentTranslateXPx();
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(' + (cur + deltaPx) + 'px)';
+      track.offsetHeight;
+    }
+    function ensureSafeZone(){
+      // Keep pos within the middle third of the tripled buffer at all
+      // times — checked before every single step, not just after a
+      // transition happens to settle — so no burst of rapid clicks can
+      // ever outrun this and push pos past the edge of the physical
+      // (tripled) DOM into photos that don't exist.
+      while(pos < N * 0.5){ pos += N; shiftReferenceFrame(-cycleWidthPx()); }
+      while(pos > N * 2.5){ pos -= N; shiftReferenceFrame(cycleWidthPx()); }
+    }
+
+    function step(dir){
+      pos += dir; // always a physically adjacent slide — smooth, never a jump
+      ensureSafeZone();
+      goTo(pos, true);
+    }
+
+    // Once the user has clicked, the carousel is "settled" — after this point
+    // a late-arriving image load event must never be allowed to force an
+    // instant (non-animated) re-snap, or it'll cut off whatever smooth
+    // transition is currently in flight and look like a hard jump.
+    let settled = false;
+    prevBtn.addEventListener('click', ()=>{ settled = true; step(-1); });
+    nextBtn.addEventListener('click', ()=>{ settled = true; step(1); });
+
+    // Click-to-open works through a shared lookup, not a per-element listener —
+    // so every physical copy of every album (original or peek-padding) opens
+    // the correct lightbox, with no risk of a "dead" repeated tile.
+    track.addEventListener('click', e=>{
+      const item = e.target.closest('[data-album]');
+      if(item && onCarouselTileClick) onCarouselTileClick(+item.dataset.album);
+    });
+
+    if(track._resizeHandler) removeEventListener('resize', track._resizeHandler);
+    track._resizeHandler = ()=> goTo(pos, false);
+    addEventListener('resize', track._resizeHandler, {passive:true});
+
+    track.style.transition = 'none'; // hiding must be instant — nothing wrong should ever be visible, even briefly
+    track.style.opacity = '0';
+
+    decodeAll.then(()=>{
+      goTo(pos, false); // position correctly while still invisible — nothing to see yet
+      requestAnimationFrame(()=>{
+        track.style.transition = ''; // restore the normal CSS transition (covers opacity too)
+        track.style.opacity = '1';   // reveal, already fully positioned — nothing left to settle
+      });
+    });
+
+    // Fallback safety net: recompute (still invisible-safe, since it only
+    // runs before or shortly after the reveal above) in case a browser
+    // doesn't support decode(), or a photo's size shifts for any other reason.
+    track.querySelectorAll('img').forEach(img=>{
+      if(img.complete) requestAnimationFrame(()=> goTo(pos, false));
+      else img.addEventListener('load', ()=> {
+        // Before the user has touched the arrows, this is the initial
+        // layout-settle — snap instantly, nothing has been seen yet.
+        // After that, a late photo load should never cut off a slide the
+        // user is watching — ease into the correct spot instead of
+        // teleporting there.
+        goTo(pos, settled);
+      }, {once:true});
+    });
+  }
+  document.querySelectorAll('.carousel').forEach(initFilmstripCarousel);
+
+
+  // ============================================================
+  // Home page photo pipeline — reads the Google Sheet published
+  // as CSV (see /docs/home-form-spec.md for the exact form/columns).
+  // ============================================================
+  const HOME_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUdMZSDj3ZYl4zpBXFB47rHfk3Q3zUiN3_G6eh6Y2KPYQgNOdsCoq44TSKsW2lmxKDBKQr1IK5J9Sy/pub?gid=1062964178&single=true&output=csv";
+
+  function parseHomeCSV(text){
+    const rows=[]; let row=[],field='',inQuotes=false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], next=text[i+1];
+      if(inQuotes){
+        if(c==='"'&&next==='"'){field+='"';i++;}
+        else if(c==='"'){inQuotes=false;}
+        else{field+=c;}
+      }else{
+        if(c==='"')inQuotes=true;
+        else if(c===','){row.push(field);field='';}
+        else if(c==='\n'||c==='\r'){
+          if(field.length||row.length){row.push(field);rows.push(row);row=[];field='';}
+          if(c==='\r'&&next==='\n')i++;
+        }else field+=c;
+      }
+    }
+    if(field.length||row.length){row.push(field);rows.push(row);}
+    return rows.filter(r=>r.some(cell=>cell.trim()!==''));
+  }
+
+  function extractHomeRows(rows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rows.findIndex(r=>r.some(c=>norm(c)==='page'));
+    if(headerIndex===-1) return null;
+    const header=rows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={
+      timestamp: find('timestamp'),
+      page:      find('page'),
+      section:   find('section'),
+      name:      find('name'),
+      label:     find('label','genre'),
+      cover:     find('cover photo','cover'),
+      album:     find('album photos','photos','album')
+    };
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    return rows.slice(headerIndex+1)
+      .filter(r=>get(r,cols.page).toLowerCase()==='home')
+      .map(r=>({
+        timestamp: get(r,cols.timestamp),
+        section:   get(r,cols.section).toLowerCase(),
+        name:      get(r,cols.name),
+        label:     get(r,cols.label),
+        cover:     get(r,cols.cover),
+        album:     get(r,cols.album).split(',').map(s=>s.trim()).filter(Boolean)
+      }));
+  }
+
+  // Splits any comma-separated links cell into individual usable image URLs
+  function splitLinks(str){ return (str||'').split(',').map(s=>s.trim()).filter(Boolean); }
+
+  // ---------- Header genre dropdown ----------
+  // The "Portfolio" nav menu is duplicated in the header of every page, this
+  // one included. Its genre list is never stored separately - it's derived
+  // fresh, right here, from whatever Genre values exist on the Portfolio
+  // page's rows in the same shared sheet, so it can never drift out of sync
+  // with the Portfolio page or with Home's Featured links.
+  function slugify(s){
+    return String(s||'').trim().toLowerCase()
+      .replace(/&/g,'and')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+  function derivePortfolioGenres(rawRows){
+    const norm=c=>(c||'').trim().toLowerCase();
+    const headerIndex=rawRows.findIndex(r=>r.some(c=>norm(c)==='page'));
+    if(headerIndex===-1) return [];
+    const header=rawRows[headerIndex].map(norm);
+    const find=(...names)=>header.findIndex(h=>names.includes(h));
+    const cols={ page: find('page'), section: find('section'), label: find('label','caption/label','genre') };
+    const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    const seen = new Map(); // slug -> display name (first spelling wins)
+    rawRows.slice(headerIndex+1).forEach(r=>{
+      const page = get(r,cols.page).toLowerCase();
+      const section = get(r,cols.section).toLowerCase();
+      // A genre can be introduced from either place: a Portfolio submission
+      // (Photo or New Genre), or a Home Featured tile, whose Label question
+      // is literally titled "Genre" - both feed the same derived list.
+      const isPortfolioGenre = page==='portfolio' && section==='genre';
+      const isFeaturedGenre  = page==='home' && section==='featured';
+      if(!isPortfolioGenre && !isFeaturedGenre) return;
+      const label = get(r,cols.label);
+      if(!label) return;
+      const slug = slugify(label);
+      if(!slug || seen.has(slug)) return;
+      seen.set(slug, label);
+    });
+    return [...seen.entries()].map(([slug,name])=>({slug,name})).sort((a,b)=>a.name.localeCompare(b.name));
+  }
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                          .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function renderNavDropdown(genres){
+    if(!genres.length) return; // sheet not connected yet / nothing submitted — static list stays as-is
+    const dd = document.querySelector('.has-drop .dropdown');
+    if(!dd) return;
+    dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
+      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections</a>'
+      + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
+  }
+
+  function renderHome(homeRows){
+    if(!homeRows) return; // sheet not connected — hardcoded fallback stays as-is
+
+    // ---------- CAROUSEL: group rows by Album Name (case/whitespace-insensitive) ----------
+    const carouselRows = homeRows.filter(r=>r.section==='carousel' && r.name);
+    const albums = {};
+    carouselRows.forEach(r=>{
+      const key = r.name.trim().toLowerCase();
+      if(!albums[key]) albums[key] = {name:r.name, label:r.label, photos:[]};
+      if(r.cover) albums[key].photos.push(r.cover);
+      albums[key].photos.push(...r.album);
+      if(!albums[key].label && r.label) albums[key].label = r.label;
+    });
+    const albumList = Object.values(albums).filter(a=>a.photos.length);
+
+    const track = document.getElementById('carouselTrack');
+    if(albumList.length && track){
+      // Load every cover photo BEFORE it ever appears on screen. Real hosted
+      // photos take real time to arrive — if we put them in the page first
+      // and let them load in, the layout visibly "settles" as each one
+      // finishes. Preloading off-screen means that settling happens before
+      // anything is shown, so the placeholder swaps straight to a fully
+      // correct, already-loaded carousel with nothing left to visibly jump.
+      function preloadImage(src, timeoutMs){
+        return new Promise(resolve=>{
+          const img = new Image();
+          let done = false;
+          const finish = ()=>{ if(!done){ done = true; resolve(); } };
+          img.onload = finish; img.onerror = finish; // resolve either way — a broken link shouldn't block the rest
+          img.src = src;
+          setTimeout(finish, timeoutMs || 3000); // safety net so one dead link can't stall the whole carousel
+        });
+      }
+
+      Promise.all(albumList.map(a=> preloadImage(a.photos[0]))).then(()=>{
+        // one carousel tile per album — its cover is the first photo in that album.
+        // Real <img> tags (not background-image) so each slide keeps its own true
+        // width at a fixed height — no cropping, full photo always visible.
+        track.innerHTML = albumList.map((a,i)=>
+          '<div class="carousel-item ph" data-album="'+i+'">'
+          +'<img src="'+a.photos[0]+'" alt="">'
+          +'<span class="ph-cap">'+(a.label||a.name)+'</span></div>'
+        ).join('');
+        // shared lookup used by every physical copy of every tile (including the
+        // repeated peek-padding copies the carousel adds for the always-filled look)
+        onCarouselTileClick = (i)=> openLightbox(albumList[i].photos, 0);
+        // re-init this carousel now that real items exist (the shared carousel script
+        // already ran once against the placeholder — refresh it against the new DOM)
+        initFilmstripCarousel(document.getElementById('homeCarousel'));
+      });
+    }
+
+    // ---------- FEATURED: group by Tile Name, newest submission per name wins ----------
+    const featuredRows = homeRows.filter(r=>r.section==='featured' && r.name && r.cover)
+      .sort((a,b)=> new Date(a.timestamp) - new Date(b.timestamp));
+    const featuredByName = {};
+    featuredRows.forEach(r=>{ featuredByName[r.name.trim().toLowerCase()] = r; }); // last wins = newest
+    const featuredList = Object.values(featuredByName);
+
+    const grid = document.getElementById('featuredGrid');
+    if(featuredList.length && grid){
+      const slug = s => encodeURIComponent(s.trim().toLowerCase().replace(/\s+/g,'-'));
+      const tilesHtml = featuredList.map(r=>
+        '<a class="genre" href="portfolio.html#'+slug(r.label||r.name)+'" style="background-image:url(\''+r.cover+'\');background-size:cover;background-position:center;">'
+        +'<span class="genre-cap">'+r.name+'</span></a>'
+      ).join('');
+      // Prints for Purchase is a permanent tile — keep it, add the dynamic ones alongside it
+      grid.innerHTML = tilesHtml + grid.innerHTML;
+    }
+  }
+
+  function loadHomePipeline(){
+    if(!HOME_CSV_URL || HOME_CSV_URL.includes('PASTE_YOUR')) return; // fallback content stays visible
+    fetch(HOME_CSV_URL)
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(text=>{
+        const rawRows = parseHomeCSV(text);
+        renderHome(extractHomeRows(rawRows));
+        renderNavDropdown(derivePortfolioGenres(rawRows));
+      })
+      .catch(err=> console.error('Home photo pipeline failed to load:', err));
+  }
+
+  // ---------- Lightbox: browse a whole album with arrows, matching the reference screenshots ----------
+  let lbPhotos = [], lbIndex = 0;
+  function openLightbox(photos, startIndex){
+    lbPhotos = photos; lbIndex = startIndex;
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function updateLightbox(){
+    document.getElementById('lbImage').src = lbPhotos[lbIndex];
+    document.getElementById('lbCount').textContent = (lbIndex+1)+' / '+lbPhotos.length;
+  }
+  function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); }
+  document.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelector('#lightbox .lb-close').addEventListener('click', closeLightbox);
+    document.querySelector('#lightbox .lb-prev').addEventListener('click', ()=>{ lbIndex=(lbIndex-1+lbPhotos.length)%lbPhotos.length; updateLightbox(); });
+    document.querySelector('#lightbox .lb-next').addEventListener('click', ()=>{ lbIndex=(lbIndex+1)%lbPhotos.length; updateLightbox(); });
+    document.getElementById('lightbox').addEventListener('click', e=>{ if(e.target.id==='lightbox') closeLightbox(); });
+    document.addEventListener('keydown', e=>{
+      if(!document.getElementById('lightbox').classList.contains('open')) return;
+      if(e.key==='Escape') closeLightbox();
+      if(e.key==='ArrowLeft') document.querySelector('#lightbox .lb-prev').click();
+      if(e.key==='ArrowRight') document.querySelector('#lightbox .lb-next').click();
+    });
+  });
+
+  loadHomePipeline();
+
+  const secs=[...document.querySelectorAll('[id^="d-"]')];
+  const dots=document.querySelectorAll('#dots a');
+  if(secs.length && dots.length){
+    const dio=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ dots.forEach(d=>d.classList.toggle('on', d.dataset.sec===e.target.id)); } });
+    },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+    secs.forEach(s=>dio.observe(s));
+  }
+
+})();
+</script>
+</body>
+</html>
