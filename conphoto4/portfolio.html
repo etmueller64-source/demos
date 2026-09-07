@@ -251,7 +251,7 @@
           <a href="portfolio.html#maternity">Maternity</a>
           <a href="portfolio.html#pets">Pets</a>
           <a href="portfolio.html#sports">Sports</a>
-          <a href="portfolio.html#collections" style="font-weight:600;">Collections</a>
+          <a href="portfolio.html#collections" style="font-weight:600;">Collections and Events</a>
           <a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>
         </div>
       </div>
@@ -284,7 +284,7 @@
       <a class="f-tab" data-genre="nature" href="#nature">Nature</a>
       <a class="f-tab" data-genre="family" href="#family">Family</a>
       <a class="f-tab" data-genre="portraits" href="#portraits">Portraits</a>
-      <a class="f-tab collections-tab" href="#collections">Collections</a>
+      <a class="f-tab collections-tab" href="#collections">Collections and Events</a>
       <a class="f-tab print-tab" href="print.html">Prints for Purchase ↗</a>
     </div>
   </div>
@@ -639,7 +639,7 @@
     if(!row) return;
     row.innerHTML = '<a class="f-tab" data-genre="all" href="#all">All</a>'
       + genres.map(g=>'<a class="f-tab" data-genre="'+esc(g.slug)+'" href="#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
-      + '<a class="f-tab collections-tab" href="#collections">Collections</a>'
+      + '<a class="f-tab collections-tab" href="#collections">Collections and Events</a>'
       + '<a class="f-tab print-tab" href="print.html">Prints for Purchase ↗</a>';
   }
 
@@ -670,7 +670,7 @@
     const dd = document.querySelector('.has-drop .dropdown');
     if(!dd) return;
     dd.innerHTML = genres.map(g=>'<a href="portfolio.html#'+esc(g.slug)+'">'+esc(g.name)+'</a>').join('')
-      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections</a>'
+      + '<a href="portfolio.html#collections" style="font-weight:600;">Collections and Events</a>'
       + '<a href="print.html" style="color:var(--amber-deep);font-weight:600;">Prints for Purchase</a>';
   }
 
@@ -741,7 +741,7 @@
     if(!grid) return;
     grid.classList.add('collections-grid');
     if(!COLLECTIONS.length){
-      grid.innerHTML = '<div class="shot shot-empty"><span class="empty-msg"><b>Nothing here yet</b>Collections coming soon!</span></div>';
+      grid.innerHTML = '<div class="shot shot-empty"><span class="empty-msg"><b>Nothing here yet</b>Collections and Events coming soon!</span></div>';
       return;
     }
     grid.innerHTML = COLLECTIONS.map(c=>
@@ -773,7 +773,7 @@
     if(!head || !grid) return;
     grid.classList.remove('collections-grid');
     head.style.display = '';
-    head.innerHTML = '<a class="collection-back">&larr; Back to Collections</a>'
+    head.innerHTML = '<a class="collection-back">&larr; Back to Collections and Events</a>'
       + (c.cover ? '<div class="collection-hero has-photo"><span class="photo-fit no-cap"><img src="'+esc(c.cover)+'" alt="'+esc(c.name)+'"></span></div>' : '')
       + '<div class="collection-head"><h1>'+esc(c.name)+'</h1>'
       + (c.story ? '<p class="story">'+esc(c.story)+'</p>' : '')

@@ -2,57 +2,83 @@
  * Conacher Photography — Form → "Website Data" sheet bridge
  * ============================================================
  * This script must live on the FORM (Form editor → ⋮ menu → Script editor),
- * not the spreadsheet — see the wiring steps below for why.
+ * not the spreadsheet — see the wiring steps sent alongside this file for
+ * why, and for exactly how to build the matching Form sections.
  *
- * What it does on every submission:
- *   1. Reads "What are you editing?" to figure out which of the 4 branches
- *      was used (New collection / New Carousel Group / Adding to Carousel
- *      Group / Adding to Genre).
- *   2. Pulls that branch's answers by QUESTION TITLE (not column position),
- *      so re-ordering questions in the Form later won't break this.
- *   3. Converts any uploaded files (Cover Photo, Photos in the
- *      collection/group, Upload Photos, overflow fields) from Drive file
- *      IDs into public, hotlink-able image URLs.
- *   4. Appends ONE normalized row to the "Website Data" tab, in the exact
- *      column shape every page's JS already expects:
- *      Timestamp | Page | Section | Name | Label | Cover Photo | Album Photos | Story
+ * Six branches, driven by "What are you editing?":
+ *   1. Collections and Events        — create a new collection/event
+ *   2. Adding to Collections and Events — add photos to an existing one
+ *   3. New Carousel Group            — create a new Home carousel group
+ *   4. Adding to Carousel Group      — add photos to an existing one
+ *   5. New Genre                     — create a new Portfolio genre,
+ *                                       optionally featuring it on Home
+ *   6. Adding to Genre               — add photos to an existing genre
  *
- * "Adding to Carousel Group" isn't built out in the Form yet — that branch
- * below just logs and exits cleanly so a submission there never throws.
- * Mirror the ROUTE_NEW_CAROUSEL block once it exists.
+ * Every branch is pulled by QUESTION TITLE (not column position), so
+ * reordering questions in the Form later won't break this — but the
+ * TITLES MUST MATCH EXACTLY (see the Q_* constants below) between the
+ * Form and this script.
+ *
+ * Column contract written to the "Website Data" tab (unchanged from
+ * before — every page's JS already expects this shape):
+ *   Timestamp | Page | Section | Name | Label | Cover Photo | Album Photos | Story
+ *
+ * Featuring a new genre on Home doesn't need its own column — it just
+ * writes a SECOND row (Section: "featured") alongside the genre row,
+ * reusing Home's existing Featured-tile mechanism as-is.
  */
 
 // ---- Sheet destination ----------------------------------------------------
 const DATA_SHEET_NAME = 'Website Data';
 
-// ---- Exact question titles, copied from the Form ---------------------------
+// ---- Router ----------------------------------------------------------------
 const Q_ROUTER = 'What are you editing?';
 
+const ROUTE_NEW_COLLECTION = 'Collections and Events';
+const ROUTE_ADD_COLLECTION = 'Adding to Collections and Events';
+const ROUTE_NEW_CAROUSEL   = 'New Carousel Group';
+const ROUTE_ADD_CAROUSEL   = 'Adding to Carousel Group';
+const ROUTE_NEW_GENRE      = 'New Genre';
+const ROUTE_ADD_GENRE      = 'Adding to Genre';
+
+// ---- 1. Collections and Events (new) ---------------------------------------
 const Q_COLLECTION_NAME     = 'Whats the name of the collection?';
 const Q_COLLECTION_STORY    = 'A few words on the photo (location, setting, etc..)';
-const Q_COLLECTION_COVER    = 'Cover Photo';           // shared title, disambiguated by branch below
+const Q_COLLECTION_COVER    = 'Cover Photo';
 const Q_COLLECTION_PHOTOS   = 'Photos in the collection';
 const Q_COLLECTION_OVERFLOW = 'If more than 10 photos';
 
+// ---- 2. Adding to Collections and Events (existing) -------------------------
+const Q_ADD_COLLECTION_WHICH    = 'Which collection or event?'; // dropdown of existing names
+const Q_ADD_COLLECTION_PHOTOS   = 'Photos to add';
+const Q_ADD_COLLECTION_OVERFLOW = 'If more than 10 photos';
+
+// ---- 3. New Carousel Group ---------------------------------------------------
 const Q_CAROUSEL_NAME   = 'Name';
 const Q_CAROUSEL_COVER  = 'Cover Photo';
 const Q_CAROUSEL_PHOTOS = 'Photos in the group';
 
-const Q_GENRE_WHICH    = 'Which genre?';
-const Q_GENRE_PHOTOS   = 'Upload Photos';
-const Q_GENRE_OVERFLOW = 'If more than 10 photos';
+// ---- 4. Adding to Carousel Group (existing) ----------------------------------
+const Q_ADD_CAROUSEL_WHICH  = 'Which carousel group?'; // dropdown of existing group names
+const Q_ADD_CAROUSEL_PHOTOS = 'Photos to add';
 
-// Router option values as they appear in the dropdown.
-const ROUTE_NEW_COLLECTION = 'New collection';
-const ROUTE_NEW_CAROUSEL   = 'New Carousel Group';
-const ROUTE_ADD_CAROUSEL   = 'Adding to Carousel Group'; // not built out yet
-const ROUTE_ADD_GENRE      = 'Adding to Genre';
+// ---- 5. New Genre -------------------------------------------------------------
+const Q_NEW_GENRE_NAME     = 'Whats the genre called?';
+const Q_NEW_GENRE_FEATURED = 'Feature this on the home page?'; // Yes/No
+const Q_NEW_GENRE_PHOTOS   = 'Upload Photos';
+const Q_NEW_GENRE_OVERFLOW = 'If more than 10 photos';
+const FEATURED_YES = 'Yes'; // must match the Form's exact option text
+
+// ---- 6. Adding to Genre (existing) ---------------------------------------------
+const Q_ADD_GENRE_WHICH    = 'Which genre?'; // dropdown of existing genres
+const Q_ADD_GENRE_PHOTOS   = 'Upload Photos';
+const Q_ADD_GENRE_OVERFLOW = 'If more than 10 photos';
 
 // ---- Resolves the linked response spreadsheet, regardless of container ----
 // SpreadsheetApp.getActiveSpreadsheet() ONLY works in a script bound to a
-// Sheet. This script is bound to the Form, so that call would return
-// nothing here — going through the Form's destination ID works no matter
-// which container the script lives in.
+// Sheet. This script is bound to the Form, so that call returns nothing
+// here — going through the Form's destination ID works no matter which
+// container the script lives in.
 function getDataSpreadsheet() {
   const form = FormApp.getActiveForm();
   if (!form) {
@@ -106,61 +132,87 @@ function onFormSubmit(e) {
 
     Logger.log('Routing on: "' + route + '"');
 
-    let row = null; // {page, section, name, label, cover, album, story}
+    // Each branch pushes one or more {page, section, name, label, cover,
+    // album, story} rows onto this list — usually just one, except New
+    // Genre with Featured=Yes, which pushes two.
+    const rows = [];
 
     if (route === ROUTE_NEW_COLLECTION) {
       const coverIds = getFileIds(Q_COLLECTION_COVER);
       const photoIds = [...getFileIds(Q_COLLECTION_PHOTOS), ...getFileIds(Q_COLLECTION_OVERFLOW)];
-      row = {
-        page: 'portfolio',
-        section: 'collection',
-        name: getText(Q_COLLECTION_NAME),
-        label: '',
+      rows.push({
+        page: 'portfolio', section: 'collection',
+        name: getText(Q_COLLECTION_NAME), label: '',
         cover: filesToUrls(coverIds)[0] || '',
         album: filesToUrls(photoIds),
         story: getText(Q_COLLECTION_STORY)
-      };
+      });
+
+    } else if (route === ROUTE_ADD_COLLECTION) {
+      const photoIds = [...getFileIds(Q_ADD_COLLECTION_PHOTOS), ...getFileIds(Q_ADD_COLLECTION_OVERFLOW)];
+      rows.push({
+        page: 'portfolio', section: 'collection',
+        name: getText(Q_ADD_COLLECTION_WHICH), label: '',
+        cover: '', // leave existing cover untouched - this row only adds photos
+        album: filesToUrls(photoIds),
+        story: ''
+      });
 
     } else if (route === ROUTE_NEW_CAROUSEL) {
       const coverIds = getFileIds(Q_CAROUSEL_COVER);
       const photoIds = getFileIds(Q_CAROUSEL_PHOTOS);
-      row = {
-        page: 'home',
-        section: 'carousel',
-        name: getText(Q_CAROUSEL_NAME),
-        label: '',
+      rows.push({
+        page: 'home', section: 'carousel',
+        name: getText(Q_CAROUSEL_NAME), label: '',
         cover: filesToUrls(coverIds)[0] || '',
         album: filesToUrls(photoIds),
         story: ''
-      };
+      });
 
     } else if (route === ROUTE_ADD_CAROUSEL) {
-      // Section not built out in the Form yet — nothing to safely map.
-      // Once it exists, mirror the ROUTE_NEW_CAROUSEL block above, matching
-      // the existing group by Name so the site's "combine by Name" logic
-      // picks it up automatically.
-      Logger.log('Adding to Carousel Group submitted, but this branch is not built out yet — skipped.');
-      return;
-
-    } else if (route === ROUTE_ADD_GENRE) {
-      const photoIds = [...getFileIds(Q_GENRE_PHOTOS), ...getFileIds(Q_GENRE_OVERFLOW)];
-      row = {
-        page: 'portfolio',
-        section: 'genre',
-        name: '',
-        label: getText(Q_GENRE_WHICH),
-        cover: '',
+      const photoIds = getFileIds(Q_ADD_CAROUSEL_PHOTOS);
+      rows.push({
+        page: 'home', section: 'carousel',
+        name: getText(Q_ADD_CAROUSEL_WHICH), label: '',
+        cover: '', // leave existing cover untouched - this row only adds photos
         album: filesToUrls(photoIds),
         story: ''
-      };
+      });
+
+    } else if (route === ROUTE_NEW_GENRE) {
+      const genreName = getText(Q_NEW_GENRE_NAME);
+      const photoIds = [...getFileIds(Q_NEW_GENRE_PHOTOS), ...getFileIds(Q_NEW_GENRE_OVERFLOW)];
+      const photoUrls = filesToUrls(photoIds);
+      rows.push({
+        page: 'portfolio', section: 'genre',
+        name: '', label: genreName,
+        cover: '', album: photoUrls, story: ''
+      });
+      const wantsFeatured = getText(Q_NEW_GENRE_FEATURED) === FEATURED_YES;
+      if (wantsFeatured) {
+        rows.push({
+          page: 'home', section: 'featured',
+          name: genreName, label: genreName,
+          cover: photoUrls[0] || '', // Home's Featured tile needs a Cover Photo to display at all
+          album: [], story: ''
+        });
+      }
+
+    } else if (route === ROUTE_ADD_GENRE) {
+      const photoIds = [...getFileIds(Q_ADD_GENRE_PHOTOS), ...getFileIds(Q_ADD_GENRE_OVERFLOW)];
+      rows.push({
+        page: 'portfolio', section: 'genre',
+        name: '', label: getText(Q_ADD_GENRE_WHICH),
+        cover: '', album: filesToUrls(photoIds), story: ''
+      });
 
     } else {
       Logger.log('Unrecognized "What are you editing?" value: "' + route + '" — check it matches ROUTE_* exactly (including capitalization).');
       return;
     }
 
-    appendRow(timestamp, row);
-    Logger.log('Row appended OK: ' + JSON.stringify(row));
+    rows.forEach(row => appendRow(timestamp, row));
+    Logger.log('Appended ' + rows.length + ' row(s) OK: ' + JSON.stringify(rows));
 
   } catch (err) {
     Logger.log('onFormSubmit error: ' + err.message + '\n' + err.stack);
