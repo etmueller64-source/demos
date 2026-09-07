@@ -565,7 +565,13 @@
     const find=(...names)=>header.findIndex(h=>names.includes(h));
     const cols={ page: find('page'), section: find('section'), label: find('label','caption/label','genre') };
     const get=(r,i)=>(i>=0 && r[i]!=null)?r[i].trim():'';
+    // Preset genres always appear in the dropdown, even before Debbie has
+    // submitted anything into them yet - matches the fixed tab set on the
+    // Portfolio page itself.
+    const GENRE_ORDER = ['sports','nature','family','portraits'];
+    const GENRE_NAMES = {sports:'Sports', nature:'Nature', family:'Family', portraits:'Portraits'};
     const seen = new Map();
+    GENRE_ORDER.forEach(slug=> seen.set(slug, GENRE_NAMES[slug]));
     rawRows.slice(headerIndex+1).forEach(r=>{
       const page = get(r,cols.page).toLowerCase();
       const section = get(r,cols.section).toLowerCase();
@@ -578,7 +584,13 @@
       if(!slug || seen.has(slug)) return;
       seen.set(slug, label);
     });
-    return [...seen.entries()].map(([slug,name])=>({slug,name})).sort((a,b)=>a.name.localeCompare(b.name));
+    return [...seen.entries()].map(([slug,name])=>({slug,name})).sort((a,b)=>{
+      const ia = GENRE_ORDER.indexOf(a.slug), ib = GENRE_ORDER.indexOf(b.slug);
+      if(ia===-1 && ib===-1) return a.name.localeCompare(b.name);
+      if(ia===-1) return 1;
+      if(ib===-1) return -1;
+      return ia-ib;
+    });
   }
   function renderNavDropdown(genres){
     if(!genres.length) return;

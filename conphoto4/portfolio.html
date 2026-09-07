@@ -568,8 +568,25 @@
   // canonical section, since the site treats them identically) or a Home
   // Featured row, whose Label question is literally titled "Genre". Deduped
   // case/whitespace-insensitively, keeping whichever spelling came first.
+  // Preset genre order (Sports, Nature, Family, Portraits) - anything
+  // outside that set (e.g. leftover data from before the form was locked
+  // down) just falls in afterward, alphabetically.
+  const GENRE_ORDER = ['sports','nature','family','portraits'];
+  const GENRE_NAMES = {sports:'Sports', nature:'Nature', family:'Family', portraits:'Portraits'};
+  function byGenreOrder(a,b){
+    const ia = GENRE_ORDER.indexOf(a.slug), ib = GENRE_ORDER.indexOf(b.slug);
+    if(ia===-1 && ib===-1) return a.name.localeCompare(b.name);
+    if(ia===-1) return 1;
+    if(ib===-1) return -1;
+    return ia-ib;
+  }
+
   function deriveGenres(portfolioRows, featuredRows){
     const map = new Map(); // slug -> {name, photos:[]}
+    // Seed with all 4 preset genres up front, so every one of them always
+    // gets a tab - even before Debbie's submitted anything into it (that
+    // tab just shows the existing "Nothing here yet" empty state).
+    GENRE_ORDER.forEach(slug=> map.set(slug, {name:GENRE_NAMES[slug], photos:[]}));
     const register = label => {
       const trimmed = (label||'').trim();
       if(!trimmed) return null;
@@ -590,18 +607,6 @@
     return [...map.entries()]
       .map(([slug,g])=>({slug, name:g.name, photos:g.photos}))
       .sort(byGenreOrder);
-  }
-
-  // Preset genre order (Sports, Nature, Family, Portraits) - anything
-  // outside that set (e.g. leftover data from before the form was locked
-  // down) just falls in afterward, alphabetically.
-  const GENRE_ORDER = ['sports','nature','family','portraits'];
-  function byGenreOrder(a,b){
-    const ia = GENRE_ORDER.indexOf(a.slug), ib = GENRE_ORDER.indexOf(b.slug);
-    if(ia===-1 && ib===-1) return a.name.localeCompare(b.name);
-    if(ia===-1) return 1;
-    if(ib===-1) return -1;
-    return ia-ib;
   }
 
   // Every collection: grouped by Collection Name, combining every row
